@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>a New Order...</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Griffy&family=IBM+Plex+Serif:ital,wght@0,500;1,200&family=Lobster&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Griffy&family=IBM+Plex+Serif:ital,wght@0,500;1,200&family=Lobster&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="css/style.css">
+<!-- adicionando icone de aba -->
+<link rel="icon" type="image/x-icon" href="img/ANEWORDER.png">
+</head>
+<body>
+
+<div id="menu-screen">
+  <div class="menu-strings-bg" aria-hidden="true">
+    <span style="--x:2%; --h:70vh; --delay:-1.3s; --dur:7.4s; --amp:2.1deg; --op:.22;"></span>
+    <span style="--x:7%; --h:88vh; --delay:-4.6s; --dur:9.2s; --amp:1.8deg; --op:.18;"></span>
+    <span style="--x:13%; --h:62vh; --delay:-2.1s; --dur:6.8s; --amp:2.6deg; --op:.25;"></span>
+    <span style="--x:19%; --h:95vh; --delay:-6.4s; --dur:10.5s; --amp:1.6deg; --op:.16;"></span>
+    <span style="--x:26%; --h:74vh; --delay:-.8s; --dur:8.1s; --amp:2.3deg; --op:.24;"></span>
+    <span style="--x:33%; --h:66vh; --delay:-3.5s; --dur:7.9s; --amp:2.9deg; --op:.2;"></span>
+    <span style="--x:40%; --h:90vh; --delay:-5.2s; --dur:9.8s; --amp:1.7deg; --op:.17;"></span>
+    <span style="--x:47%; --h:60vh; --delay:-1.9s; --dur:6.5s; --amp:3.1deg; --op:.28;"></span>
+    <span style="--x:54%; --h:85vh; --delay:-7.1s; --dur:10.1s; --amp:1.9deg; --op:.19;"></span>
+    <span style="--x:61%; --h:72vh; --delay:-2.7s; --dur:8.4s; --amp:2.4deg; --op:.23;"></span>
+    <span style="--x:68%; --h:93vh; --delay:-4.1s; --dur:9.5s; --amp:1.5deg; --op:.15;"></span>
+    <span style="--x:75%; --h:64vh; --delay:-.4s; --dur:7.1s; --amp:2.8deg; --op:.26;"></span>
+    <span style="--x:82%; --h:80vh; --delay:-6.8s; --dur:8.8s; --amp:2.0deg; --op:.21;"></span>
+    <span style="--x:90%; --h:96vh; --delay:-3.0s; --dur:11s; --amp:1.4deg; --op:.14;"></span>
+    <span style="--x:96%; --h:68vh; --delay:-5.9s; --dur:7.6s; --amp:2.5deg; --op:.24;"></span>
+  </div>
+ 
+  <div class="menu-strings" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+ 
+  <div class="menu-particles" aria-hidden="true">
+    <span style="--x:4%; --size:3px; --dur:11s; --delay:-2s; --drift:24px; --maxop:.5;"></span>
+    <span style="--x:11%; --size:2px; --dur:14s; --delay:-6s; --drift:-18px; --maxop:.4;"></span>
+    <span style="--x:18%; --size:4px; --dur:9s; --delay:-1s; --drift:32px; --maxop:.55;"></span>
+    <span style="--x:24%; --size:2px; --dur:16s; --delay:-9s; --drift:-24px; --maxop:.35;"></span>
+    <span style="--x:31%; --size:3px; --dur:10s; --delay:-4s; --drift:20px; --maxop:.5;"></span>
+    <span style="--x:38%; --size:2px; --dur:13s; --delay:-7s; --drift:-30px; --maxop:.4;"></span>
+    <span style="--x:45%; --size:4px; --dur:8s; --delay:-3s; --drift:16px; --maxop:.6;"></span>
+    <span style="--x:52%; --size:3px; --dur:15s; --delay:-11s; --drift:-22px; --maxop:.35;"></span>
+    <span style="--x:59%; --size:2px; --dur:12s; --delay:-5s; --drift:28px; --maxop:.45;"></span>
+    <span style="--x:66%; --size:3px; --dur:9.5s; --delay:-2.5s; --drift:-16px; --maxop:.5;"></span>
+    <span style="--x:73%; --size:4px; --dur:17s; --delay:-8s; --drift:34px; --maxop:.4;"></span>
+    <span style="--x:80%; --size:2px; --dur:11.5s; --delay:-4.5s; --drift:-26px; --maxop:.45;"></span>
+    <span style="--x:87%; --size:3px; --dur:10.5s; --delay:-6.5s; --drift:18px; --maxop:.55;"></span>
+    <span style="--x:94%; --size:2px; --dur:14.5s; --delay:-1.5s; --drift:-20px; --maxop:.4;"></span>
+    <span style="--x:9%; --size:3px; --dur:13.5s; --delay:-10s; --drift:26px; --maxop:.35;"></span>
+    <span style="--x:28%; --size:2px; --dur:9.8s; --delay:-3.8s; --drift:-14px; --maxop:.5;"></span>
+    <span style="--x:47%; --size:4px; --dur:16.5s; --delay:-12s; --drift:22px; --maxop:.45;"></span>
+    <span style="--x:63%; --size:3px; --dur:8.6s; --delay:-2.2s; --drift:-28px; --maxop:.6;"></span>
+    <span style="--x:78%; --size:2px; --dur:12.8s; --delay:-7.4s; --drift:30px; --maxop:.4;"></span>
+    <span style="--x:97%; --size:3px; --dur:10.2s; --delay:-5.6s; --drift:-18px; --maxop:.5;"></span>
+  </div>
+
+  <div class="menu-content">
+    <p class="menu-eyebrow"><i>by KZHAR D'GRANDTH</i></p>
+    <h1 class="menu-title" data-curse="ᚨ ᚾᛖᚹ ᛟᚱᛞᛖᚱ">A NEW ORDER</h1>
+    <p class="menu-subtitle">todo boneco responde a uma mão com agulhas.</p>
+    
+    <div class="menu-card" id="login-card">
+      <label class="menu-label" for="input-username">Como te chamam no palco?</label>
+      <input id="input-username" class="menu-input" type="text" maxlength="15" placeholder="Nome do marionetista" autocomplete="off">
+      <div class="menu-id-tag" id="player-id-tag">Nº ————</div>
+      <button id="btn-play" class="menu-play-btn" type="button" data-sfx-click="click" data-sfx-hover="hover">
+        <i class="bi bi-suit-diamond-fill" aria-hidden="true"></i> Jogar
+      </button>
+      <p class="menu-error" id="menu-error"></p>
+    </div>
+    
+    <div class="menu-card menu-card--waiting" id="waiting-card" hidden>
+      <img class="menu-logo" src="img/ANEWORDER.png" alt="A New Order">
+      <!-- <div class="waiting-spinner" aria-hidden="true"></div> -->
+      <p class="menu-waiting-text" id="waiting-text">Procurando um oponente...</p>
+      <button id="btn-cancel" class="menu-cancel-btn" type="button" data-sfx-click="click" data-sfx-hover="hover">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div id="app" class="pre-match">
+  <!-- <div id="topbar">
+    <h1>Trincheira</h1>
+    <span>protótipo base</span>
+  </div> -->
+
+  <div id="player-names">
+    <div class="player-info player-info--ally">
+      <div id="player-name-ally" class="player-name">Jogador</div>
+      <div class="player-stats">
+        <span class="player-stat player-stat--dolls" id="player-dolls-ally">x0 &#129670;</span>
+        <span class="player-stat player-stat--mobs" id="player-mobs-ally">x0 MOBS</span>
+      </div>
+    </div>
+    <div class="player-info player-info--enemy">
+      <div id="player-name-enemy" class="player-name">Inimigo</div>
+      <div class="player-stats">
+        <span class="player-stat player-stat--dolls" id="player-dolls-enemy">x0 &#129670;</span>
+        <span class="player-stat player-stat--mobs" id="player-mobs-enemy">x0 MOBS</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="board-viewport">
+    <div id="board"></div>
+  </div>
+
+  <div id="reserve">
+    <div id="reserve-header">
+      <div id="reserve-actions">
+        <button id="btn-surrender" class="reserve-action-btn" type="button" title="Render-se" aria-label="Render-se" data-sfx-click="click" data-sfx-hover="hover">🏳️</button>
+        <button id="btn-settings" class="reserve-action-btn" type="button" title="Configurações" aria-label="Configurações" data-sfx-click="click" data-sfx-hover="hover">⚙️</button>
+      </div>
+      <div id="reserve-label">Reserva</div>
+    </div>
+    <div id="reserve-ally"></div>
+  </div>
+</div>
+
+<div id="modal-overlay"></div>
+
+<script src="js/styles.js"></script>
+<script src="js/audio.js"></script>
+<script>
+
+
+async function carregarCatalog() {
+    const resposta = await fetch('json/catalog.json');
+    const catalog = await resposta.json();
+
+    return catalog;
+}
+
+
+/* ============================================================
+   CONFIG — mude aqui pra mudar a forma do jogo. O DOM inteiro
+   é gerado a partir disso, então alterar esses números já
+   reorganiza o tabuleiro/reserva sem tocar em mais nada.
+============================================================ */
+const CONFIG = {
+  corridors: 4,      // corredores (linhas) do tabuleiro
+  slotsPerSide: 3,    // slots de cada lado, por corredor
+  reserveSize: 12,    // tamanho visual da mão
+  playerName: null,   // preenchido pelo Menu quando a partida começa
+  enemyName: null,
+};
+
+/* ============================================================
+   ESTADO — a "fonte da verdade". Tudo que é desenhado na tela
+   vem daqui. É nisso que o Firebase vai escrever/ler no futuro:
+   um onSnapshot substitui esses arrays e chama renderAll().
+
+   board[row][col]:
+     col 0..slotsPerSide-1        -> lado esquerdo (0 = borda, cresce em direção ao meio)
+     col slotsPerSide..2*sPS-1    -> lado direito   (cresce em direção à borda)
+     null = slot vazio
+
+   reserves.ally  -> mão do jogador local (renderizada)
+   reserves.enemy -> mão do oponente (só dado, sem DOM — o jogo
+                     ainda não deve revelar a mão do inimigo)
+============================================================ */
+const state = {
+  board: Array.from({ length: CONFIG.corridors }, () =>
+    Array(CONFIG.slotsPerSide * 2).fill(null)
+  ),
+  reserves: {
+    ally: Array(CONFIG.reserveSize).fill(null),
+    enemy: Array(CONFIG.reserveSize).fill(null),
+  },
+  // Mobs = quantos bonecos o jogador pode mover no turno. A lógica
+  // ainda não existe — por enquanto é só um número pra PlayerStats
+  // ter o que mostrar; entra de verdade junto com o sistema de turno.
+  mobs: {
+    ally: 0,
+    enemy: 0,
+  },
+  effects: {},
+  winner: ''
+};
+
+// Fábrica simples pra manter os personagens com o mesmo formato
+// em todo lugar (seed local hoje, documento do Firestore amanhã).
+function createCharacter({ id, name, image, life, attack, rage, guard, owner = 'ally' }) {
+  return { id, name, image, life, attack, rage, guard, owner };
+}
+
+function getRandomKeyDoll() {
+  const keys_doll = Object.keys(catalog);
+
+  // Pega uma chave aleatória
+  return keys_doll[Math.floor(Math.random() * keys_doll.length)];
+}
+
+function getRandomDoll() {
+  const key_doll = getRandomKeyDoll();
+  return {id: key_doll, doll: catalog[key_doll]};
+}
+
+/* ============================================================
+   CardRenderer — desenha UM cartão dentro de um slot qualquer.
+   Board e Reserve chamam essa mesma função; a única diferença
+   entre os dois é a opção showStats/draggable.
+============================================================ */
+const CardRenderer = {
+  render(el, character, { showStats = false, draggable = false } = {}) {
+    el.innerHTML = '';
+    el.classList.toggle('slot--empty', !character);
+    el.classList.toggle('slot--filled', !!character);
+    el.draggable = false;
+    el.removeAttribute('aria-label');
+
+    if (!character) {
+      el.setAttribute('aria-label', 'Slot vazio');
+      return;
+    }
+
+    const visual = document.createElement('div');
+    visual.className = 'card-visual';
+    visual.appendChild(this.createImage(character));
+    el.appendChild(visual);
+
+    if (showStats) {
+      const stats = document.createElement('div');
+      stats.className = 'card-stats';
+      stats.innerHTML =
+        `<span class="stat ${definyStyle('life',character.id)}${character.life}</span>` +
+        `<span class="stat ${definyStyle('attack',character.id)}${character.attack}</span>` +
+        (character.rage > 0? `<span class="stat stat--rage">${simbol.rage}${character.rage}</span>`: '');
+
+      el.appendChild(stats);
+    }
+
+    if (draggable) el.draggable = true;
+    el.setAttribute('aria-label', character.name);
+  },
+
+  // character.image pode ser uma URL de gif (produção) ou um
+  // emoji/placeholder (o que a gente usa aqui pra não depender
+  // de assets externos). A detecção é só "parece uma URL?".
+  createImage(character) {
+    const looksLikeUrl = /^https?:\/\//.test(character.image) || character.image.includes('/');
+    if (looksLikeUrl) {
+      const img = document.createElement('img');
+      img.src = character.image;
+      img.alt = character.name;
+      img.className = 'card-img';
+      return img;
+    }
+    const span = document.createElement('span');
+    span.className = 'card-icon';
+    span.textContent = character.image;
+    return span;
+  },
+};
+
+/* ============================================================
+   Board — constrói e mantém o tabuleiro.
+   setSlot()/clearSlot() são o jeito "certo" de mexer na matriz
+   porque já cuidam do re-render. Mas nada impede de mexer direto
+   em state.board e chamar renderSlot()/renderAll() depois (é
+   assim que uma sincronização do Firebase vai funcionar).
+============================================================ */
+const Board = {
+  slotEls: [],
+
+  build(container) {
+    container.innerHTML = '';
+    this.slotEls = [];
+
+    for (let row = 0; row < CONFIG.corridors; row++) {
+      const corridorEl = document.createElement('div');
+      corridorEl.className = 'corridor';
+
+      const leftEl = document.createElement('div');
+      leftEl.className = 'corridor-side corridor-side--left';
+      const rightEl = document.createElement('div');
+      rightEl.className = 'corridor-side corridor-side--right';
+      const gapEl = document.createElement('div');
+      gapEl.className = 'corridor-gap';
+
+      const rowSlots = [];
+      const totalCols = CONFIG.slotsPerSide * 2;
+
+      for (let col = 0; col < totalCols; col++) {
+        const slotEl = document.createElement('div');
+        slotEl.className = 'slot board-slot';
+        slotEl.dataset.row = row;
+        slotEl.dataset.col = col;
+        slotEl.tabIndex = 0;
+        slotEl.setAttribute('role', 'button');
+
+        DragDrop.attachDropTarget(slotEl);
+        slotEl.addEventListener('click', () => this.handleSlotClick(row, col));
+        slotEl.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') this.handleSlotClick(row, col);
+        });
+
+        (col < CONFIG.slotsPerSide ? leftEl : rightEl).appendChild(slotEl);
+        rowSlots.push(slotEl);
+      }
+
+      corridorEl.append(leftEl, gapEl, rightEl);
+      container.appendChild(corridorEl);
+      this.slotEls.push(rowSlots);
+    }
+  },
+
+  renderAll() {
+    state.board.forEach((row, r) => row.forEach((_, c) => this.renderSlot(r, c)));
+  },
+
+  renderSlot(row, col) {
+    CardRenderer.render(this.slotEls[row][col], state.board[row][col], { showStats: true });
+  },
+
+  handleSlotClick(row, col) {
+    const character = state.board[row][col];
+    if (character) Modal.open(character);
+  },
+
+  setSlot(row, col, character) {
+    state.board[row][col] = character;
+    this.renderSlot(row, col);
+  },
+
+  clearSlot(row, col) {
+    this.setSlot(row, col, null);
+  },
+};
+
+/* ============================================================
+   Reserve — mesma lógica do Board, só que numa fileira única.
+   Só a reserva "ally" ganha DOM; "enemy" fica só no estado.
+============================================================ */
+const Reserve = {
+  slotEls: [],
+
+  build(container) {
+    container.innerHTML = '';
+    this.slotEls = [];
+
+    for (let i = 0; i < CONFIG.reserveSize; i++) {
+      const slotEl = document.createElement('div');
+      slotEl.className = 'slot reserve-slot';
+      slotEl.dataset.index = i;
+      slotEl.tabIndex = 0;
+      slotEl.setAttribute('role', 'button');
+      slotEl.dataset.sfxHover = 'hover';
+      slotEl.dataset.sfxClick = 'click';
+
+      DragDrop.attachDragSource(slotEl, i);
+      slotEl.addEventListener('click', () => this.handleClick(i));
+      slotEl.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') this.handleClick(i);
+      });
+
+      container.appendChild(slotEl);
+      this.slotEls.push(slotEl);
+    }
+  },
+
+  renderAll() {
+    state.reserves.ally.forEach((_, i) => this.renderSlot(i));
+  },
+
+  renderSlot(i) {
+    const character = state.reserves.ally[i];
+    CardRenderer.render(this.slotEls[i], character, {
+      showStats: false,
+      draggable: !!character,
+    });
+  },
+
+  handleClick(i) {
+    const character = state.reserves.ally[i];
+    if (character) Modal.open(character);
+  },
+
+  setSlot(i, character) {
+    state.reserves.ally[i] = character;
+    this.renderSlot(i);
+    PlayerStats.update();
+  },
+
+  clearSlot(i) {
+    this.setSlot(i, null);
+  },
+};
+
+/* ============================================================
+   DragDrop — arrastar da reserva pra um slot vazio do tabuleiro.
+   Usa a API nativa de drag&drop, sem libs.
+============================================================ */
+const DragDrop = {
+  attachDragSource(el, reserveIndex) {
+    el.addEventListener('dragstart', (e) => {
+      const character = state.reserves.ally[reserveIndex];
+      if (!character) { e.preventDefault(); return; }
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', JSON.stringify({ reserveIndex }));
+    });
+  },
+
+  attachDropTarget(el) {
+    const row = () => Number(el.dataset.row);
+    const col = () => Number(el.dataset.col);
+
+    el.addEventListener('dragover', (e) => {
+      if (state.board[row()][col()] === null) {
+        e.preventDefault();
+        el.classList.add('slot--dragover');
+      }
+    });
+
+    el.addEventListener('dragleave', () => el.classList.remove('slot--dragover'));
+
+    el.addEventListener('drop', (e) => {
+      e.preventDefault();
+      el.classList.remove('slot--dragover');
+      if (state.board[row()][col()] !== null) return;
+
+      let payload;
+      try { payload = JSON.parse(e.dataTransfer.getData('text/plain')); }
+      catch { return; }
+
+      const character = state.reserves.ally[payload.reserveIndex];
+      if (!character) return;
+
+      Board.setSlot(row(), col(), character);
+      Reserve.clearSlot(payload.reserveIndex);
+    });
+  },
+};
+
+/* ============================================================
+   PlayerNames — só escreve o texto nos dois cantos do topo.
+   setNames() é o jeito de trocar depois (ex: quando o Firebase
+   informar o nome real do oponente).
+============================================================ */
+const PlayerNames = {
+  allyEl: null,
+  enemyEl: null,
+
+  init(allyEl, enemyEl) {
+    this.allyEl = allyEl;
+    this.enemyEl = enemyEl;
+    this.setNames(CONFIG.playerName, CONFIG.enemyName);
+  },
+
+  setNames(playerName, enemyName) {
+    if (playerName != null) this.allyEl.textContent = playerName;
+    if (enemyName != null) this.enemyEl.textContent = enemyName;
+  },
+};
+
+/* ============================================================
+   PlayerStats — as duas linhas embaixo do nome de cada jogador:
+   quantos bonecos ele tem na reserva, e quantos MOBS ele tem
+   (mobs = quantos bonecos dá pra mover no turno; a contagem real
+   ainda não existe, isso só desenha o número de state.mobs).
+   update() é chamado sempre que a reserva ou os mobs mudam.
+============================================================ */
+const PlayerStats = {
+  els: {},
+
+  init(dollsAllyEl, mobsAllyEl, dollsEnemyEl, mobsEnemyEl) {
+    this.els = {
+      dollsAlly: dollsAllyEl,
+      mobsAlly: mobsAllyEl,
+      dollsEnemy: dollsEnemyEl,
+      mobsEnemy: mobsEnemyEl,
+    };
+    this.update();
+  },
+
+  countDolls(reserve) {
+    return reserve.filter(Boolean).length;
+  },
+
+  update() {
+    if (!this.els.dollsAlly) return;
+    this.els.dollsAlly.innerHTML = `x${this.countDolls(state.reserves.ally)}<i class="bi bi-people-fill"></i>`;
+    this.els.dollsEnemy.innerHTML = `x${this.countDolls(state.reserves.enemy)}<i class="bi bi-people-fill"></i> `;
+    this.els.mobsAlly.innerHTML = `x${state.mobs.ally} MOBS`;
+    this.els.mobsEnemy.innerHTML = `x${state.mobs.enemy} MOBS`;
+  },
+};
+
+/* ============================================================
+Modal — janela simples com as infos do personagem.
+============================================================ */
+
+const Modal = {
+  el: null,
+
+  init(el) {
+    this.el = el;
+    el.addEventListener('click', (e) => {
+      if (e.target === el) this.close();
+    });
+  },
+
+  open(character) {
+    const doll = catalog[character.id]
+    const attbts = joinAttributes(doll.attbtLife, doll.attbtDamage)
+
+    this.el.innerHTML = `
+      <div class="modal-card">
+        <button class="modal-close" data-sfx-click="click" aria-label="Fechar">&#10005;</button>
+        <div class="modal-visual"></div>
+        <h2 class="modal-name">${character.name}</h2>
+        <h2 class="modal-group"><i>${doll.group}<i></h2>
+          <div class="modal-stats">
+            <span class="stat ${definyStyle('life',character.id)}Vida: ${character.life}</span>
+              <span class="stat ${definyStyle('attack',character.id)}Ataque: ${character.attack}</span>
+          </div>
+          ${attbts.length || doll.power.description !== '' ? "<hr style='opacity: 0.3;'>": ''}
+          <h2 class="modal-attributes">${getHTMLattributes(attbts,doll.rageDamage)}</h2>
+          <br>
+          <h2 class="modal-power">${doll.power.description.replace('[','<i><strong><u>').replace(']','</i></strong></u>')}</h2>
+
+          ${doll.affinities.length ? "<br><hr style='opacity: 0.3;'>": ''}
+
+          <h2 class="modal-affinities">${doll.affinities.map(item => `&#9903;${item}   `).join('')}</h2>
+      </div>
+    `;
+    this.el.querySelector('.modal-visual').appendChild(CardRenderer.createImage(character));
+    this.el.querySelector('.modal-close').addEventListener('click', () => this.close());
+    this.el.classList.add('modal-overlay--visible');
+
+    // Prévia sonora do atributo principal do boneco (rage, drill, guardian...).
+    // Quando o sistema de combate real existir, chame AudioManager.Sfx.dollEffect()
+    // no momento do golpe de verdade — isso aqui é só a ficha sendo aberta.
+    AudioManager.Sfx.dollEffect(attbts[0] || 'default');
+  },
+
+  close() {
+    this.el.classList.remove('modal-overlay--visible');
+  },
+
+};
+
+/* ============================================================
+   Dados de exemplo — só pra provar que o sistema funciona.
+   Troque à vontade / substitua por dados vindos do Firestore.
+============================================================ */
+function setRandomDoll() {
+  const {id, doll} = getRandomDoll();
+  return createCharacter({ id, name: doll.name,  image: '🗡️', life: doll.stats.baseLife, attack: doll.stats.baseDamage, rage: doll.rageDamage, guard: new Set(doll.attbtLife).has('guardian')})
+}
+
+function seedDemoData() {
+  const allyDeck = [
+    createCharacter(setRandomDoll()),
+    createCharacter(setRandomDoll()),
+    createCharacter(setRandomDoll()),
+    createCharacter(setRandomDoll()),
+    createCharacter(setRandomDoll()),
+    createCharacter(setRandomDoll()),
+    createCharacter(setRandomDoll()),
+    createCharacter(setRandomDoll()),
+    createCharacter(setRandomDoll()),
+    createCharacter(setRandomDoll()),
+    createCharacter(setRandomDoll()),
+    createCharacter(setRandomDoll()),
+  ];
+  allyDeck.forEach((character, i) => { state.reserves.ally[i] = character; });
+
+  const enemyDeck = [
+    createCharacter(setRandomDoll()),
+    createCharacter(setRandomDoll()),
+  ];
+  enemyDeck.forEach((character, i) => { state.reserves.enemy[i] = character; });
+}
+
+// Carrega o catálogo assim que a página abre — precisa estar
+// pronto ANTES da partida começar, porque o Modal e o styles.js
+// (definyStyle) consultam a variável global `catalog`.
+async function boot() {
+  catalog = await carregarCatalog();
+}
+
+/* ============================================================
+   Boot
+============================================================ */
+document.addEventListener('DOMContentLoaded', () => {
+  Board.build(document.getElementById('board'));
+  Reserve.build(document.getElementById('reserve-ally'));
+  Modal.init(document.getElementById('modal-overlay'));
+  PlayerNames.init(
+    document.getElementById('player-name-ally'),
+    document.getElementById('player-name-enemy')
+  );
+  PlayerStats.init(
+    document.getElementById('player-dolls-ally'),
+    document.getElementById('player-mobs-ally'),
+    document.getElementById('player-dolls-enemy'),
+    document.getElementById('player-mobs-enemy')
+  );
+
+  boot();
+
+  // ---- Áudio: liga tudo de uma vez, aqui no boot ----------------
+  // bindUISounds cobre qualquer elemento com data-sfx-click/hover,
+  // inclusive os criados depois (slots, botão de fechar modal).
+  AudioManager.bindUISounds();
+  AudioManager.attachTypingSound(document.getElementById('input-username'));
+  // Autoplay do navegador só libera som após um gesto do usuário —
+  // isso dispara a música do menu no primeiro clique/tecla.
+  AudioManager.primeOnFirstInteraction('menu');
+
+  // Botões acima da Reserva — a lógica de fato (confirmar rendição,
+  // abrir painel de configurações) entra aqui quando existir.
+  document.getElementById('btn-surrender').addEventListener('click', () => {
+    console.log('[Trincheira] Render-se clicado — plugar lógica de rendição aqui.');
+  });
+  document.getElementById('btn-settings').addEventListener('click', () => {
+    console.log('[Trincheira] Configurações clicado — plugar painel de configurações aqui.');
+  });
+
+  // API pública — é aqui que a integração com Firebase entra depois.
+  // Ex.: onSnapshot(docRef, (doc) => Game.loadBoardState(doc.data().board))
+  window.Game = {
+    CONFIG,
+    state,
+    Board,
+    Reserve,
+    Modal,
+    PlayerNames,
+    PlayerStats,
+    loadBoardState(newBoard) {
+      state.board = newBoard;
+      Board.renderAll();
+    },
+    loadAllyReserveState(newReserve) {
+      state.reserves.ally = newReserve;
+      Reserve.renderAll();
+    },
+    setPlayerNames(playerName, enemyName) {
+      PlayerNames.setNames(playerName, enemyName);
+    },
+
+    // Chamado pelo js/menu.js quando o Firestore fecha uma sala
+    // (dono + convidado presentes, 12 bonecos já sorteados pros
+    // dois lados). Só desenha o que já veio pronto — nenhuma
+    // lógica de turno/combate mexe aqui ainda.
+    startMatch({ me, opponent, myReserve, opponentReserve }) {
+      CONFIG.playerName = me.name;
+      CONFIG.enemyName = opponent.name;
+      PlayerNames.setNames(me.name, opponent.name);
+
+      state.reserves.ally = myReserve.map((d) => createCharacter({
+        id: d.id, name: d.name, image: '🗡️',
+        life: d.life, attack: d.damage, rage: d.rage, guard: d.guard,
+        owner: 'ally',
+      }));
+      state.reserves.enemy = opponentReserve.map((d) => createCharacter({
+        id: d.id, name: d.name, image: '🗡️',
+        life: d.life, attack: d.damage, rage: d.rage, guard: d.guard,
+        owner: 'enemy',
+      }));
+
+      Reserve.renderAll();
+      Board.renderAll();
+      PlayerStats.update();
+
+      /* ══════════════════════════════════════════════════════════
+         ██  TRANSIÇÃO: MENU  ➜  TABULEIRO  ██
+         A partida começa de verdade aqui. A música de fundo troca
+         do tema do menu pro tema do tabuleiro (crossfade sozinho,
+         ver enterBoard() em js/audio.js).
+      ══════════════════════════════════════════════════════════ */
+      AudioManager.enterBoard();
+
+      document.getElementById('app').classList.remove('pre-match');
+    },
+
+    // Atalho pra testar a tela do jogo sem precisar do Firebase
+    // configurado — abra o console e rode: Game.seedDemo()
+    async seedDemo() {
+      if (!catalog) catalog = await carregarCatalog();
+      seedDemoData();
+      Reserve.renderAll();
+      Board.renderAll();
+      PlayerStats.update();
+
+      /* ══════════════════════════════════════════════════════════
+         ██  TRANSIÇÃO: MENU  ➜  TABULEIRO  ██  (atalho de teste)
+         Mesmo ponto de troca de música do startMatch() de verdade.
+      ══════════════════════════════════════════════════════════ */
+      AudioManager.enterBoard();
+
+      document.getElementById('app').classList.remove('pre-match');
+      document.getElementById('menu-screen').classList.add('menu-screen--hidden');
+    },
+  };
+});
+</script>
+
+<script type="module" src="js/menu.js"></script>
+
+</body>
+</html>

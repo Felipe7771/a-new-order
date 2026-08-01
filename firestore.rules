@@ -1,0 +1,41 @@
+rules_version = '2';
+
+// Regras de PROTÓTIPO para a coleção "salas".
+//
+// Aviso importante: este projeto ainda não usa Firebase Authentication
+// — o "ID único" do jogador é gerado no navegador (crypto.randomUUID)
+// e guardado no localStorage. Isso é ótimo pra prototipar rápido, mas
+// significa que estas regras NÃO conseguem provar de verdade quem é
+// o dono de uma sala (qualquer um pode mandar o ID que quiser).
+// Antes de ir pra produção, o passo recomendado é ligar o Firebase
+// Authentication no modo "Anonymous" e trocar o ID local por
+// request.auth.uid nas regras abaixo.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /salas/{salaId} {
+      // Qualquer jogador pode ver a lista de salas (precisa disso
+      // pra fazer matchmaking client-side).
+      allow read: if true;
+
+      // Só cria sala nova em estado 'waiting', sem convidado.
+      allow create: if request.resource.data.state == 'waiting'
+                    && request.resource.data.guest == null
+                    && request.resource.data.ower.ID is string
+                    && request.resource.data.ower.name is string;
+
+      // Só permite: (a) alguém entrar como convidado numa sala
+      // 'waiting' sem convidado, virando 'playing'; ou (b) o dono
+      // apagar a própria sala vazia (tratado em "delete" abaixo).
+      allow update: if resource.data.state == 'waiting'
+                    && resource.data.guest == null
+                    && request.resource.data.guest != null
+                    && request.resource.data.state == 'playing';
+
+      // Só apaga sala que ainda não tem convidado (cancelar busca,
+      // ou limpeza de sala expirada há mais de 24h).
+      allow delete: if resource.data.guest == null;
+    }
+  }
+}

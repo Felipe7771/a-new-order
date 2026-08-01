@@ -1,0 +1,825 @@
+/* ============================================================
+     TOKENS — tudo que é "identidade visual" mora aqui.
+     Trocar o clima do jogo (ex: virar tema espacial) é mexer
+     só nesse bloco, sem tocar em layout ou lógica.
+  ============================================================ */
+  :root{
+    --bg: #14170f;
+    --panel: #1f2417;
+    --reserv:rgb(0, 0, 0);
+    --panel-alt: #161c0d;
+    --panel-alt-menu: transparent;
+    --line: #46502f;
+    --dashed: #5a6b3d;
+    --text: #e7e2cf;
+    --text-group:rgb(0, 0, 0)f;
+    --text-dim: #ffffff;
+    --life: #c1544a;
+    --guardian: #dadada;
+    --implacable: #4aabc1;
+    --affinities: #97e8fb;
+    --attack: #c99a3c;
+    --drill: #ff8400;
+    --mortal: #885d5d;
+    --area: #b9403a;
+    --entire_arena: #b9403a;
+    --rage: #a65bd2;
+    --font-display: 'Oswald', sans-serif;
+    --font-title: "Griffy", system-ui;
+    --font-mono: 'JetBrains Mono', monospace;
+    --principal-button: #d8ac4d;
+
+    /* Largura do tabuleiro: ajuste --board-width pra compactar
+       pelos lados (ex: 70%). A sobra fica pintada com --board-bg. */
+    --board-width: 90%;
+    --board-max-width: 1200px;
+    --board-bg: #000;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html, body{
+    height: 100%;
+    margin: 0;
+    overflow: hidden; /* sem scroll, tela inteira */
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-display);
+  }
+
+  #app{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  /* ---------- nomes dos jogadores (sobre o topo da tela) ---------- */
+  #player-names{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 14px 22px;
+    z-index: 60;
+    pointer-events: none;
+  }
+  .player-name{
+    font-family: var(--font-title);
+    font-weight: 1000;
+    font-size: clamp(21px, 3.4vw, 20px);
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    line-height: 1;
+    color: var(--text);
+    text-shadow:
+      2px 2px 0 #000,
+      -2px 2px 0 #000,
+      2px -2px 0 #000,
+      -2px -2px 0 #000,
+      0 3px 10px rgba(0,0,0,.85);
+  }
+  #player-name-enemy{
+    text-align: right;
+    color: var(--life);
+  }
+
+  .player-info{
+    display: flex;
+    flex-direction: column;
+  }
+  .player-info--ally{ align-items: flex-start; }
+  .player-info--enemy{ align-items: flex-end; }
+
+  .player-stats{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 5px;
+  }
+  .player-info--ally .player-stats{ align-items: flex-start; }
+  .player-info--enemy .player-stats{ align-items: flex-end; }
+
+  .player-stat{
+    font-family: var(--font-title);
+    font-weight: 1000;
+    letter-spacing: .3em;
+    line-height: 1.15;
+    text-shadow:
+      1px 1px 0 #000,
+      -1px 1px 0 #000,
+      1px -1px 0 #000,
+      -1px -1px 0 #000,
+      0 2px 8px rgba(0,0,0,.8);
+  }
+  .player-stat--dolls{
+    font-size: clamp(14px, 2.6vw, 16px);
+    color: var(--text);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    overflow:hidden;
+  }
+  .player-stat--mobs{
+    font-size: clamp(10px, 1.8vw, 12px);
+    color: var(--implacable);
+    text-transform: uppercase;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    overflow:hidden;
+  }
+
+  /* ---------- cabeçalho fino ---------- */
+  #topbar{
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--line);
+    background: linear-gradient(180deg, var(--panel), var(--bg));
+  }
+  #topbar h1{
+    margin: 0;
+    font-size: clamp(14px, 1.8vw, 20px);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  #topbar span{
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: .05em;
+  }
+
+  /* ---------- tabuleiro ---------- */
+  /* #board-viewport ocupa toda a largura e pinta de preto a área
+     que sobrar; #board é compactado/centralizado dentro dele via
+     --board-width / --board-max-width (definidos em :root). */
+  #board-viewport{
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    justify-content: center;
+    background: var(--board-bg);
+    position: relative;
+  }
+  #board{
+    width: var(--board-width);
+    /* max-width: var(--board-max-width); */
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .corridor{
+    flex: 1 1 0;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    /* border-bottom: 1px solid var(--line); */
+  }
+  .corridor:nth-child(odd){ background: var(--panel); }
+  .corridor:nth-child(even){ background: var(--panel-alt); }
+
+  .corridor-side{
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: clamp(6px, 1vw, 14px);
+    padding: 0 clamp(10px, 1.6vw, 24px);
+  }
+
+  /* "terra de ninguém": a faixa central vazia entre os dois lados */
+  .corridor-gap{
+    flex: 1 1 auto;
+    position: relative;
+    height: 2px;
+    margin: 0 4px;
+    background-image: repeating-linear-gradient(
+      90deg, var(--dashed) 0 14px, transparent 14px 26px
+    );
+  }
+  .corridor-gap::before,
+  .corridor-gap::after{
+    content: '▸';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--dashed);
+    font-size: 14px;
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  .corridor-gap::before{ left: calc(50% - 20px); }
+  .corridor-gap::after{ content: '◂'; left: calc(50% + 6px); animation-delay: .3s; }
+  @keyframes pulse{
+    0%, 100% { opacity: .35; }
+    50% { opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .corridor-gap::before, .corridor-gap::after{ animation: none; opacity: .6; }
+  }
+
+  /* ---------- slots (compartilhado por tabuleiro e reserva) ---------- */
+  .slot{
+    width: clamp(52px, 6.4vw, 104px);
+    aspect-ratio: 3 / 4;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    background: rgba(255,255,255,.02);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: default;
+    transition: border-color .15s, background-color .15s, transform .1s;
+  }
+  .slot--empty{
+    border-style: dashed;
+    opacity: .45;
+  }
+  .slot--filled{
+    background: var(--panel-alt);
+    cursor: pointer;
+  }
+  .board-slot.slot--filled{ cursor: pointer; }
+  .reserve-slot.slot--filled{ cursor: grab; }
+  .reserve-slot.slot--filled:active{ cursor: grabbing; }
+  .slot--dragover{
+    border-color: var(--attack);
+    background: rgba(201,154,60,.15);
+    transform: scale(1.04);
+  }
+  .slot:focus-visible{
+    outline: 2px solid var(--attack);
+    outline-offset: 2px;
+  }
+
+  .card-visual{
+    flex: 1;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(20px, 3.2vw, 36px);
+    overflow: hidden;
+  }
+  .card-visual img{
+    width: 82%;
+    height: 82%;
+    object-fit: cover;
+    border-radius: 2px;
+    pointer-events: none;
+  }
+  .card-stats{
+    display: flex;
+    gap: 6px;
+    padding: 2px 0 5px;
+    font-family: var(--font-title);
+    letter-spacing: .1em;
+    font-weight: 500;
+    font-size: clamp(8px, .95vw, 11px);
+    z-index: 101;
+  }
+  .stat--life{ color: var(--life); }
+  .stat--attack{ color: var(--attack); }
+  .stat--guardian{ color: var(--guardian); font-weight: bold;}
+  .stat--implacable{ color: var(--implacable); font-weight: bold;}
+  .stat--drill{ color: var(--drill); font-weight: bold;}
+  .stat--mortal{ color: var(--mortal); font-weight: bold;}
+  .stat--area{ color: var(--area); }
+  .stat--entire_arena{ color: var(--entire_arena); }
+  .stat--rage{ color: var(--rage); font-weight: bold;}
+
+  /* ---------- reserva (mão) ---------- */
+#reserve {
+    flex: 0 0 auto;
+    height: 15vh;
+    min-height: 100px;
+    background: var(--reserv);
+    display: flex;
+    padding: 6px 16px 10px;
+    z-index: 100;
+    position: relative;
+}
+
+#reserve::before {
+    content: "";
+    position: absolute;
+    top: -60px;
+    left: 0;
+    width: 100%;
+    height: 80px;
+
+    background: linear-gradient(
+        to top,
+        var(--reserv),
+        transparent
+    );
+
+    pointer-events: none;
+}
+  #reserve-header{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    z-index: 120;
+  }
+  #reserve-actions{
+    display: flex;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+  .reserve-action-btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    background: var(--panel-alt);
+    color: var(--text);
+    font-size: 14px;
+    cursor: pointer;
+    transition: border-color .15s, background-color .15s;
+  }
+  .reserve-action-btn:hover{
+    border-color: var(--attack);
+    background: var(--panel);
+  }
+  .reserve-action-btn:focus-visible{
+    outline: 2px solid var(--attack);
+    outline-offset: 2px;
+  }
+  #reserve-label{
+    font-size: 10px;
+    letter-spacing: .18em;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    z-index: 120;
+    font-family: var(--font-title);
+    font-weight: 500;
+  }
+  #reserve-ally{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(4px, .8vw, 10px);
+  }
+  #reserve-ally .slot{ width: 100%; max-width: 90px; }
+
+  /* ---------- modal de informações ---------- */
+  #modal-overlay{
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.72);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .15s ease;
+    z-index: 999;
+  }
+  #modal-overlay.modal-overlay--visible{
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .modal-card{
+    position: relative;
+    background: var(--panel-alt);
+    border: 2px solid var(--line);
+    border-radius: 4px;
+    padding: 28px 32px 22px;
+    min-width: 350px;
+    max-width: 375px;
+    text-align: center;
+  }
+  .modal-close{
+    position: absolute;
+    top: 6px; right: 8px;
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 16px;
+    cursor: pointer;
+  }
+  .modal-close:hover{ color: var(--text); }
+  .modal-visual{
+    font-size: clamp(44px, 7vw, 68px);
+    margin-bottom: 10px;
+  }
+  .modal-visual img{
+    width: 96px; height: 96px;
+    object-fit: cover;
+    border-radius: 3px;
+  }
+  .modal-name{
+    margin: 0 0 10px;
+    font-size: 20px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    font-family: var(--font-title);
+    font-weight: 600;
+  }
+  .modal-group{
+    margin: 0 0 10px;
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+  .modal-power{
+    margin: 0 0 10px;
+    font-size: 14px;
+    letter-spacing: .06em;
+    font-family: var(--font-title);
+    font-weight: 500;
+    justify-content: center;
+  }
+  .modal-attributes {
+    margin: 0 0 10px;
+    font-size: 12px;
+    letter-spacing: .06em;
+    font-family: var(--font-mono);
+    justify-content: center;
+  }
+  .modal-affinities {
+    margin: 10 0 10px;
+    font-size: 12px;
+    letter-spacing: .06em;
+    font-family: var(--font-title);
+    font-weight: 500;
+    justify-content: center;
+    color: var(--affinities)
+  }
+  .modal-stats{
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    font-family: var(--font-mono);
+    margin-bottom:20px;
+    /* font-size: 13px; */
+  }
+
+  /* ============================================================
+     MENU — login e busca de sala. Fica por cima de tudo até uma
+     partida começar; #app.pre-match esconde o jogo enquanto isso.
+  ============================================================ */
+  #app.pre-match #player-names,
+  #app.pre-match #board-viewport,
+  #app.pre-match #reserve{
+    display: none;
+  }
+
+  #menu-screen{
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    background:
+      radial-gradient(ellipse 60% 40% at 50% -5%, rgba(83, 83, 28, 0.22), transparent 60%),
+      linear-gradient(180deg, #100e07 0%, var(--bg) 55%, #0a0a06 100%);
+    transition: opacity .4s ease, visibility .4s ease;
+  }
+  #menu-screen.menu-screen--hidden{
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  /* fios do marionetista descendo do topo — o "signature" visual
+     do menu, ecoando o "mão com agulhas" do briefing */
+  /* ---------- cordas longas de fundo — mesmo espírito das 5 da
+     frente, só que mais compridas, mais fracas e espalhadas pela
+     tela toda, pra dar profundidade atrás do cartão de login ---------- */
+  .menu-strings-bg{
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .menu-strings-bg span{
+    position: absolute;
+    top: -2%;
+    left: var(--x);
+    width: 1px;
+    --amp: 45.9deg;
+    height: var(--h, 70vh);
+    background: linear-gradient(180deg, transparent, var(--dashed) 30%, var(--dashed) 85%, transparent);
+    opacity: var(--op, .2);
+    transform-origin: top center;
+    animation: string-wind var(--dur, 8s) ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+  }
+
+  /* ---------- poeira/neve levada pelo vento, atrás do cartão ---------- */
+  .menu-particles{
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .menu-particles span{
+    position: absolute;
+    top: -4%;
+    left: var(--x);
+    width: var(--size, 3px);
+    height: var(--size, 3px);
+    border-radius: 50%;
+    background: #fff;
+    opacity: 1;
+    --maxop: .5;
+    --drift: 120px;
+    animation: particle-drift var(--dur, 11s) linear infinite;
+    animation-delay: var(--delay, 0s);
+  }
+
+  .menu-strings{
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 42vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: clamp(28px, 8vw, 90px);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .menu-strings span{
+    position: relative;
+    width: 1px;
+    height: 90%;
+    background: linear-gradient(180deg, transparent, var(--dashed) 40%, var(--attack) 100%);
+    opacity: .55;
+    transform-origin: top center;
+    --amp: 1.9deg;
+    animation: string-wind 6s ease-in-out infinite;
+  }
+  .menu-strings span::after{
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 50%;
+    width: 6px;
+    height: 6px;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    background: var(--attack);
+    box-shadow: 0 0 6px rgba(201,154,60,.7);
+  }
+  .menu-strings span:nth-child(1){ animation-delay: 0s; height: 82%; }
+  .menu-strings span:nth-child(2){ animation-delay: .8s; height: 94%; }
+  .menu-strings span:nth-child(3){ animation-delay: 1.6s; height: 100%; }
+  .menu-strings span:nth-child(4){ animation-delay: .4s; height: 88%; }
+  .menu-strings span:nth-child(5){ animation-delay: 1.2s; height: 96%; }
+  /* Vento não é um metrônomo: em vez de balançar em 2 pontos
+     (ida-e-volta simétrica, quase imperceptível num fio de 1px),
+     usa 4 estágios com leve translateX pra parecer uma rajada
+     irregular. Cada corda define sua própria --amp/--dur/--delay
+     (inline, nas de fundo) e some no fallback pras 5 da frente. */
+  @keyframes string-wind{
+    0%   { transform: rotate(calc(var(--amp, 1.9deg) * -1)) translateX(0); }
+    22%  { transform: rotate(calc(var(--amp, 1.9deg) * .4)) translateX(2px); }
+    50%  { transform: rotate(var(--amp, 1.9deg)) translateX(3px); }
+    78%  { transform: rotate(calc(var(--amp, 1.9deg) * -.5)) translateX(-2px); }
+    100% { transform: rotate(calc(var(--amp, 1.9deg) * -1)) translateX(0); }
+  }
+
+  /* Partículas de poeira/neve: sobem em opacidade, atravessam a
+     tela na diagonal (leve --drift lateral simulando vento) e
+     desaparecem antes de sair, pra não "cortar" no fim do loop. */
+  @keyframes particle-drift{
+    0%   { transform: translate(0, 0); opacity: 0; }
+    10%  { opacity: var(--maxop, .5); }
+    88%  { opacity: var(--maxop, .5); }
+    100% { transform: translate(var(--drift, 120px), 112vh); opacity: 0; }
+  }
+
+  .menu-content{
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    /* max-width: 380px; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-top: clamp(48px, 9vh, 100px);
+  }
+  .menu-eyebrow{
+    margin: 0 0 6px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--principal-button);
+    opacity: .75;
+  }
+  .menu-title{
+    margin: 0 0 8px;
+    font-family: var(--font-title);
+    font-weight: 400;
+    font-size: clamp(36px, 7vw, 62px);
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--text);
+    animation: title-flicker 5s ease-in-out infinite;
+  }
+  .menu-logo{
+    /* width: 120px;  */
+    /* margin-bottom: 8px; */
+    /* Deixar imagem responsiva ao tamanho da tela, e margin tambem */
+    width: clamp(0px, 15vw, 50px);
+    height: auto;
+    margin-bottom: clamp(0px, -2vh, -30px);
+    filter: drop-shadow(0 0 6px rgba(201,154,60,.85)) drop-shadow(0 0 14px rgba(166,91,210,.16));
+    animation: logo-flicker 30s linear infinite;
+  }
+  /* fazer animação da imagem sofrer certos descuidos de opacidade */
+  /* girar lentamente uma volta de 360 graus */
+  @keyframes logo-flicker{
+    0% { opacity: 0.6; filter: drop-shadow(0 0 6px rgba(201,154,60,.85)) drop-shadow(0 0 14px rgba(166,91,210,.16)); transform: rotate(0deg); }
+    50%      { opacity: 0.55; filter: drop-shadow(0 0 6px rgba(201,154,60,.35)) drop-shadow(0 0 14px rgba(166,91,210,.16)); transform: rotate(180deg); }
+    100% { opacity: 0.6; filter: drop-shadow(0 0 6px rgba(201,154,60,.85)) drop-shadow(0 0 14px rgba(166,91,210,.16)); transform: rotate(360deg); }
+  }
+  
+  @keyframes title-flicker{
+    0%, 100% { text-shadow: 0 0 18px rgba(201,154,60,.35), 0 0 42px rgba(166,91,210,.16); }
+    50%      { text-shadow: 0 0 24px rgba(201,154,60,.85), 0 0 50px rgba(166,91,210,.24); }
+  }
+  .menu-subtitle{
+    margin: 0 0 30px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: .03em;
+    color: var(--text-dim);
+    opacity: .8;
+  }
+  /* @media (prefers-reduced-motion: reduce){
+    .menu-strings span,
+    .menu-strings-bg span,
+    .menu-particles span,
+    .menu-title{ animation: none; }
+  } */
+
+  .menu-card{
+    position: relative;
+    width: min(320px, 88vw);
+    background: var(--panel-alt-menu);
+    border: 1px solid var(--line);
+    padding: 32px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: 0 24px 50px rgba(0,0,0,.55);
+  }
+  /* alfinete que "prende" o cartão do menu, como um tecido */
+  .menu-card::before{
+    content: '';
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    width: 22px;
+    height: 22px;
+    transform: translateX(-50%) rotate(45deg);
+    background: linear-gradient(135deg, var(--attack), #8a6a26);
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    box-shadow: 0 3px 6px rgba(0,0,0,.5);
+  }
+
+  .menu-label{
+    text-align: left;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    opacity: .8;
+  }
+  .menu-input{
+    background: rgba(0,0,0,.35);
+    border: none;
+    border-bottom: 1px solid var(--dashed);
+    color: var(--text);
+    font-family: "Dancing Script", cursive;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 16px;
+    letter-spacing: .03em;
+    padding: 8px 4px;
+    outline: none;
+    transition: border-color .15s;
+  }
+  .menu-input::placeholder{ color: rgba(231,226,207,.35); }
+  .menu-input:focus{ border-bottom-color: var(--attack); }
+
+  .menu-id-tag{
+    text-align: right;
+    font-style: italic;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .08em;
+    color: var(--implacable);
+    opacity: .85;
+  }
+
+  .menu-play-btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 6px;
+    padding: 12px;
+    border: 1px solid var(--attack);
+    border-radius: 2px;
+    background: linear-gradient(180deg, var(--principal-button), var(--attack));
+    color: #14170f;
+    font-family: var(--font-title);
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: transform .12s, box-shadow .12s, opacity .12s;
+  }
+  .menu-play-btn:hover:not(:disabled){
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(201,154,60,.35);
+    /* transform: scale(1.02); */
+  }
+  .menu-play-btn:active:not(:disabled){ transform: translateY(0); }
+  .menu-play-btn:disabled{
+    opacity: .5;
+    cursor: default;
+    box-shadow: none;
+    transform: none;
+  }
+
+  .menu-error{
+    min-height: 14px;
+    margin: 2px 0 0;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--life);
+  }
+
+  .menu-card--waiting{
+    align-items: center;
+    text-align: center;
+  }
+  .waiting-spinner{
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px dashed var(--dashed);
+    border-top-color: var(--attack);
+    animation: spin 1.1s linear infinite;
+  }
+  @keyframes spin{ to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce){ .waiting-spinner{ animation: none; } }
+
+  .menu-waiting-text{
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: .04em;
+    color: var(--text-dim);
+  }
+  .menu-cancel-btn{
+    margin-top: 4px;
+    padding: 8px 16px;
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    color: var(--text-dim);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: border-color .15s, color .15s;
+  }
+  .menu-cancel-btn:hover{
+    border-color: var(--life);
+    color: var(--life);
+  }
