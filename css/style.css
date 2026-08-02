@@ -263,6 +263,15 @@
     outline: 2px solid var(--attack);
     outline-offset: 2px;
   }
+  /* campo do inimigo — só pra deixar visualmente claro que aqui
+     não dá pra soltar boneco (o bloqueio de verdade é em JS/DragDrop
+     e, do lado servidor, na transação de placeDoll em matchmaking.js) */
+  .board-slot--enemy{
+    cursor: not-allowed;
+  }
+  .board-slot--enemy.slot--empty{
+    opacity: .28;
+  }
 
   .card-visual{
     flex: 1;
@@ -823,7 +832,14 @@
     border-color: var(--life);
     color: var(--life);
   }
-/* ---------- telão de entrada do boneco (ao lado do slot) ---------- */
+/* ---------- telão de entrada do boneco (ao lado do slot) ----------
+   Timeline única de 3.2s (bate com o hideTimeout do JS em EntranceFX):
+     0%   -> 14%   entra deslizando rápido (igual antes, .45s)
+     14%  -> 82%   fica visível e deriva BEM devagar, só uns pixels
+     82%  -> 100%  fade-out suave (opacity 1 -> 0)
+   As duas classes (--visible e --from-left/--from-right) são
+   reaplicadas do zero a cada show() no JS, então a animação sempre
+   reinicia do começo pra cada boneco novo. ---------- */
 #entrance-overlay{
   position: fixed;
   top: 0;
@@ -836,34 +852,41 @@
   transform: translateY(-50%);
 }
 #entrance-overlay.entrance-overlay--visible{
-  opacity: 1;
-  animation: entrance-slide-in .45s cubic-bezier(.2,.8,.3,1) forwards,
-             entrance-fade-out .5s ease .35s;
-  /* o segundo delay (2.4) some perto do fim dos 3.2s do setTimeout do JS */
+  animation: entrance-fade 3.2s ease-in-out forwards;
 }
 
-/* nasce do lado esquerdo do slot -> desliza vindo da esquerda */
-#entrance-overlay.entrance-overlay--from-left .entrance-card{
-  transform: translateX(-24px);
+/* nasce do lado esquerdo do slot -> desliza vindo da esquerda, e
+   continua deslizando bem devagar pro mesmo lado antes de sumir */
+#entrance-overlay.entrance-overlay--visible.entrance-overlay--from-left .entrance-card{
+  animation: entrance-drift-left 3.2s ease-in-out forwards;
 }
 /* nasce do lado direito do slot -> desliza vindo da direita, e o
    card inteiro precisa "crescer" pra esquerda (não pra fora da tela) */
 #entrance-overlay.entrance-overlay--from-right{
   transform: translateY(-50%) translateX(-100%);
 }
-#entrance-overlay.entrance-overlay--from-right .entrance-card{
-  transform: translateX(24px);
+#entrance-overlay.entrance-overlay--visible.entrance-overlay--from-right .entrance-card{
+  animation: entrance-drift-right 3.2s ease-in-out forwards;
 }
 
-@keyframes entrance-slide-in{
-  from{ opacity: 0; }
-  to{ opacity: 1; }
+@keyframes entrance-fade{
+  0%   { opacity: 0; }
+  14%  { opacity: 1; }
+  82%  { opacity: 1; }
+  100% { opacity: 0; }
 }
-#entrance-overlay .entrance-card{
-  transition: transform .45s cubic-bezier(.2,.8,.3,1);
+
+/* entra rápido (0% -> 14%, mesmo timing de antes) e depois deriva
+   bem lentamente mais alguns pixels na mesma direção, até sumir */
+@keyframes entrance-drift-left{
+  0%   { transform: translateX(-24px); animation-timing-function: cubic-bezier(.2,.8,.3,1); }
+  14%  { transform: translateX(0); }
+  100% { transform: translateX(7px); }
 }
-#entrance-overlay.entrance-overlay--visible .entrance-card{
-  transform: translateX(0);
+@keyframes entrance-drift-right{
+  0%   { transform: translateX(24px); animation-timing-function: cubic-bezier(.2,.8,.3,1); }
+  14%  { transform: translateX(0); }
+  100% { transform: translateX(-7px); }
 }
 
 .entrance-card{
@@ -878,7 +901,7 @@
   margin: 0 0 2px;
   font-family: var(--font-title);
   font-weight: 700;
-  font-size: clamp(14px, 2vw, 20px);
+  font-size: clamp(15px, 2vw, 20px);
   letter-spacing: .04em;
   text-transform: uppercase;
   color: var(--life);
@@ -898,7 +921,8 @@
   margin: 0;
   font-family: var(--font-title);
   font-weight: 500;
-  font-size: clamp(10px, 1.3vw, 13px);
+  font-size: clamp(13px, 1.3vw, 13px);
+  letter-spacing: .12em;
   color: #fff;
   white-space: normal;
   max-width: 40vw;

@@ -43,6 +43,14 @@ const SALAS = "salas";
 const RESERVE_SIZE = 12;
 const ROOM_TTL_MS = 24 * 60 * 60 * 1000; // 1 dia
 
+// Precisam bater com CONFIG.corridors/slotsPerSide em index.html —
+// é o mesmo espelho que existe entre RESERVE_SIZE aqui e
+// CONFIG.reserveSize lá. Usados só pra validar linha/coluna em
+// placeDoll(); se o tabuleiro mudar de tamanho, atualize os dois.
+const CORRIDORS = 4;
+const SLOTS_PER_SIDE = 3;
+const TOTAL_COLS = SLOTS_PER_SIDE * 2;
+
 let db = null;
 function getDb() {
   if (!db) {
@@ -250,11 +258,33 @@ export async function placeDoll(roomId, playerId, reserveIndex, row, col) {
   const roomRef = doc(getDb(), SALAS, roomId);
   const boardKey = `${row}-${col}`;
 
+  // Fora dos limites do tabuleiro — nem chega a olhar a sala.
+  if (
+    !Number.isInteger(row) || !Number.isInteger(col) ||
+    row < 0 || row >= CORRIDORS || col < 0 || col >= TOTAL_COLS
+  ) {
+    throw new Error("posicao-fora-do-tabuleiro");
+  }
+
   await runTransaction(getDb(), async (tx) => {
     const snap = await tx.get(roomRef);
     if (!snap.exists()) throw new Error("sala-nao-existe");
 
     const data = snap.data();
+
+    // Colunas 0..SLOTS_PER_SIDE-1 são sempre do ower, o resto é
+    // sempre do guest (ver comentário de CONFIG.myRole em index.html).
+    // Isso vale independente de quem está olhando a tela — é a MESMA
+    // regra pros dois lados, então validar aqui (server-side, dentro
+    // da transação) é o que garante de verdade que ninguém consegue
+    // jogar no campo do adversário, mesmo chamando isso direto pelo
+    // console do navegador.
+    const isOwner = data.ower?.ID === playerId;
+    const isOwnerColumn = col < SLOTS_PER_SIDE;
+    if (isOwner !== isOwnerColumn) {
+      throw new Error("coluna-nao-pertence-ao-jogador");
+    }
+
     if (data.board && data.board[boardKey]) {
       throw new Error("slot-ja-ocupado");
     }

@@ -188,6 +188,10 @@ async handlePlay() {
       opponent: { id: opponent.ID, name: opponent.name },
       myReserve,
       opponentReserve,
+      // Decide, do lado do Game, qual coluna é "minha" e o
+      // espelhamento visual do tabuleiro (ower sempre à esquerda
+      // pra si, guest também sempre à esquerda pra si).
+      role: isOwner ? 'owner' : 'guest',
     });
 
     this.els.screen.classList.add("menu-screen--hidden");

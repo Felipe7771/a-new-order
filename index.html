@@ -151,7 +151,26 @@ const CONFIG = {
   reserveSize: 12,    // tamanho visual da mão
   playerName: null,   // preenchido pelo Menu quando a partida começa
   enemyName: null,
+  // 'owner' | 'guest' — preenchido pelo Menu quando a partida começa.
+  // Define TANTO o espelhamento visual do tabuleiro (cada jogador
+  // sempre vê o próprio lado à esquerda) QUANTO quais colunas o
+  // jogador local tem permissão de jogar (ver isMyColumn()).
+  myRole: 'owner',
 };
+
+// Colunas 0..slotsPerSide-1 são sempre do OWER (regra do jogo/Firestore,
+// ver matchmaking.js). Colunas slotsPerSide..2*slotsPerSide-1 são
+// sempre do GUEST. Isso não muda com o ponto de vista — o que muda é
+// só a ORDEM em que a gente desenha essas colunas na tela (ver
+// Board.build/displayColOf).
+function isOwnerColumn(col) {
+  return col < CONFIG.slotsPerSide;
+}
+
+// A coluna pertence ao jogador LOCAL (baseado no papel dele na sala)?
+function isMyColumn(col) {
+  return CONFIG.myRole === 'guest' ? !isOwnerColumn(col) : isOwnerColumn(col);
+}
 
 /* ============================================================
    ESTADO — a "fonte da verdade". Tudo que é desenhado na tela
@@ -285,9 +304,28 @@ const CardRenderer = {
 const Board = {
   slotEls: [],
 
+  // Coluna LÓGICA (a mesma pra sempre, é o índice usado em
+  // state.board / no documento do Firestore) -> coluna de EXIBIÇÃO
+  // (onde ela realmente aparece na tela). Pro ower não muda nada.
+  // Pro guest, espelha a fileira inteira (borda continua borda, meio
+  // continua meio, só troca de lado) — assim o próprio lado do guest
+  // sempre cai na esquerda, igual acontece pro ower.
+  displayColOf(col) {
+    const totalCols = CONFIG.slotsPerSide * 2;
+    return CONFIG.myRole === 'guest' ? (totalCols - 1 - col) : col;
+  },
+
   build(container) {
     container.innerHTML = '';
     this.slotEls = [];
+
+    const totalCols = CONFIG.slotsPerSide * 2;
+    // Ordem de construção dos slots: sempre em ordem crescente de
+    // coluna de EXIBIÇÃO (não de coluna lógica), pra que o append
+    // no DOM já saia na posição visual correta da esquerda pra
+    // direita, sem precisar de CSS extra pra reordenar.
+    const colsByDisplayOrder = Array.from({ length: totalCols }, (_, c) => c)
+      .sort((a, b) => this.displayColOf(a) - this.displayColOf(b));
 
     for (let row = 0; row < CONFIG.corridors; row++) {
       const corridorEl = document.createElement('div');
@@ -300,16 +338,16 @@ const Board = {
       const gapEl = document.createElement('div');
       gapEl.className = 'corridor-gap';
 
-      const rowSlots = [];
-      const totalCols = CONFIG.slotsPerSide * 2;
+      const rowSlots = new Array(totalCols);
 
-      for (let col = 0; col < totalCols; col++) {
+      for (const col of colsByDisplayOrder) {
         const slotEl = document.createElement('div');
         slotEl.className = 'slot board-slot';
         slotEl.dataset.row = row;
-        slotEl.dataset.col = col;
+        slotEl.dataset.col = col; // coluna LÓGICA — é o que DragDrop/state usam
         slotEl.tabIndex = 0;
         slotEl.setAttribute('role', 'button');
+        if (!isMyColumn(col)) slotEl.classList.add('board-slot--enemy');
 
         DragDrop.attachDropTarget(slotEl);
         slotEl.addEventListener('click', () => this.handleSlotClick(row, col));
@@ -317,8 +355,9 @@ const Board = {
           if (e.key === 'Enter' || e.key === ' ') this.handleSlotClick(row, col);
         });
 
-        (col < CONFIG.slotsPerSide ? leftEl : rightEl).appendChild(slotEl);
-        rowSlots.push(slotEl);
+        const displayCol = this.displayColOf(col);
+        (displayCol < CONFIG.slotsPerSide ? leftEl : rightEl).appendChild(slotEl);
+        rowSlots[col] = slotEl;
       }
 
       corridorEl.append(leftEl, gapEl, rightEl);
@@ -426,12 +465,18 @@ const DragDrop = {
   attachDropTarget(el) {
     const row = () => Number(el.dataset.row);
     const col = () => Number(el.dataset.col);
+    // slot vazio E dentro do próprio campo — as duas condições que
+    // precisam valer pra soltar um boneco aqui.
+    const canDropHere = () => state.board[row()][col()] === null && isMyColumn(col());
 
     el.addEventListener('dragover', (e) => {
-      if (state.board[row()][col()] === null) {
+      if (canDropHere()) {
         e.preventDefault();
         el.classList.add('slot--dragover');
       }
+      // Se não pode soltar aqui, NÃO chama preventDefault() — isso faz
+      // o navegador mostrar o cursor de "não permitido" sozinho, sem
+      // precisar de CSS/JS extra pra isso.
     });
 
     el.addEventListener('dragleave', () => el.classList.remove('slot--dragover'));
@@ -439,7 +484,7 @@ const DragDrop = {
     el.addEventListener('drop', (e) => {
       e.preventDefault();
       el.classList.remove('slot--dragover');
-      if (state.board[row()][col()] !== null) return;
+      if (!canDropHere()) return; // reforça a checagem (o campo inimigo nunca entra aqui)
 
       let payload;
       try { payload = JSON.parse(e.dataTransfer.getData('text/plain')); }
@@ -531,7 +576,10 @@ const EntranceFX = {
 
     clearTimeout(this.hideTimeout);
 
-    const isLeftSide = col < CONFIG.slotsPerSide;
+    // IMPORTANTE: usa a coluna de EXIBIÇÃO (pós-espelhamento pro
+    // guest), não a coluna lógica — senão o texto de entrada nasce
+    // do lado errado da tela pro jogador convidado.
+    const isLeftSide = Board.displayColOf(col) < CONFIG.slotsPerSide;
     this.el.classList.toggle('entrance-overlay--from-left', isLeftSide);
     this.el.classList.toggle('entrance-overlay--from-right', !isLeftSide);
 
@@ -731,10 +779,16 @@ window.Game = {
     // (dono + convidado presentes, 12 bonecos já sorteados pros
     // dois lados). Só desenha o que já veio pronto — nenhuma
     // lógica de turno/combate mexe aqui ainda.
-  startMatch({ roomId, me, opponent, myReserve, opponentReserve }) {
+  startMatch({ roomId, me, opponent, myReserve, opponentReserve, role }) {
     this.roomId = roomId;
     this.meId = me.id;
     this.opponentId = opponent.id;
+
+    // 'owner' | 'guest' — decide o espelhamento do tabuleiro e o
+    // bloqueio de colocar boneco no campo inimigo (ver CONFIG.myRole
+    // em isMyColumn/Board.displayColOf). Precisa ser setado ANTES de
+    // reconstruir o board, senão ele nasce com a orientação errada.
+    CONFIG.myRole = role === 'guest' ? 'guest' : 'owner';
 
     CONFIG.playerName = me.name;
     CONFIG.enemyName = opponent.name;
@@ -742,6 +796,11 @@ window.Game = {
 
     state.reserves.ally = myReserve.map((d) => characterFromRoomData(d, 'ally'));
     state.reserves.enemy = opponentReserve.map((d) => characterFromRoomData(d, 'enemy'));
+
+    // Reconstrói o tabuleiro agora que já sabemos o papel do jogador
+    // local — o build feito no boot (DOMContentLoaded) usava o valor
+    // padrão 'owner' porque a sala ainda não tinha fechado.
+    Board.build(document.getElementById('board'));
 
     Reserve.renderAll();
     Board.renderAll();
