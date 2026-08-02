@@ -823,3 +823,83 @@
     border-color: var(--life);
     color: var(--life);
   }
+/* ---------- telão de entrada do boneco (ao lado do slot) ---------- */
+#entrance-overlay{
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  z-index: 800;
+  opacity: 0;
+  transform: translateY(-50%);
+}
+#entrance-overlay.entrance-overlay--visible{
+  opacity: 1;
+  animation: entrance-slide-in .45s cubic-bezier(.2,.8,.3,1) forwards,
+             entrance-fade-out .5s ease .35s;
+  /* o segundo delay (2.4) some perto do fim dos 3.2s do setTimeout do JS */
+}
+
+/* nasce do lado esquerdo do slot -> desliza vindo da esquerda */
+#entrance-overlay.entrance-overlay--from-left .entrance-card{
+  transform: translateX(-24px);
+}
+/* nasce do lado direito do slot -> desliza vindo da direita, e o
+   card inteiro precisa "crescer" pra esquerda (não pra fora da tela) */
+#entrance-overlay.entrance-overlay--from-right{
+  transform: translateY(-50%) translateX(-100%);
+}
+#entrance-overlay.entrance-overlay--from-right .entrance-card{
+  transform: translateX(24px);
+}
+
+@keyframes entrance-slide-in{
+  from{ opacity: 0; }
+  to{ opacity: 1; }
+}
+#entrance-overlay .entrance-card{
+  transition: transform .45s cubic-bezier(.2,.8,.3,1);
+}
+#entrance-overlay.entrance-overlay--visible .entrance-card{
+  transform: translateX(0);
+}
+
+.entrance-card{
+  text-align: left;
+  padding: 8px 14px;
+  background: rgba(0,0,0,.6);
+  border-radius: 4px;
+  white-space: nowrap;
+  max-width: 46vw;
+}
+.entrance-name{
+  margin: 0 0 2px;
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: clamp(14px, 2vw, 20px);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--life);
+  text-shadow: 0 0 10px rgba(193,84,74,.7), 0 2px 6px rgba(0,0,0,.9);
+}
+.entrance-group{
+  margin: 0 0 4px;
+  font-family: var(--font-mono);
+  font-size: clamp(9px, 1.1vw, 11px);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  opacity: .85;
+  white-space: normal;
+}
+.entrance-power{
+  margin: 0;
+  font-family: var(--font-title);
+  font-weight: 500;
+  font-size: clamp(10px, 1.3vw, 13px);
+  color: #fff;
+  white-space: normal;
+  max-width: 40vw;
+}

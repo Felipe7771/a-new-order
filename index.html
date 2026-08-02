@@ -125,6 +125,7 @@
 </div>
 
 <div id="modal-overlay"></div>
+<div id="entrance-overlay"></div>
 
 <script src="js/styles.js"></script>
 <script src="js/audio.js"></script>
@@ -189,6 +190,20 @@ const state = {
 // em todo lugar (seed local hoje, documento do Firestore amanhã).
 function createCharacter({ id, name, image, life, attack, rage, guard, owner = 'ally' }) {
   return { id, name, image, life, attack, rage, guard, owner };
+}
+
+function characterFromRoomData(d, ownerRole) {
+  if (!d) return null;
+  return createCharacter({
+    id: d.id,
+    name: d.name,
+    image: '🗡️',
+    life: d.life,
+    attack: d.damage,
+    rage: d.rage,
+    guard: d.guard,
+    owner: ownerRole,
+  });
 }
 
 function getRandomKeyDoll() {
@@ -433,8 +448,10 @@ const DragDrop = {
       const character = state.reserves.ally[payload.reserveIndex];
       if (!character) return;
 
-      Board.setSlot(row(), col(), character);
-      Reserve.clearSlot(payload.reserveIndex);
+      // Não mexe em state.board/state.reserves aqui — quem manda agora
+      // é o Firestore. O onSnapshot (Game.syncRoom) redesenha tudo pros
+      // dois lados quando a confirmação da escrita voltar.
+      window.Game.placeDoll(row(), col(), payload.reserveIndex);
     });
   },
 };
@@ -490,6 +507,65 @@ const PlayerStats = {
     this.els.dollsEnemy.innerHTML = `x${this.countDolls(state.reserves.enemy)}<i class="bi bi-people-fill"></i> `;
     this.els.mobsAlly.innerHTML = `x${state.mobs.ally} MOBS`;
     this.els.mobsEnemy.innerHTML = `x${state.mobs.enemy} MOBS`;
+  },
+};
+
+/* ============================================================
+   EntranceFX — telão de entrada quando um boneco pisa no tabuleiro.
+   Nome grande em vermelho, grupo pequeno embaixo, e (se o boneco
+   tiver poder) a descrição em branco. Toca audio/entrance/{grupo}.mp3
+   e some sozinho depois de um tempo — é só um flash informativo.
+============================================================ */
+const EntranceFX = {
+  el: null,
+  hideTimeout: null,
+
+  init(el) {
+    this.el = el;
+  },
+
+  show(character, row, col) {
+    if (!this.el) return;
+    const doll = catalog[character.id];
+    if (!doll) return;
+
+    clearTimeout(this.hideTimeout);
+
+    const isLeftSide = col < CONFIG.slotsPerSide;
+    this.el.classList.toggle('entrance-overlay--from-left', isLeftSide);
+    this.el.classList.toggle('entrance-overlay--from-right', !isLeftSide);
+
+    // Posiciona o texto grudado no slot: se o boneco caiu do lado
+    // esquerdo do corredor, o texto nasce à direita do slot (e vice-
+    // versa), pra nunca ficar cortado pela borda do tabuleiro.
+    const slotEl = Board.slotEls[row]?.[col];
+    if (slotEl) {
+      const rect = slotEl.getBoundingClientRect();
+      const top = rect.top + rect.height / 2;
+      this.el.style.top = `${top}px`;
+      this.el.style.left = isLeftSide ? `${rect.right}px` : `${rect.left}px`;
+    }
+
+    this.el.innerHTML = `
+      <div class="entrance-card">
+        <h2 class="entrance-name">${character.name}</h2>
+        <p class="entrance-group">${doll.group}</p>
+        ${doll.power?.has
+          ? `<p class="entrance-power">${doll.power.description.replace('[', '<i><strong><u>').replace(']', '</u></strong></i>')}</p>`
+          : ''}
+      </div>
+    `;
+
+    // reinicia a animação (senão dois disparos seguidos ficam parados)
+    this.el.classList.remove('entrance-overlay--visible');
+    void this.el.offsetWidth; // força reflow
+    this.el.classList.add('entrance-overlay--visible');
+
+    AudioManager.Sfx.entrance(doll.group);
+
+    this.hideTimeout = setTimeout(() => {
+      this.el.classList.remove('entrance-overlay--visible');
+    }, 3200);
   },
 };
 
@@ -594,6 +670,7 @@ document.addEventListener('DOMContentLoaded', () => {
   Board.build(document.getElementById('board'));
   Reserve.build(document.getElementById('reserve-ally'));
   Modal.init(document.getElementById('modal-overlay'));
+  EntranceFX.init(document.getElementById('entrance-overlay'));
   PlayerNames.init(
     document.getElementById('player-name-ally'),
     document.getElementById('player-name-enemy')
@@ -627,14 +704,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // API pública — é aqui que a integração com Firebase entra depois.
   // Ex.: onSnapshot(docRef, (doc) => Game.loadBoardState(doc.data().board))
-  window.Game = {
-    CONFIG,
-    state,
-    Board,
-    Reserve,
-    Modal,
-    PlayerNames,
-    PlayerStats,
+window.Game = {
+  CONFIG,
+  state,
+  Board,
+  Reserve,
+  Modal,
+  PlayerNames,
+  PlayerStats,
+  roomId: null,
+  meId: null,
+  opponentId: null,
     loadBoardState(newBoard) {
       state.board = newBoard;
       Board.renderAll();
@@ -651,36 +731,78 @@ document.addEventListener('DOMContentLoaded', () => {
     // (dono + convidado presentes, 12 bonecos já sorteados pros
     // dois lados). Só desenha o que já veio pronto — nenhuma
     // lógica de turno/combate mexe aqui ainda.
-    startMatch({ me, opponent, myReserve, opponentReserve }) {
-      CONFIG.playerName = me.name;
-      CONFIG.enemyName = opponent.name;
-      PlayerNames.setNames(me.name, opponent.name);
+  startMatch({ roomId, me, opponent, myReserve, opponentReserve }) {
+    this.roomId = roomId;
+    this.meId = me.id;
+    this.opponentId = opponent.id;
 
-      state.reserves.ally = myReserve.map((d) => createCharacter({
-        id: d.id, name: d.name, image: '🗡️',
-        life: d.life, attack: d.damage, rage: d.rage, guard: d.guard,
-        owner: 'ally',
-      }));
-      state.reserves.enemy = opponentReserve.map((d) => createCharacter({
-        id: d.id, name: d.name, image: '🗡️',
-        life: d.life, attack: d.damage, rage: d.rage, guard: d.guard,
-        owner: 'enemy',
-      }));
+    CONFIG.playerName = me.name;
+    CONFIG.enemyName = opponent.name;
+    PlayerNames.setNames(me.name, opponent.name);
 
-      Reserve.renderAll();
-      Board.renderAll();
-      PlayerStats.update();
+    state.reserves.ally = myReserve.map((d) => characterFromRoomData(d, 'ally'));
+    state.reserves.enemy = opponentReserve.map((d) => characterFromRoomData(d, 'enemy'));
 
-      /* ══════════════════════════════════════════════════════════
-         ██  TRANSIÇÃO: MENU  ➜  TABULEIRO  ██
-         A partida começa de verdade aqui. A música de fundo troca
-         do tema do menu pro tema do tabuleiro (crossfade sozinho,
-         ver enterBoard() em js/audio.js).
-      ══════════════════════════════════════════════════════════ */
-      AudioManager.enterBoard();
+    Reserve.renderAll();
+    Board.renderAll();
+    PlayerStats.update();
 
-      document.getElementById('app').classList.remove('pre-match');
-    },
+    AudioManager.enterBoard();
+    document.getElementById('app').classList.remove('pre-match');
+  },
+
+  // Chamado a cada onSnapshot depois que a partida começou.
+  // Reconstrói tabuleiro + reservas a partir do documento da sala
+  // e dispara EntranceFX pra qualquer slot que passou de vazio pra
+  // ocupado (seja boneco meu ou do oponente).
+  syncRoom(data) {
+    if (!this.meId) return;
+
+    const newBoard = Array.from({ length: CONFIG.corridors }, () =>
+      Array(CONFIG.slotsPerSide * 2).fill(null)
+    );
+
+    const boardData = data.board || {};
+    Object.entries(boardData).forEach(([key, dollData]) => {
+      if (!dollData) return;
+      const [r, c] = key.split('-').map(Number);
+      if (Number.isNaN(r) || Number.isNaN(c)) return;
+      const ownerRole = dollData.owner === this.meId ? 'ally' : 'enemy';
+      newBoard[r][c] = characterFromRoomData(dollData, ownerRole);
+    });
+
+    for (let r = 0; r < CONFIG.corridors; r++) {
+      for (let c = 0; c < CONFIG.slotsPerSide * 2; c++) {
+        if (!state.board[r][c] && newBoard[r][c]) {
+          EntranceFX.show(newBoard[r][c], r, c);
+        }
+      }
+    }
+
+    state.board = newBoard;
+    Board.renderAll();
+
+    const myReserveData = data.p?.[this.meId]?.reserve || [];
+    const oppReserveData = data.p?.[this.opponentId]?.reserve || [];
+
+    state.reserves.ally = myReserveData.map((d) => characterFromRoomData(d, 'ally'));
+    state.reserves.enemy = oppReserveData.map((d) => characterFromRoomData(d, 'enemy'));
+
+    Reserve.renderAll();
+    PlayerStats.update();
+  },
+
+  async placeDoll(row, col, reserveIndex) {
+    if (!this.roomId || !this.meId) {
+      console.warn('[Trincheira] placeDoll chamado sem partida ativa.');
+      return;
+    }
+    try {
+      await window.Matchmaking.placeDoll(this.roomId, this.meId, reserveIndex, row, col);
+    } catch (err) {
+      console.error('[Trincheira] não foi possível jogar o boneco:', err);
+    }
+  },
 
     // Atalho pra testar a tela do jogo sem precisar do Firebase
     // configurado — abra o console e rode: Game.seedDemo()

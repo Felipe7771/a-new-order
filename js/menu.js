@@ -6,7 +6,12 @@
    segundo jogador entrar.
 ============================================================ */
 
-import { findOrCreateRoom, listenRoom, cancelRoom, isFirebaseConfigured } from "./matchmaking.js";
+import { findOrCreateRoom, listenRoom, cancelRoom, isFirebaseConfigured, placeDoll } from "./matchmaking.js";
+
+// index.html roda como script normal (não-module), então é aqui
+// que ele ganha acesso às funções do Firestore que precisa depois
+// que a partida começa (Game.placeDoll chama isso).
+window.Matchmaking = { placeDoll };
 
 // Testando com duas abas do MESMO navegador? localStorage é
 // compartilhado entre elas, então as duas puxariam o mesmo ID.
@@ -36,6 +41,7 @@ export const Menu = {
   els: {},
   player: null,
   catalog: null,
+  matchStarted: false,
   roomId: null,
   unsubscribe: null,
 
@@ -81,69 +87,68 @@ export const Menu = {
     this.els.error.textContent = msg || "";
   },
 
-  async handlePlay() {
-    if (!isFirebaseConfigured) {
-      this.setError(
-        "Firebase ainda não configurado — preencha js/firebase-config.js pra habilitar o Jogar."
-      );
-      return;
-    }
+async handlePlay() {
+  if (!isFirebaseConfigured) {
+    this.setError(
+      "Firebase ainda não configurado — preencha js/firebase-config.js pra habilitar o Jogar."
+    );
+    return;
+  }
 
-    const name = this.els.input.value.trim();
-    if (!name) {
-      this.setError("Diga seu nome antes de entrar no palco.");
-      this.els.input.focus();
-      return;
-    }
+  const name = this.els.input.value.trim();
+  if (!name) {
+    this.setError("Diga seu nome antes de entrar no palco.");
+    this.els.input.focus();
+    return;
+  }
 
-    localStorage.setItem(STORAGE_NAME_KEY, name);
-    this.setError("");
-    this.player = { id: getOrCreatePlayerId(), name };
+  localStorage.setItem(STORAGE_NAME_KEY, name);
+  this.setError("");
+  this.player = { id: getOrCreatePlayerId(), name };
+  this.matchStarted = false;
 
-    this.els.playBtn.disabled = true;
-    this.showWaiting("Procurando um oponente...");
+  this.els.playBtn.disabled = true;
+  this.showWaiting("Procurando um oponente...");
 
-    try {
-      const catalog = await this.catalog;
-      const { roomId, role } = await findOrCreateRoom(this.player, catalog);
-      this.roomId = roomId;
+  try {
+    const catalog = await this.catalog;
+    const { roomId, role } = await findOrCreateRoom(this.player, catalog);
+    this.roomId = roomId;
 
-      if (role === "guest") {
-        // A sala já fechou (ganhou dono + convidado) na própria
-        // chamada acima — só falta ler o resultado final.
-        this.unsubscribe = listenRoom(roomId, (data) => {
-          if (data && data.state === "playing" && data.guest) {
-            this.unsubscribe?.();
-            this.unsubscribe = null;
-            this.startMatch(data);
-          }
-        });
-        return;
-      }
-
-      // role === 'owner': sala recém-criada, esperando alguém entrar.
+    if (role === "owner") {
       this.showWaiting("Sala criada. Aguardando outro jogador entrar...");
-      this.unsubscribe = listenRoom(roomId, (data) => {
-        if (!data) {
-          // sala sumiu (expirou / foi limpa) — volta pro login
+    }
+
+    // Um único listener cobre tudo: primeiro detecta a sala fechando
+    // (state === 'playing'), dispara startMatch() uma vez só, e depois
+    // vira o canal de sincronia do tabuleiro/reserva durante a partida.
+    this.unsubscribe = listenRoom(roomId, (data) => {
+      if (!data) {
+        if (!this.matchStarted) {
           this.unsubscribe?.();
           this.unsubscribe = null;
           this.setError("A sala expirou. Tente novamente.");
           this.showLogin();
-          return;
         }
-        if (data.state === "playing" && data.guest) {
-          this.unsubscribe?.();
-          this.unsubscribe = null;
-          this.startMatch(data);
-        }
-      });
-    } catch (err) {
-      console.error("[Menu] falha ao entrar em uma sala:", err);
-      this.setError("Não foi possível entrar agora. Tente de novo.");
-      this.showLogin();
-    }
-  },
+        return;
+      }
+
+      if (!this.matchStarted && data.state === "playing" && data.guest) {
+        this.matchStarted = true;
+        this.startMatch(data);
+        return; // startMatch já processa esse primeiro snapshot inteiro
+      }
+
+      if (this.matchStarted) {
+        window.Game.syncRoom(data);
+      }
+    });
+  } catch (err) {
+    console.error("[Menu] falha ao entrar em uma sala:", err);
+    this.setError("Não foi possível entrar agora. Tente de novo.");
+    this.showLogin();
+  }
+},
 
   async handleCancel() {
     this.unsubscribe?.();

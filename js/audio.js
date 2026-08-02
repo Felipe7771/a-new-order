@@ -32,33 +32,42 @@
    ANTES do js/menu.js — ele expõe window.AudioManager, que tanto
    scripts normais quanto módulos ES (menu.js) conseguem acessar.
 ============================================================ */
+function nomeArquivo(nome) {
+    return nome
+        .normalize("NFD")              // separa acentos
+        .replace(/[\u0300-\u036f]/g, "") // remove acentos
+        .toLowerCase()                 // minúsculas
+        .replace(/\./g, "")             // remove pontos: C.A.S -> CAS
+        .replace(/[^a-z0-9]+/g, "_")    // espaços/hífens viram _
+        .replace(/^_|_$/g, "");        // remove _ das pontas
+}
 
 const AudioManager = (() => {
 
   const BASE = 'audio/';
-  const PATHS = {
-    background: `${BASE}background/`,
-    sound: `${BASE}sound/`,
-    effects: `${BASE}sound/effects/`,
-  };
+const PATHS = {
+  background: `${BASE}background/`,
+  sound: `${BASE}sound/`,
+  effects: `${BASE}sound/effects/`,
+  entrance: `${BASE}entrance/`,   // <-- novo
+};
 
-  // ---- configuração / estado -----------------------------------
-  // Cada chave liga/desliga uma categoria inteira. "Aplicar e
-  // desaplicar" um tipo de som é só trocar esse valor.
-  const settings = {
-    music: true,
-    click: true,
-    hover: true,
-    type: true,
-    dollEffects: true,
-    volumes: {
-      music: 0.5,
-      click: 0.6,
-      hover: 0.35,
-      type: 0.3,
-      dollEffects: 0.7,
-    },
-  };
+const settings = {
+  music: true,
+  click: true,
+  hover: true,
+  type: true,
+  dollEffects: true,
+  entrance: true,                 // <-- novo
+  volumes: {
+    music: 0.5,
+    click: 0.6,
+    hover: 0.35,
+    type: 0.3,
+    dollEffects: 0.7,
+    entrance: 0.4,                // <-- novo
+  },
+};
 
   const musicCache = {};
   const sfxCache = {};
@@ -164,24 +173,34 @@ const AudioManager = (() => {
     instance.play().catch(() => {});
   }
 
-  const Sfx = {
-    click(name = 'click') { playOneShot('click', name); },
-    hover(name = 'hover') { playOneShot('hover', name); },
-    type(name = 'type') { playOneShot('type', name); },
+const Sfx = {
+  click(name = 'click') { playOneShot('click', name); },
+  hover(name = 'hover') { playOneShot('hover', name); },
+  type(name = 'type') { playOneShot('type', name); },
 
-    // efeito de boneco — recebe a chave do atributo (guardian, drill,
-    // rage, mortal, area, entire_arena, implacable...). Se não existir
-    // arquivo pra essa chave, cai no default.mp3 automaticamente.
-    dollEffect(effectKey) {
-      if (!settings.dollEffects) return;
-      const base = getSfx(effectKey, PATHS.effects);
-      const instance = base.cloneNode();
-      instance.volume = settings.volumes.dollEffects;
-      instance.play().catch(() => {
-        playOneShot('dollEffects', 'default', PATHS.effects);
-      });
-    },
-  };
+  dollEffect(effectKey) {
+    if (!settings.dollEffects) return;
+    const base = getSfx(effectKey, PATHS.effects);
+    const instance = base.cloneNode();
+    instance.volume = settings.volumes.dollEffects;
+    instance.play().catch(() => {
+      playOneShot('dollEffects', 'default', PATHS.effects);
+    });
+  },
+
+  // audio/entrance/{grupo}.mp3 — um arquivo por facção/grupo do
+  // catalog.json (ex: "IRUMEO.mp3", "C.A.S.mp3", "Família Cruz-Lenz.mp3").
+  // Tocado pelo EntranceFX quando o boneco entra em campo.
+  entrance(groupName) {
+    if (!settings.entrance || !groupName) return;
+    const base = getSfx(nomeArquivo(groupName), PATHS.entrance);
+    const instance = base.cloneNode();
+    instance.volume = settings.volumes.entrance;
+    instance.play().catch((err) => {
+      console.warn(`[AudioManager] sem áudio de entrada pro grupo "${groupName}" [${nomeArquivo(groupName)}]:`, err.message);
+    });
+  },
+};
 
   // ================================================================
   // AUTO-ATTACH via delegação — liga uma vez em document e funciona

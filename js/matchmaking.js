@@ -165,6 +165,7 @@ async function tryJoinRoom(roomId, player, catalog) {
       tx.update(roomRef, {
         guest: { ID: player.id, name: player.name },
         state: "playing",
+        board: {},              // <-- novo: mapa esparso "linha-coluna" -> boneco
         turn: { number: 1, phase: "defense", current: ownerId },
         p: {
           [ownerId]: { mobs: [], reserve: ownerDeck, effects: [] },
@@ -237,4 +238,41 @@ export async function cancelRoom(roomId, player) {
   if (data.ower?.ID === player.id && !data.guest) {
     await deleteDoc(roomRef);
   }
+}
+
+/* ------------------------------------------------------------
+   Joga um boneco da reserva no tabuleiro, de forma atômica:
+   escreve em board["linha-coluna"] e zera o índice correspondente
+   na reserve do jogador que jogou. Os dois clientes enxergam a
+   mudança pelo mesmo onSnapshot (listenRoom) já usado no matchmaking.
+------------------------------------------------------------ */
+export async function placeDoll(roomId, playerId, reserveIndex, row, col) {
+  const roomRef = doc(getDb(), SALAS, roomId);
+  const boardKey = `${row}-${col}`;
+
+  await runTransaction(getDb(), async (tx) => {
+    const snap = await tx.get(roomRef);
+    if (!snap.exists()) throw new Error("sala-nao-existe");
+
+    const data = snap.data();
+    if (data.board && data.board[boardKey]) {
+      throw new Error("slot-ja-ocupado");
+    }
+
+    const playerData = data.p?.[playerId];
+    if (!playerData || !Array.isArray(playerData.reserve)) {
+      throw new Error("jogador-sem-reserva");
+    }
+
+    const character = playerData.reserve[reserveIndex];
+    if (!character) throw new Error("boneco-nao-encontrado-na-reserva");
+
+    const newReserve = [...playerData.reserve];
+    newReserve[reserveIndex] = null;
+
+    tx.update(roomRef, {
+      [`board.${boardKey}`]: character,
+      [`p.${playerId}.reserve`]: newReserve,
+    });
+  });
 }
