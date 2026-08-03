@@ -881,7 +881,26 @@ window.Game = {
       document.getElementById('app').classList.remove('pre-match');
       document.getElementById('menu-screen').classList.add('menu-screen--hidden');
     },
+
   };
+  // ---- Dev only: atalho pra testar 2 jogadores no mesmo navegador.
+// Ctrl+Shift+2 abre uma segunda aba com ?slot=2
+// (também disponível no console: Dev.openPlayer2())
+});
+window.Dev = {
+openPlayer2() {
+  const url = new URL(window.location.href);
+  url.searchParams.set('slot', '2');
+  window.open(url.toString(), '_blank');
+},
+};
+
+document.addEventListener('keydown', (e) => {
+  console.log('keydown', e.key, e.ctrlKey, e.shiftKey);
+if (e.ctrlKey && e.shiftKey && e.key === '@') {
+  e.preventDefault();
+  Dev.openPlayer2();
+}
 });
 </script>
 

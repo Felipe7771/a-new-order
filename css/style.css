@@ -892,7 +892,7 @@
 .entrance-card{
   text-align: left;
   padding: 8px 14px;
-  background: rgba(0,0,0,.6);
+  background: rgba(0,0,0,.8);
   border-radius: 4px;
   white-space: nowrap;
   max-width: 46vw;
@@ -901,7 +901,7 @@
   margin: 0 0 2px;
   font-family: var(--font-title);
   font-weight: 700;
-  font-size: clamp(15px, 2vw, 20px);
+  font-size: clamp(20px, 2vw, 20px);
   letter-spacing: .04em;
   text-transform: uppercase;
   color: var(--life);
