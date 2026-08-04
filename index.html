@@ -9,7 +9,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Griffy&family=IBM+Plex+Serif:ital,wght@0,500;1,200&family=Lobster&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Griffy&family=IBM+Plex+Serif:ital,wght@0,500;1,200&family=Lobster&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/game.css">
+<link rel="stylesheet" href="css/menu.css">
+<link rel="stylesheet" href="css/entrance.css">
+<link rel="stylesheet" href="css/turn.css">
 <!-- adicionando icone de aba -->
 <link rel="icon" type="image/x-icon" href="img/ANEWORDER.png">
 </head>
@@ -99,6 +103,15 @@
         <span class="player-stat player-stat--mobs" id="player-mobs-ally">x0 MOBS</span>
       </div>
     </div>
+
+  <div class="turn-action" id="turn-action">
+    <button id="btn-end-turn" class="end-turn-btn" type="button" disabled
+      data-sfx-click="click" data-sfx-hover="hover">
+      <span class="end-turn-btn__timer" id="end-turn-timer"></span>
+      <span class="end-turn-btn__label">Encerrar Turno</span>
+    </button>
+  </div>
+
     <div class="player-info player-info--enemy">
       <div id="player-name-enemy" class="player-name">Inimigo</div>
       <div class="player-stats">
@@ -126,6 +139,7 @@
 
 <div id="modal-overlay"></div>
 <div id="entrance-overlay"></div>
+<div id="turn-banner-overlay"></div>
 
 <script src="js/styles.js"></script>
 <script src="js/audio.js"></script>
@@ -672,6 +686,84 @@ const Modal = {
 };
 
 /* ============================================================
+   TurnBanner — texto grande de passagem de turno. Overlay
+   totalmente separado do EntranceFX/#entrance-overlay, pra nunca
+   competir com o telão de entrada de boneco.
+============================================================ */
+const TurnBanner = {
+  el: null,
+  hideTimeout: null,
+
+  init(el) {
+    this.el = el;
+  },
+
+  show(playerName, phase) {
+    if (!this.el) return;
+    clearTimeout(this.hideTimeout);
+
+    const isAttack = phase === 'attack';
+    const label = isAttack ? 'TURNO OFENSIVO' : 'TURNO DEFENSIVO';
+
+    this.el.innerHTML = `
+      <div class="turn-banner-card">
+        <h2 class="turn-banner-name">${playerName}</h2>
+        <p class="turn-banner-phase">${label}</p>
+      </div>
+    `;
+
+    this.el.classList.remove(
+      'turn-banner--defense', 'turn-banner--attack',
+      'turn-banner--visible-defense', 'turn-banner--visible-attack'
+    );
+    void this.el.offsetWidth; // força reflow — reinicia a animação sempre
+
+    this.el.classList.add(isAttack ? 'turn-banner--attack' : 'turn-banner--defense');
+    this.el.classList.add(isAttack ? 'turn-banner--visible-attack' : 'turn-banner--visible-defense');
+
+    AudioManager.Sfx.entrance(isAttack ? 'turno_ofensivo' : 'turno_defensivo');
+
+    const duration = isAttack ? 3000 : 5500;
+    this.hideTimeout = setTimeout(() => {
+      this.el.classList.remove('turn-banner--visible-defense', 'turn-banner--visible-attack');
+    }, duration);
+  },
+};
+
+/* ============================================================
+   EndTurnButton — botão "Encerrar Turno", visível SÓ pro jogador
+   que está na fase de defesa dele. A barra vermelha por trás do
+   texto encolhe conforme o prazo (60s) passa.
+============================================================ */
+const EndTurnButton = {
+  el: null,
+  timerEl: null,
+
+  init(el, timerEl) {
+    this.el = el;
+    this.timerEl = timerEl;
+    el.addEventListener('click', () => {
+      if (el.disabled) return;
+      window.Game.endTurn();
+    });
+  },
+
+  hide() {
+    document.getElementById('turn-action')?.classList.remove('turn-action--visible');
+  },
+
+  show({ enabled, deadlineMs }) {
+    document.getElementById('turn-action')?.classList.add('turn-action--visible');
+    this.el.disabled = !enabled;
+
+    const remainingSec = Math.max(0, (deadlineMs - Date.now()) / 1000);
+    this.timerEl.style.animation = 'none';
+    void this.timerEl.offsetWidth;
+    this.timerEl.style.animation = `end-turn-countdown ${remainingSec}s linear forwards`;
+  },
+};
+
+/* ============================================================
    Dados de exemplo — só pra provar que o sistema funciona.
    Troque à vontade / substitua por dados vindos do Firestore.
 ============================================================ */
@@ -729,6 +821,11 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('player-dolls-enemy'),
     document.getElementById('player-mobs-enemy')
   );
+  TurnBanner.init(document.getElementById('turn-banner-overlay'));
+  EndTurnButton.init(
+    document.getElementById('btn-end-turn'),
+    document.getElementById('end-turn-timer')
+  );
 
   boot();
 
@@ -779,7 +876,7 @@ window.Game = {
     // (dono + convidado presentes, 12 bonecos já sorteados pros
     // dois lados). Só desenha o que já veio pronto — nenhuma
     // lógica de turno/combate mexe aqui ainda.
-  startMatch({ roomId, me, opponent, myReserve, opponentReserve, role }) {
+  startMatch({ roomId, me, opponent, myReserve, opponentReserve, role, turn }) {
     this.roomId = roomId;
     this.meId = me.id;
     this.opponentId = opponent.id;
@@ -808,7 +905,67 @@ window.Game = {
 
     AudioManager.enterBoard();
     document.getElementById('app').classList.remove('pre-match');
+    this.handleTurnSync(turn, null);
   },
+
+  // Chamado depois de startMatch() e a cada syncRoom() com o novo
+// data.turn. Decide: mostra o banner (só quando o turno mudou de
+// verdade), mostra/esconde o botão de encerrar, e (re)agenda o
+// timer local que dispara o avanço automático quando o prazo acaba.
+handleTurnSync(turn, data) {
+  clearTimeout(this._turnTimeout);
+
+  if (!turn) {
+    EndTurnButton.hide();
+    return;
+  }
+
+  const isNewTurn = this._lastTurnNumber !== turn.number;
+  this._lastTurnNumber = turn.number;
+
+  if (isNewTurn) {
+    const activeName = turn.current === this.meId ? CONFIG.playerName : CONFIG.enemyName;
+    TurnBanner.show(activeName, turn.phase);
+  }
+
+  if (turn.phase === 'defense' && turn.current === this.meId) {
+    EndTurnButton.show({ enabled: !!turn.hasActed, deadlineMs: turn.deadline.toMillis() });
+  } else {
+    EndTurnButton.hide();
+  }
+
+  // Qualquer cliente conectado pode disparar o avanço — a transação
+  // em autoAdvanceTurn garante que só o primeiro a chegar processa
+  // de verdade (ver checagem de turn.number em matchmaking.js).
+  const remainingMs = turn.deadline.toMillis() - Date.now();
+  this._turnTimeout = setTimeout(() => {
+    window.Matchmaking.autoAdvanceTurn(this.roomId, turn.number).catch((err) => {
+      console.warn('[Trincheira] falha ao avançar turno automaticamente:', err.message);
+    });
+  }, Math.max(0, remainingMs) + 250);
+},
+
+async endTurn() {
+  if (!this.roomId || !this.meId) return;
+  try {
+    await window.Matchmaking.endTurn(this.roomId, this.meId);
+  } catch (err) {
+    console.error('[Trincheira] não foi possível encerrar o turno:', err);
+  }
+},
+
+// Chamado pelo menu.js quando a sala some NO MEIO da partida
+// (encerrada por inatividade). Reseta tudo e devolve pro pre-match.
+handleRoomClosed() {
+  clearTimeout(this._turnTimeout);
+  this._lastTurnNumber = null;
+  this.roomId = null;
+  this.meId = null;
+  this.opponentId = null;
+  EndTurnButton.hide();
+  document.getElementById('app').classList.add('pre-match');
+  AudioManager.enterMenu();
+},
 
   // Chamado a cada onSnapshot depois que a partida começou.
   // Reconstrói tabuleiro + reservas a partir do documento da sala
@@ -849,6 +1006,7 @@ window.Game = {
 
     Reserve.renderAll();
     PlayerStats.update();
+    this.handleTurnSync(data.turn, data);
   },
 
   async placeDoll(row, col, reserveIndex) {

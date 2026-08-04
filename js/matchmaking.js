@@ -6,16 +6,16 @@
      ower:   { ID, name }
      guest:  { ID, name } | null
      state:  'waiting' | 'playing' | 'ended'
-     turn:   { number, phase, current } | null
+     turn:   { number, phase, current, deadline, hasActed } | null
      p:      { [ID]: { mobs, reserve, effects } } | null
      winner: ID | null
-     board:  null (por enquanto — a lógica de tabuleiro entra depois)
+     board:  mapa esparso "linha-coluna" -> boneco | null
      createdAt: Timestamp do servidor
      expireAt:  Timestamp usado pela política de TTL do Firestore
 
-   Este módulo só cuida de MENU + LOGIN + MATCHMAKING. A lógica
-   de turno/combate ainda não mexe em "turn"/"p" além de criar
-   o esqueleto inicial.
+   Este módulo cuida de MENU + LOGIN + MATCHMAKING + SISTEMA DE
+   TURNOS. A lógica de combate em si (o que acontece DENTRO do
+   turno ofensivo) ainda não existe.
 ============================================================ */
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
@@ -50,6 +50,14 @@ const ROOM_TTL_MS = 24 * 60 * 60 * 1000; // 1 dia
 const CORRIDORS = 4;
 const SLOTS_PER_SIDE = 3;
 const TOTAL_COLS = SLOTS_PER_SIDE * 2;
+
+// ---- Sistema de turnos -----------------------------------------
+// Defesa: 60s pra jogar pelo menos 1 boneco. Ataque: por enquanto
+// não tem ação nenhuma implementada, então é só um mínimo de 5s
+// antes de devolver a vez (isso vai virar "tempo baseado na
+// animação/ação do boneco" quando o combate existir).
+const DEFENSE_TURN_MS = 60 * 1000;
+const ATTACK_TURN_MS = 5 * 1000;
 
 let db = null;
 function getDb() {
@@ -90,6 +98,65 @@ function buildDeck(catalog, ownerId) {
 }
 
 /* ------------------------------------------------------------
+   Turnos — construção de fases e regra de transição.
+
+   Ciclo: Defesa(X) -> Ataque(adversário de X, SE ele tiver bonecos
+   em campo, senão pula direto) -> Defesa(mesmo adversário) ->
+   Ataque(X, com a mesma checagem) -> Defesa(X) -> ...
+
+   Ou seja: depois de uma DEFESA, quem age é sempre o ADVERSÁRIO
+   (em ataque, ou pulando pra defesa dele se não tiver bonecos).
+   Depois de um ATAQUE, quem defende em seguida é o MESMO jogador
+   que acabou de atacar.
+------------------------------------------------------------ */
+function hasDollsOnBoard(board, playerId) {
+  if (!board) return false;
+  return Object.values(board).some((d) => d && d.owner === playerId);
+}
+
+function opponentOf(data, playerId) {
+  return data.ower.ID === playerId ? data.guest.ID : data.ower.ID;
+}
+
+function buildDefensePhase(playerId, turnNumber) {
+  return {
+    number: turnNumber,
+    phase: "defense",
+    current: playerId,
+    deadline: Timestamp.fromMillis(Date.now() + DEFENSE_TURN_MS),
+    hasActed: false,
+  };
+}
+
+function buildAttackPhase(playerId, turnNumber) {
+  return {
+    number: turnNumber,
+    phase: "attack",
+    current: playerId,
+    deadline: Timestamp.fromMillis(Date.now() + ATTACK_TURN_MS),
+    hasActed: false, // não usado em ataque, mantido só por consistência de shape
+  };
+}
+
+// Chamada quando a DEFESA de `playerId` termina (de propósito ou
+// por timeout com hasActed=true). Quem age em seguida é sempre o
+// ADVERSÁRIO — ataca se tiver bonecos em campo, ou já pula direto
+// pra defesa dele se não tiver.
+function afterDefense(data, playerId, turnNumber) {
+  const attacker = opponentOf(data, playerId);
+  if (hasDollsOnBoard(data.board, attacker)) {
+    return buildAttackPhase(attacker, turnNumber);
+  }
+  return buildDefensePhase(attacker, turnNumber);
+}
+
+// Chamada quando o ATAQUE de `playerId` termina (timer mínimo
+// estourou). Quem defende em seguida é o MESMO jogador.
+function afterAttack(playerId, turnNumber) {
+  return buildDefensePhase(playerId, turnNumber);
+}
+
+/* ------------------------------------------------------------
    Limpeza de salas abandonadas — apaga salas em 'waiting' com
    mais de 24h. Isso cobre o caso client-side; o ideal em produção
    é TAMBÉM ativar a política de TTL nativa do Firestore sobre o
@@ -109,9 +176,6 @@ async function cleanupStaleRooms() {
   try {
     snap = await getDocs(q);
   } catch (err) {
-    // Se o índice composto ainda não existir, o Firestore devolve
-    // um link no próprio erro pra criá-lo. Não travamos o fluxo
-    // de matchmaking por causa disso.
     console.warn("[Matchmaking] limpeza de salas adiada:", err.message);
     return;
   }
@@ -173,8 +237,9 @@ async function tryJoinRoom(roomId, player, catalog) {
       tx.update(roomRef, {
         guest: { ID: player.id, name: player.name },
         state: "playing",
-        board: {},              // <-- novo: mapa esparso "linha-coluna" -> boneco
-        turn: { number: 1, phase: "defense", current: ownerId },
+        board: {},
+        // O anfitrião sempre começa — turno 1, fase de defesa dele.
+        turn: buildDefensePhase(ownerId, 1),
         p: {
           [ownerId]: { mobs: [], reserve: ownerDeck, effects: [] },
           [player.id]: { mobs: [], reserve: guestDeck, effects: [] },
@@ -210,8 +275,6 @@ async function createRoom(player) {
    API pública
 ------------------------------------------------------------ */
 
-// Procura uma sala aberta e entra nela; se não achar (ou perder
-// a corrida pra outro jogador), cria uma sala nova e espera.
 export async function findOrCreateRoom(player, catalog) {
   await cleanupStaleRooms();
 
@@ -225,8 +288,6 @@ export async function findOrCreateRoom(player, catalog) {
   return { roomId, role: "owner" };
 }
 
-// Escuta mudanças na sala em tempo real. Devolve uma função pra
-// cancelar a escuta.
 export function listenRoom(roomId, onChange) {
   const roomRef = doc(getDb(), SALAS, roomId);
   return onSnapshot(
@@ -236,8 +297,6 @@ export function listenRoom(roomId, onChange) {
   );
 }
 
-// Cancela a procura: só apaga a sala se ela ainda não tiver
-// convidado e se pertencer a este jogador.
 export async function cancelRoom(roomId, player) {
   const roomRef = doc(getDb(), SALAS, roomId);
   const snap = await getDoc(roomRef);
@@ -249,16 +308,15 @@ export async function cancelRoom(roomId, player) {
 }
 
 /* ------------------------------------------------------------
-   Joga um boneco da reserva no tabuleiro, de forma atômica:
-   escreve em board["linha-coluna"] e zera o índice correspondente
-   na reserve do jogador que jogou. Os dois clientes enxergam a
-   mudança pelo mesmo onSnapshot (listenRoom) já usado no matchmaking.
+   Joga um boneco da reserva no tabuleiro, de forma atômica.
+   Agora também exige que seja a fase de DEFESA e a vez de
+   `playerId` — sem isso, nem o console do navegador consegue
+   forçar uma jogada fora de hora.
 ------------------------------------------------------------ */
 export async function placeDoll(roomId, playerId, reserveIndex, row, col) {
   const roomRef = doc(getDb(), SALAS, roomId);
   const boardKey = `${row}-${col}`;
 
-  // Fora dos limites do tabuleiro — nem chega a olhar a sala.
   if (
     !Number.isInteger(row) || !Number.isInteger(col) ||
     row < 0 || row >= CORRIDORS || col < 0 || col >= TOTAL_COLS
@@ -272,13 +330,10 @@ export async function placeDoll(roomId, playerId, reserveIndex, row, col) {
 
     const data = snap.data();
 
-    // Colunas 0..SLOTS_PER_SIDE-1 são sempre do ower, o resto é
-    // sempre do guest (ver comentário de CONFIG.myRole em index.html).
-    // Isso vale independente de quem está olhando a tela — é a MESMA
-    // regra pros dois lados, então validar aqui (server-side, dentro
-    // da transação) é o que garante de verdade que ninguém consegue
-    // jogar no campo do adversário, mesmo chamando isso direto pelo
-    // console do navegador.
+    if (!data.turn || data.turn.phase !== "defense" || data.turn.current !== playerId) {
+      throw new Error("nao-e-seu-turno-de-defesa");
+    }
+
     const isOwner = data.ower?.ID === playerId;
     const isOwnerColumn = col < SLOTS_PER_SIDE;
     if (isOwner !== isOwnerColumn) {
@@ -303,6 +358,67 @@ export async function placeDoll(roomId, playerId, reserveIndex, row, col) {
     tx.update(roomRef, {
       [`board.${boardKey}`]: character,
       [`p.${playerId}.reserve`]: newReserve,
+      "turn.hasActed": true,
     });
+  });
+}
+
+/* ------------------------------------------------------------
+   Encerra o turno de DEFESA voluntariamente (botão "Encerrar
+   Turno"). Só funciona se for a fase de defesa de `playerId` E
+   ele já tiver jogado pelo menos 1 boneco nesse turno.
+------------------------------------------------------------ */
+export async function endTurn(roomId, playerId) {
+  const roomRef = doc(getDb(), SALAS, roomId);
+  await runTransaction(getDb(), async (tx) => {
+    const snap = await tx.get(roomRef);
+    if (!snap.exists()) throw new Error("sala-nao-existe");
+    const data = snap.data();
+    const turn = data.turn;
+
+    if (!turn || turn.phase !== "defense" || turn.current !== playerId) {
+      throw new Error("nao-e-seu-turno-de-defesa");
+    }
+    if (!turn.hasActed) {
+      throw new Error("precisa-jogar-pelo-menos-um-boneco-antes-de-encerrar");
+    }
+
+    tx.update(roomRef, { turn: afterDefense(data, playerId, turn.number + 1) });
+  });
+}
+
+/* ------------------------------------------------------------
+   Avança o turno automaticamente quando o prazo estoura.
+   Chamada por QUALQUER cliente conectado (o timer local roda
+   nos dois lados) — a checagem de turn.number garante que só o
+   primeiro a chegar realmente processa a virada, mesmo que os
+   dois clientes disparem quase ao mesmo tempo.
+
+   Regras:
+   - Defesa sem hasActed -> sala é apagada (inatividade).
+   - Defesa com hasActed  -> passa o turno normalmente.
+   - Ataque (sempre, já que ainda não existe ação de combate)
+     -> passa pra defesa do mesmo jogador.
+------------------------------------------------------------ */
+export async function autoAdvanceTurn(roomId, expectedTurnNumber) {
+  const roomRef = doc(getDb(), SALAS, roomId);
+  await runTransaction(getDb(), async (tx) => {
+    const snap = await tx.get(roomRef);
+    if (!snap.exists()) return; // sala já não existe
+
+    const data = snap.data();
+    const turn = data.turn;
+    if (!turn || turn.number !== expectedTurnNumber) return; // já avançou
+
+    if (turn.phase === "defense") {
+      if (!turn.hasActed) {
+        tx.delete(roomRef); // ninguém jogou nada no prazo — encerra por inatividade
+        return;
+      }
+      tx.update(roomRef, { turn: afterDefense(data, turn.current, turn.number + 1) });
+      return;
+    }
+
+    tx.update(roomRef, { turn: afterAttack(turn.current, turn.number + 1) });
   });
 }

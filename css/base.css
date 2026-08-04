@@ -1,0 +1,223 @@
+/* ============================================================
+   BASE — tokens, reset global e componentes compartilhados.
+   ============================================================ */
+:root {
+  --bg: #14170f;
+  --panel: #1f2417;
+  --reserv: rgb(0, 0, 0);
+  --panel-alt: #161c0d;
+  --panel-alt-menu: transparent;
+  --line: #46502f;
+  --dashed: #5a6b3d;
+  --text: #e7e2cf;
+  --text-group: rgb(0, 0, 0)f;
+  --text-dim: #ffffff;
+  --life: #c1544a;
+  --guardian: #dadada;
+  --implacable: #4aabc1;
+  --affinities: #97e8fb;
+  --attack: #c99a3c;
+  --drill: #ff8400;
+  --mortal: #885d5d;
+  --area: #b9403a;
+  --entire_arena: #b9403a;
+  --rage: #a65bd2;
+  --font-display: 'Oswald', sans-serif;
+  --font-title: "Griffy", system-ui;
+  --font-mono: 'JetBrains Mono', monospace;
+  --principal-button: #d8ac4d;
+
+  --board-width: 90%;
+  --board-max-width: 1200px;
+  --board-bg: #000;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-display);
+}
+
+#app {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+#player-names {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 14px 22px;
+  z-index: 60;
+  pointer-events: none;
+}
+
+.player-name {
+  font-family: var(--font-title);
+  font-weight: 1000;
+  font-size: clamp(21px, 3.4vw, 20px);
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--text);
+  text-shadow:
+    2px 2px 0 #000,
+    -2px 2px 0 #000,
+    2px -2px 0 #000,
+    -2px -2px 0 #000,
+    0 3px 10px rgba(0,0,0,.85);
+}
+
+#player-name-enemy {
+  text-align: right;
+  color: var(--life);
+}
+
+.player-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.player-info--ally { align-items: flex-start; }
+.player-info--enemy { align-items: flex-end; }
+
+.player-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 5px;
+}
+
+.player-info--ally .player-stats { align-items: flex-start; }
+.player-info--enemy .player-stats { align-items: flex-end; }
+
+.player-stat {
+  font-family: var(--font-title);
+  font-weight: 1000;
+  letter-spacing: .3em;
+  line-height: 1.15;
+  text-shadow:
+    1px 1px 0 #000,
+    -1px 1px 0 #000,
+    1px -1px 0 #000,
+    -1px -1px 0 #000,
+    0 2px 8px rgba(0,0,0,.8);
+}
+
+.player-stat--dolls {
+  font-size: clamp(14px, 2.6vw, 16px);
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.player-stat--mobs {
+  font-size: clamp(10px, 1.8vw, 12px);
+  color: var(--implacable);
+  text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.slot {
+  width: clamp(52px, 6.4vw, 104px);
+  aspect-ratio: 3 / 4;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: rgba(255,255,255,.02);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: default;
+  transition: border-color .15s, background-color .15s, transform .1s;
+}
+
+.slot--empty {
+  border-style: dashed;
+  opacity: .45;
+}
+
+.slot--filled {
+  background: var(--panel-alt);
+  cursor: pointer;
+}
+
+.board-slot.slot--filled { cursor: pointer; }
+.reserve-slot.slot--filled { cursor: grab; }
+.reserve-slot.slot--filled:active { cursor: grabbing; }
+
+.slot--dragover {
+  border-color: var(--attack);
+  background: rgba(201,154,60,.15);
+  transform: scale(1.04);
+}
+
+.slot:focus-visible {
+  outline: 2px solid var(--attack);
+  outline-offset: 2px;
+}
+
+.board-slot--enemy {
+  cursor: not-allowed;
+}
+
+.board-slot--enemy.slot--empty {
+  opacity: .28;
+}
+
+.card-visual {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(20px, 3.2vw, 36px);
+  overflow: hidden;
+}
+
+.card-visual img {
+  width: 82%;
+  height: 82%;
+  object-fit: cover;
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.card-stats {
+  display: flex;
+  gap: 6px;
+  padding: 2px 0 5px;
+  font-family: var(--font-title);
+  letter-spacing: .1em;
+  font-weight: 500;
+  font-size: clamp(8px, .95vw, 11px);
+  z-index: 101;
+}
+
+.stat--life { color: var(--life); }
+.stat--attack { color: var(--attack); }
+.stat--guardian { color: var(--guardian); font-weight: bold; }
+.stat--implacable { color: var(--implacable); font-weight: bold; }
+.stat--drill { color: var(--drill); font-weight: bold; }
+.stat--mortal { color: var(--mortal); font-weight: bold; }
+.stat--area { color: var(--area); }
+.stat--entire_arena { color: var(--entire_arena); }
+.stat--rage { color: var(--rage); font-weight: bold; }

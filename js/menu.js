@@ -6,13 +6,10 @@
    segundo jogador entrar.
 ============================================================ */
 
-import { findOrCreateRoom, listenRoom, cancelRoom, isFirebaseConfigured, placeDoll } from "./matchmaking.js";
+// 1) Import: adicione endTurn e autoAdvanceTurn
+import { findOrCreateRoom, listenRoom, cancelRoom, isFirebaseConfigured, placeDoll, endTurn, autoAdvanceTurn } from "./matchmaking.js";
 
-// index.html roda como script normal (não-module), então é aqui
-// que ele ganha acesso às funções do Firestore que precisa depois
-// que a partida começa (Game.placeDoll chama isso).
-window.Matchmaking = { placeDoll };
-
+window.Matchmaking = { placeDoll, endTurn, autoAdvanceTurn };
 // Testando com duas abas do MESMO navegador? localStorage é
 // compartilhado entre elas, então as duas puxariam o mesmo ID.
 // Abrindo a segunda aba como "?slot=2" (ou qualquer valor), essa
@@ -122,27 +119,36 @@ async handlePlay() {
     // Um único listener cobre tudo: primeiro detecta a sala fechando
     // (state === 'playing'), dispara startMatch() uma vez só, e depois
     // vira o canal de sincronia do tabuleiro/reserva durante a partida.
-    this.unsubscribe = listenRoom(roomId, (data) => {
-      if (!data) {
-        if (!this.matchStarted) {
-          this.unsubscribe?.();
-          this.unsubscribe = null;
-          this.setError("A sala expirou. Tente novamente.");
-          this.showLogin();
-        }
-        return;
-      }
 
-      if (!this.matchStarted && data.state === "playing" && data.guest) {
-        this.matchStarted = true;
-        this.startMatch(data);
-        return; // startMatch já processa esse primeiro snapshot inteiro
+  this.unsubscribe = listenRoom(roomId, (data) => {
+    if (!data) {
+      this.unsubscribe?.();
+      this.unsubscribe = null;
+      const wasPlaying = this.matchStarted;
+      this.matchStarted = false;
+      this.roomId = null;
+      if (wasPlaying) {
+        window.Game.handleRoomClosed();
       }
+      this.setError(
+        wasPlaying
+          ? "A sala foi encerrada por inatividade."
+          : "A sala expirou. Tente novamente."
+      );
+      this.showLogin();
+      return;
+    }
 
-      if (this.matchStarted) {
-        window.Game.syncRoom(data);
-      }
-    });
+    if (!this.matchStarted && data.state === "playing" && data.guest) {
+      this.matchStarted = true;
+      this.startMatch(data);
+      return;
+    }
+
+    if (this.matchStarted) {
+      window.Game.syncRoom(data);
+    }
+  });
   } catch (err) {
     console.error("[Menu] falha ao entrar em uma sala:", err);
     this.setError("Não foi possível entrar agora. Tente de novo.");
@@ -170,6 +176,7 @@ async handlePlay() {
     this.els.waitingCard.hidden = true;
     this.els.loginCard.hidden = false;
     this.els.playBtn.disabled = false;
+    this.els.screen.classList.remove("menu-screen--hidden");
   },
 
   // Entrega os dados da sala fechada pro jogo já em execução em
@@ -182,17 +189,16 @@ async handlePlay() {
     const opponentReserve = roomData.p?.[opponent.ID]?.reserve || [];
     const myReserve = roomData.p?.[me]?.reserve || [];
 
-    window.Game.startMatch({
-      roomId: this.roomId,
-      me: { id: me, name: this.player.name },
-      opponent: { id: opponent.ID, name: opponent.name },
-      myReserve,
-      opponentReserve,
-      // Decide, do lado do Game, qual coluna é "minha" e o
-      // espelhamento visual do tabuleiro (ower sempre à esquerda
-      // pra si, guest também sempre à esquerda pra si).
-      role: isOwner ? 'owner' : 'guest',
-    });
+  // 4) startMatch(roomData) precisa repassar o turno pro Game:
+  window.Game.startMatch({
+    roomId: this.roomId,
+    me: { id: me, name: this.player.name },
+    opponent: { id: opponent.ID, name: opponent.name },
+    myReserve,
+    opponentReserve,
+    role: isOwner ? 'owner' : 'guest',
+    turn: roomData.turn, // <-- novo
+  });
 
     this.els.screen.classList.add("menu-screen--hidden");
   },
