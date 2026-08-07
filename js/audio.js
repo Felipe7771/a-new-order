@@ -58,14 +58,16 @@ const settings = {
   hover: true,
   type: true,
   dollEffects: true,
-  entrance: true,                 // <-- novo
+  entrance: true,
+  clockTick: true,                // <-- novo
   volumes: {
     music: 0.5,
     click: 0.6,
     hover: 0.35,
     type: 0.3,
     dollEffects: 0.7,
-    entrance: 0.4,                // <-- novo
+    entrance: 0.4,
+    clockTick: 0.1,              // <-- novo
   },
 };
 
@@ -177,6 +179,19 @@ const Sfx = {
   click(name = 'click') { playOneShot('click', name); },
   hover(name = 'hover') { playOneShot('hover', name); },
   type(name = 'type') { playOneShot('type', name); },
+
+    // Tic do relógio de turno — audio/sound/effects/tick.mp3.
+  // Toca 1x por segundo enquanto o relógio de defesa está contando
+  // (ver EndTurnButton.startClock em index.html).
+  clockTick() {
+    if (!settings.clockTick) return;
+    const base = getSfx('tick', PATHS.effects);
+    const instance = base.cloneNode();
+    instance.volume = settings.volumes.clockTick;
+    instance.play().catch((err) => {
+      console.warn('[AudioManager] sem áudio de tick (audio/sound/effects/tick.mp3):', err.message);
+    });
+  },
 
   dollEffect(effectKey) {
     if (!settings.dollEffects) return;

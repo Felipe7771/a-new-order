@@ -13,7 +13,10 @@
         ],
         "rageDamage": 10,
         "group": "Família Cruz-Lenz",
-        "affinities": ["Família Cruz-Lenz","C.A.S"],
+        "affinities": [
+            "Família Cruz-Lenz",
+            "C.A.S"
+        ],
         "power": {
             "has": false,
             "description": ""
@@ -31,10 +34,13 @@
         "attbtDamage": [],
         "rageDamage": 0,
         "group": "Família Leef-Graves",
-        "affinities": ["Família Leef-Graves","Londres"],
+        "affinities": [
+            "Família Leef-Graves",
+            "Londres"
+        ],
         "power": {
             "has": true,
-            "description": "O seu primeiro golpe em Campo é em (Dano em Área)"
+            "description": "UMA VEZ EM CAMPO, o próximo ataque será (Dano em Área) "
         }
     },
     "003tonn,darcy&braze": {
@@ -47,7 +53,9 @@
         "attbtDamage": [],
         "rageDamage": 0,
         "group": "Realeza",
-        "affinities": ["Realeza"],
+        "affinities": [
+            "Realeza"
+        ],
         "power": {
             "has": false,
             "description": ""
@@ -72,8 +80,8 @@
             "description": ""
         }
     },
-    "005kzhard'grandth": {
-        "name": "Kzhar D'Grandth",
+    "005kzhard'grandt": {
+        "name": "Kzhar D'Grandt",
         "stats": {
             "baseLife": 19.0,
             "baseDamage": 9.0
@@ -84,7 +92,9 @@
         "attbtDamage": [],
         "rageDamage": 0,
         "group": "IRUMEO",
-        "affinities": ["C.A.S"],
+        "affinities": [
+            "C.A.S"
+        ],
         "power": {
             "has": true,
             "description": "UMA VEZ em campo, Inimigo perde o próximo Turno Ofensivo"
@@ -154,7 +164,9 @@
         "attbtDamage": [],
         "rageDamage": 0,
         "group": "C.A.S",
-        "affinities": ["C.A.S"],
+        "affinities": [
+            "C.A.S"
+        ],
         "power": {
             "has": true,
             "description": "Reduza 3 de dano recebido pelo inimigo da Fileira"
@@ -226,7 +238,9 @@
         ],
         "rageDamage": 9,
         "group": "Mafia Pullduck",
-        "affinities": ["IRUMEO"],
+        "affinities": [
+            "IRUMEO"
+        ],
         "power": {
             "has": true,
             "description": "UMA VEZ em campo, bonecos aliados [Mafia Pullduck] ATACAM instantâneamente"
@@ -245,7 +259,7 @@
         "affinities": [],
         "power": {
             "has": true,
-            "description": "Nenhum boneco aliado recebe dano até seu próximo turno"
+            "description": "UMA VEZ em campo, realise um ataque instantâneamente"
         }
     },
     "015doutorhorse": {
@@ -341,13 +355,15 @@
             "baseDamage": 5.0
         },
         "attbtLife": [],
-        "attbtDamage": [],
+        "attbtDamage": [
+            "drill"
+        ],
         "rageDamage": 0,
         "group": "Mafia Pullduck",
         "affinities": [],
         "power": {
-            "has": true,
-            "description": "Seu golpe ricocheteia em inimigos próximos"
+            "has": false,
+            "description": ""
         }
     },
     "021izzy": {
@@ -391,10 +407,14 @@
             "baseDamage": 3.0
         },
         "attbtLife": [],
-        "attbtDamage": [],
+        "attbtDamage": [
+            "mortal"
+        ],
         "rageDamage": 0,
         "group": "Mafia Pullduck",
-        "affinities": ["Mafia Pullduck"],
+        "affinities": [
+            "Mafia Pullduck"
+        ],
         "power": {
             "has": true,
             "description": "Ao morrer, execute 3 de dano á TODOS da arena, até aliados"
@@ -464,7 +484,9 @@
         ],
         "rageDamage": 8,
         "group": "IRUMEO",
-        "affinities": ["Família Leef-Graves"],
+        "affinities": [
+            "Família Leef-Graves"
+        ],
         "power": {
             "has": false,
             "description": ""
@@ -494,15 +516,14 @@
         },
         "attbtLife": [],
         "attbtDamage": [
-            "drill",
-            "mortal"
+            "drill"
         ],
         "rageDamage": 0,
         "group": "Vale do Leste",
         "affinities": [],
         "power": {
             "has": true,
-            "description": "Ataque em qualquer Turno Ofensivo"
+            "description": "EM turnos ofensivos, REALISA ataques mesmo recuado no corredor"
         }
     },
     "030sombras": {
@@ -565,8 +586,10 @@
         "attbtLife": [],
         "attbtDamage": [],
         "rageDamage": 0,
-        "group": "Quirkyville",
-        "affinities": ["Família Leef-Graves"],
+        "group": "Experimentos Graves",
+        "affinities": [
+            "Família Leef-Graves"
+        ],
         "power": {
             "has": false,
             "description": ""
@@ -581,7 +604,7 @@
         "attbtLife": [],
         "attbtDamage": [],
         "rageDamage": 0,
-        "group": "Quirkyville",
+        "group": "IRUMEO",
         "affinities": [],
         "power": {
             "has": false,
@@ -620,7 +643,9 @@
         ],
         "rageDamage": 0,
         "group": "Quirkyville",
-        "affinities": ["Quirkyville"],
+        "affinities": [
+            "Quirkyville"
+        ],
         "power": {
             "has": false,
             "description": ""
@@ -636,7 +661,10 @@
         "attbtDamage": [],
         "rageDamage": 0,
         "group": "Quirkyville",
-        "affinities": ["Família Cruz-Lenz","Londres"],
+        "affinities": [
+            "Família Cruz-Lenz",
+            "Londres"
+        ],
         "power": {
             "has": true,
             "description": "Se eliminada, FINALIZE boneco que a derrotou"
@@ -652,7 +680,9 @@
         "attbtDamage": [],
         "rageDamage": 0,
         "group": "Quirkyville",
-        "affinities": ["Quirkyville"],
+        "affinities": [
+            "Quirkyville"
+        ],
         "power": {
             "has": false,
             "description": ""
@@ -743,12 +773,12 @@
         "group": "IRUMEO",
         "affinities": [],
         "power": {
-            "has": true,
-            "description": "Reflete o mesmo dano recebido ao inimigo"
+            "has": false,
+            "description": ""
         }
     },
-    "044alexandr1na": {
-        "name": "Alexandr1na",
+    "044karaneville": {
+        "name": "Kara Neville",
         "stats": {
             "baseLife": 11.0,
             "baseDamage": 5.0
@@ -756,8 +786,10 @@
         "attbtLife": [],
         "attbtDamage": [],
         "rageDamage": 0,
-        "group": "Experimentos Graves",
-        "affinities": ["Família Leef-Graves"],
+        "group": "C.A.S",
+        "affinities": [
+            "C.A.S"
+        ],
         "power": {
             "has": false,
             "description": ""
@@ -773,10 +805,13 @@
         "attbtDamage": [],
         "rageDamage": 0,
         "group": "Família Leef-Graves",
-        "affinities": ["Família Leef-Graves","Londres"],
+        "affinities": [
+            "Família Leef-Graves",
+            "Londres"
+        ],
         "power": {
-            "has": false,
-            "description": ""
+            "has": true,
+            "description": "UMA VEZ em campo, bonecos aliados [Família Leef-Graves] ATACAM instantâneamente"
         }
     },
     "046gwendoly": {
@@ -789,7 +824,9 @@
         "attbtDamage": [],
         "rageDamage": 0,
         "group": "C.A.S",
-        "affinities": ["C.A.S"],
+        "affinities": [
+            "C.A.S"
+        ],
         "power": {
             "has": false,
             "description": ""
@@ -807,14 +844,16 @@
         ],
         "rageDamage": 0,
         "group": "Família Leef-Graves",
-        "affinities": ["Família Leef-Graves"],
+        "affinities": [
+            "Família Leef-Graves"
+        ],
         "power": {
             "has": true,
             "description": "TODOS os Bonecos [Experimentos Graves] não causarão dano"
         }
     },
-    "048endobrama": {
-        "name": "Endobrama",
+    "048filiotielizabetta": {
+        "name": "Филиот и Элизабетта",
         "stats": {
             "baseLife": 8.0,
             "baseDamage": 8.0
@@ -822,8 +861,8 @@
         "attbtLife": [],
         "attbtDamage": [],
         "rageDamage": 0,
-        "group": "Experimentos Graves",
-        "affinities": ["Família Leef-Graves"],
+        "group": "Ashes of Winter",
+        "affinities": [],
         "power": {
             "has": false,
             "description": ""
@@ -874,10 +913,13 @@
         ],
         "rageDamage": 9,
         "group": "C.A.S",
-        "affinities": ["Família Cruz-Lenz","Londres"],
+        "affinities": [
+            "Família Cruz-Lenz",
+            "Londres"
+        ],
         "power": {
             "has": true,
-            "description": "UMA VEZ em campo, mude os inimigos da arena de lugar"
+            "description": "UMA VEZ em campo, mova UM inimigo de lugar na Arena"
         }
     },
     "052cacadorvermelho": {
@@ -910,7 +952,7 @@
             "rage"
         ],
         "rageDamage": 6,
-        "group": "Experimentos Graves",
+        "group": "IRUMEO",
         "affinities": [],
         "power": {
             "has": false,
@@ -928,15 +970,17 @@
         ],
         "attbtDamage": [],
         "rageDamage": 0,
-        "group": "Experimentos Graves",
-        "affinities": ["Londres"],
+        "group": "IRUMEO",
+        "affinities": [
+            "Londres"
+        ],
         "power": {
             "has": true,
             "description": "UMA VEZ em campo, Atraia um inimigo para essa fileira"
         }
     },
-    "055cryistal": {
-        "name": "Cryistal",
+    "055mr.nillo": {
+        "name": "Mr. Nillo",
         "stats": {
             "baseLife": 9.0,
             "baseDamage": 9.0
@@ -944,8 +988,11 @@
         "attbtLife": [],
         "attbtDamage": [],
         "rageDamage": 0,
-        "group": "Experimentos Graves",
-        "affinities": [],
+        "group": "Ashes of Winter",
+        "affinities": [
+            "Ashes of Winter",
+            " Londres"
+        ],
         "power": {
             "has": false,
             "description": ""
@@ -962,24 +1009,26 @@
             "drill"
         ],
         "rageDamage": 0,
-        "group": "Experimentos Graves",
+        "group": "IRUMEO",
         "affinities": [],
         "power": {
             "has": false,
             "description": ""
         }
     },
-    "057reisombra": {
-        "name": "Rei Sombra",
+    "057hjalmar": {
+        "name": "Hjalmar",
         "stats": {
-            "baseLife": 5.0,
+            "baseLife": 18.0,
             "baseDamage": 4.0
         },
         "attbtLife": [],
         "attbtDamage": [],
         "rageDamage": 0,
-        "group": "Vale do Leste",
-        "affinities": [],
+        "group": "Ashes of Winter",
+        "affinities": [
+            "Londres"
+        ],
         "power": {
             "has": false,
             "description": ""
@@ -995,7 +1044,9 @@
         "attbtDamage": [],
         "rageDamage": 0,
         "group": "Experimentos Graves",
-        "affinities": ["Família Leef-Graves"],
+        "affinities": [
+            "Família Leef-Graves"
+        ],
         "power": {
             "has": false,
             "description": ""
@@ -1030,7 +1081,9 @@
         ],
         "rageDamage": 10,
         "group": "Experimentos Graves",
-        "affinities": ["Londres"],
+        "affinities": [
+            "Londres"
+        ],
         "power": {
             "has": true,
             "description": "Rex não morre enquanto tiver aliados FORA do Corredor dele"
@@ -1062,7 +1115,10 @@
         "attbtDamage": [],
         "rageDamage": 0,
         "group": "Experimentos Graves",
-        "affinities": ["Família Leef-Graves","Londres"],
+        "affinities": [
+            "Família Leef-Graves",
+            "Londres"
+        ],
         "power": {
             "has": true,
             "description": "UMA VEZ em campo, retorna um inimigo para a Reserva"
@@ -1113,7 +1169,10 @@
         ],
         "rageDamage": 6,
         "group": "Família Cruz-Lenz",
-        "affinities": ["Família Cruz-Lenz","C.A.S"],
+        "affinities": [
+            "Família Cruz-Lenz",
+            "C.A.S"
+        ],
         "power": {
             "has": true,
             "description": "Seu ataque terá efeito (MORTAL) em bonecos tipo [IRUMEO]"
@@ -1131,7 +1190,9 @@
         ],
         "rageDamage": 0,
         "group": "C.A.S",
-        "affinities": ["C.A.S"],
+        "affinities": [
+            "C.A.S"
+        ],
         "power": {
             "has": false,
             "description": ""
@@ -1147,7 +1208,9 @@
         "attbtDamage": [],
         "rageDamage": 0,
         "group": "C.A.S",
-        "affinities": ["C.A.S"],
+        "affinities": [
+            "C.A.S"
+        ],
         "power": {
             "has": true,
             "description": "Aliados próximos tornam Pietro (IMPLACÁVEL)"
@@ -1165,7 +1228,9 @@
         ],
         "rageDamage": 0,
         "group": "C.A.S",
-        "affinities": ["C.A.S"],
+        "affinities": [
+            "C.A.S"
+        ],
         "power": {
             "has": false,
             "description": ""
@@ -1183,10 +1248,13 @@
         ],
         "rageDamage": 7,
         "group": "C.A.S",
-        "affinities": ["C.A.S","Família Cruz-Lenz"],
+        "affinities": [
+            "C.A.S",
+            "Família Cruz-Lenz"
+        ],
         "power": {
             "has": true,
-            "description": "Revela as cartas inimigas da mão do inimigo uma vez"
+            "description": "UMA VEZ em campo, Aliados não recebem dano em 1 turno"
         }
     },
     "070adara": {
@@ -1217,7 +1285,9 @@
         "attbtDamage": [],
         "rageDamage": 0,
         "group": "C.A.S",
-        "affinities": ["C.A.S"],
+        "affinities": [
+            "C.A.S"
+        ],
         "power": {
             "has": false,
             "description": ""
@@ -1235,10 +1305,13 @@
         "attbtDamage": [],
         "rageDamage": 0,
         "group": "C.A.S",
-        "affinities": ["Família Cruz-Lenz","Londres"],
+        "affinities": [
+            "Família Cruz-Lenz",
+            "Londres"
+        ],
         "power": {
             "has": true,
-            "description": "Ganhe +1 de dano a cada boneco aliado [C.A.S]"
+            "description": "Ganhe +1 de dano a cada boneco aliado [C.A.S] na Arena"
         }
     },
     "073segurancapolar": {
@@ -1251,7 +1324,9 @@
         "attbtDamage": [],
         "rageDamage": 0,
         "group": "Realeza",
-        "affinities": ["Realeza"],
+        "affinities": [
+            "Realeza"
+        ],
         "power": {
             "has": false,
             "description": ""
@@ -1269,10 +1344,14 @@
         ],
         "rageDamage": 0,
         "group": "C.A.S",
-        "affinities": ["C.A.S","IRUMEO","Londres"],
+        "affinities": [
+            "C.A.S",
+            "IRUMEO",
+            "Londres"
+        ],
         "power": {
             "has": true,
-            "description": "Primeiro ataque de 5 de dano em qualquer inimigo (Dano em área)"
+            "description": "UMA VEZ em campo, realize 5 de dano em um CORREDOR"
         }
     },
     "075mr.null": {
@@ -1287,10 +1366,12 @@
         ],
         "rageDamage": 0,
         "group": "C.A.S",
-        "affinities": ["IRUMEO"],
+        "affinities": [
+            "IRUMEO"
+        ],
         "power": {
             "has": true,
-            "description": "Não receba dano por 1 turno"
+            "description": "UMA VEZ em campo, Não receba dano por 1 turno"
         }
     },
     "076cabideiro": {
@@ -1321,7 +1402,10 @@
         "attbtDamage": [],
         "rageDamage": 0,
         "group": "Família Cruz-Lenz",
-        "affinities": ["Família Cruz-Lenz","Londres"],
+        "affinities": [
+            "Família Cruz-Lenz",
+            "Londres"
+        ],
         "power": {
             "has": false,
             "description": ""
@@ -1330,7 +1414,7 @@
     "078tvnews": {
         "name": "TV News",
         "stats": {
-            "baseLife": 17.0,
+            "baseLife": 14.0,
             "baseDamage": 5.0
         },
         "attbtLife": [],
@@ -1339,14 +1423,14 @@
         "group": "IRUMEO",
         "affinities": [],
         "power": {
-            "has": true,
-            "description": "inimigos da fileira não atacam por 1 turno"
+            "has": false,
+            "description": ""
         }
     },
     "079beatriz": {
         "name": "Beatriz",
         "stats": {
-            "baseLife": 13.0,
+            "baseLife": 11.0,
             "baseDamage": 4.0
         },
         "attbtLife": [],
@@ -1369,7 +1453,9 @@
         "attbtDamage": [],
         "rageDamage": 0,
         "group": "Ashes of Winter",
-        "affinities": ["Londres"],
+        "affinities": [
+            "Londres"
+        ],
         "power": {
             "has": false,
             "description": ""
@@ -1385,7 +1471,9 @@
         "attbtDamage": [],
         "rageDamage": 0,
         "group": "IRUMEO",
-        "affinities": ["Londres"],
+        "affinities": [
+            "Londres"
+        ],
         "power": {
             "has": false,
             "description": ""
@@ -1421,8 +1509,8 @@
         "group": "Vale do Leste",
         "affinities": [],
         "power": {
-            "has": true,
-            "description": "Ataque qualquer carta da Arena que o atacar"
+            "has": false,
+            "description": ""
         }
     },
     "084jakemccovy": {
@@ -1469,7 +1557,9 @@
         "attbtDamage": [],
         "rageDamage": 0,
         "group": "Entidade",
-        "affinities": ["Londres"],
+        "affinities": [
+            "Londres"
+        ],
         "power": {
             "has": true,
             "description": "ENQUANTO VIVO, todos os Aliados ganham +1 de dano"
@@ -1487,7 +1577,10 @@
         ],
         "rageDamage": 10,
         "group": "Família Leef-Graves",
-        "affinities": ["Família Leef-Graves","Família Cruz-Lenz"],
+        "affinities": [
+            "Família Leef-Graves",
+            "Família Cruz-Lenz"
+        ],
         "power": {
             "has": true,
             "description": "Copie o MAIOR dano dos inimigos da Arena"
@@ -1507,7 +1600,10 @@
         ],
         "rageDamage": 0,
         "group": "C.A.S",
-        "affinities": ["C.A.S","Parasitas"],
+        "affinities": [
+            "C.A.S",
+            "Parasitas"
+        ],
         "power": {
             "has": false,
             "description": ""
@@ -1525,7 +1621,9 @@
         ],
         "rageDamage": 0,
         "group": "C.A.S",
-        "affinities": ["C.A.S"],
+        "affinities": [
+            "C.A.S"
+        ],
         "power": {
             "has": false,
             "description": ""
@@ -1541,10 +1639,12 @@
         "attbtDamage": [],
         "rageDamage": 0,
         "group": "Realeza",
-        "affinities": ["Londres"],
+        "affinities": [
+            "Londres"
+        ],
         "power": {
             "has": true,
-            "description": "Paralise o inimigo por 1 turno ofensivo"
+            "description": "UMA VEZ em campo, inimigos da fileira não atacam por 1 turno"
         }
     },
     "091rafaellenz": {
@@ -1559,7 +1659,10 @@
         ],
         "rageDamage": 9,
         "group": "Família Cruz-Lenz",
-        "affinities": ["Família Cruz-Lenz","Realeza"],
+        "affinities": [
+            "Família Cruz-Lenz",
+            "Realeza"
+        ],
         "power": {
             "has": true,
             "description": "Se AMELIE estiver em campo, GANHE 5 de dano"
@@ -1577,7 +1680,10 @@
         "attbtDamage": [],
         "rageDamage": 0,
         "group": "Família Cruz-Lenz",
-        "affinities": ["Família Cruz-Lenz","Realeza"],
+        "affinities": [
+            "Família Cruz-Lenz",
+            "Realeza"
+        ],
         "power": {
             "has": false,
             "description": ""
@@ -1593,7 +1699,10 @@
         "attbtDamage": [],
         "rageDamage": 0,
         "group": "Quirkyville",
-        "affinities": ["Família Cruz-Lenz","Londres"],
+        "affinities": [
+            "Família Cruz-Lenz",
+            "Londres"
+        ],
         "power": {
             "has": false,
             "description": ""
@@ -1611,7 +1720,9 @@
         ],
         "rageDamage": 0,
         "group": "Ashes of Winter",
-        "affinities": ["Londres"],
+        "affinities": [
+            "Londres"
+        ],
         "power": {
             "has": false,
             "description": ""
@@ -1632,7 +1743,10 @@
         ],
         "rageDamage": 15,
         "group": "Londres",
-        "affinities": ["Família Cruz-Lenz","Família Leef-Graves"],
+        "affinities": [
+            "Família Cruz-Lenz",
+            "Família Leef-Graves"
+        ],
         "power": {
             "has": false,
             "description": ""
@@ -1650,7 +1764,9 @@
         ],
         "rageDamage": 0,
         "group": "Ashes of Winter",
-        "affinities": ["Londres"],
+        "affinities": [
+            "Londres"
+        ],
         "power": {
             "has": false,
             "description": ""

@@ -1,19 +1,191 @@
-/* ---------- botão de Encerrar Turno (entre os nomes) ---------- */
+/* ---------- container geral (relógio + dica + botão) ---------- */
 .turn-action{
   display: none;
   flex-direction: column;
   align-items: center;
+  gap: 6px;
   pointer-events: none;
   align-self: center;
+  position: relative;
 }
 .turn-action--visible{
   display: flex;
   pointer-events: auto;
 }
+/* ---------- relógio eneágono (relógio de bolso antigo) ---------- */
+.turn-clock{
+  --clock-gray: #6c6656;
+  --clock-elapsed: 0deg;
+  --clock-fill: var(--clock-gray);
+  position: relative;
+  width: clamp(64px, 7.4vw, 86px);
+  height: clamp(64px, 7.4vw, 86px);
+  margin-top: 4px;
+}
+
+/* sombra FORTE atrás de tudo, dando peso ao relógio */
+.turn-clock::before{
+  content: '';
+  position: absolute;
+  inset: -16%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,0,0,.95) 0%, rgba(0,0,0,.65) 45%, transparent 72%);
+  filter: blur(4px);
+  z-index: -1;
+}
+
+/* aro/case metálico, um pouco maior que o mostrador */
+.turn-clock__bezel{
+  position: absolute;
+  inset: -9%;
+  clip-path: polygon(50% 2%, 81% 13%, 97% 42%, 92% 74%, 66% 95%, 34% 95%, 8% 74%, 3% 42%, 19% 13%);
+  background: linear-gradient(135deg, #b98b3e 0%, #6b4d1c 45%, #a97f37 70%, #4a3512 100%);
+  box-shadow:
+    inset 0 0 0 2px rgba(0,0,0,.5),
+    inset 0 2px 4px rgba(255,230,180,.35),
+    inset 0 -3px 6px rgba(0,0,0,.6);
+  z-index: 0;
+}
+
+.turn-clock__dial{
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(50% 2%, 81% 13%, 97% 42%, 92% 74%, 66% 95%, 34% 95%, 8% 74%, 3% 42%, 19% 13%);
+  background: conic-gradient(var(--clock-gray) 0deg var(--clock-elapsed), var(--clock-fill) var(--clock-elapsed) 360deg);
+  border: 2px solid #241d0f;
+  box-shadow: inset 0 0 12px rgba(0,0,0,.7);
+  z-index: 1;
+}
+
+/* marcações de graduação — 12 traços, 4 maiores (hora cheia) */
+.turn-clock__ticks{
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+.turn-clock__tick{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2px;
+  height: 44%;
+  margin-left: -1px;
+  margin-top: -44%;
+  transform-origin: 50% 100%;
+  transform: rotate(calc(var(--i) * 30deg));
+  background: linear-gradient(180deg, rgba(20,15,5,.8) 0%, rgba(20,15,5,.8) 20%, transparent 20%);
+}
+.turn-clock__tick--major{
+  width: 3px;
+  margin-left: -1.5px;
+  background: linear-gradient(180deg, rgba(20,15,5,.95) 0%, rgba(20,15,5,.95) 28%, transparent 28%);
+}
+
+/* ponteiros — lâmina + contrapeso, pivô um pouco acima da base
+   (o "rabo" curto abaixo do pivô é o que ultrapassa o centro) */
+.turn-clock__hand{
+  position: absolute;
+  left: 50%;
+  width: 5px;
+  margin-left: -2.5px;
+  background: linear-gradient(180deg, #e6cf95 0%, #9c7830 45%, #2c2110 100%);
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.7));
+  clip-path: polygon(50% 0%, 64% 9%, 57% 79%, 76% 84%, 50% 100%, 24% 84%, 43% 79%, 36% 9%);
+}
+.turn-clock__hand--hour{
+  top: 50%;
+  width: 6px;
+  margin-left: -3px;
+  height: 48%;
+  margin-top: -39.4%;
+  transform-origin: 50% 82%;
+  transform: rotate(0deg); /* fixo, sempre nas 12h */
+  z-index: 3;
+}
+.turn-clock__hand--minute{
+  top: 50%;
+  height: 70%;
+  margin-top: -59.5%;
+  transform-origin: 50% 85%;
+  transform: rotate(0deg);
+  transition: transform .5s ease; /* JS troca pra "salto" durante a contagem */
+  z-index: 4;
+}
+
+.turn-clock__pin{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
+  background: var(--principal-button);
+  box-shadow: 0 0 4px rgba(0,0,0,.8);
+  z-index: 5;
+}
+
+/* parafusos do case, nos 9 vértices do eneágono */
+.turn-clock__screws{
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.turn-clock__screws span{
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: 5px;
+  height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #d8c48a, #6b5220 70%, #2c2110);
+  box-shadow: 0 1px 1px rgba(0,0,0,.85), inset 0 0 1px rgba(255,255,255,.4);
+}
+
+/* pulo de "acordou" — dispara só quando um turno novo realmente começa */
+@keyframes turn-clock-wake{
+  0%   { transform: scale(.7) rotate(-10deg); }
+  50%  { transform: scale(1.15) rotate(5deg); }
+  72%  { transform: scale(.94) rotate(-2deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+.turn-clock--waking{
+  animation: turn-clock-wake .5s cubic-bezier(.34,1.56,.64,1) both;
+}
+
+/* ---------- texto "Realize sua estratégia" ---------- */
+.turn-clock__hint{
+  margin: 0;
+  padding: 4px 12px;
+  font-family: var(--font-title);
+  font-size: clamp(10px, 1.6vw, 12px);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(0,0,0,.55);
+  border-radius: 2px;
+  opacity: 0;
+  transform: translateY(-2px);
+  transition: opacity .2s ease, transform .2s ease;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.turn-clock__hint--visible{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- botão "Encerrar Turno" (tábua com âncoras) ---------- */
 .end-turn-btn{
   position: relative;
-  overflow: hidden;
-  padding: 9px 20px;
+  display: none;
+  align-items: center;
+  gap: 8px;
+  overflow: visible;
+  padding: 9px 18px;
   border: 1px solid var(--attack);
   border-radius: 2px;
   background: linear-gradient(180deg, var(--principal-button), var(--attack));
@@ -24,32 +196,52 @@
   letter-spacing: .12em;
   text-transform: uppercase;
   cursor: pointer;
-  box-shadow: 0 6px 16px rgba(0,0,0,.4);
+  box-shadow: 0 6px 16px rgba(0,0,0,.4), 0 0 10px 2px rgba(201,154,60,.35);
+  transition: box-shadow .18s ease, transform .12s ease;
 }
 .end-turn-btn:disabled{
   opacity: .45;
   cursor: default;
+  box-shadow: 0 6px 16px rgba(0,0,0,.4);
 }
-.end-turn-btn__timer{
-  position: absolute;
-  inset: 0;
-  background: rgba(193,84,74,.65);
-  transform-origin: left center;
-  animation: end-turn-countdown linear forwards;
-  pointer-events: none;
+.end-turn-btn:not(:disabled):hover{
+  box-shadow: 0 6px 16px rgba(0,0,0,.4), 0 0 26px 8px rgba(201,154,60,.6);
+  transform: translateY(-1px);
 }
-.end-turn-btn__label{
-  position: relative;
-  z-index: 1;
+.end-turn-btn__label{ position: relative; z-index: 1; }
+.end-turn-btn__anchor{
+  font-size: 13px;
+  color: #4a3c1c;
+  opacity: .75;
 }
-@keyframes end-turn-countdown{
-  from { transform: scaleX(1); }
-  to   { transform: scaleX(0); }
+.end-turn-btn--visible{ display: flex; }
+
+/* desce como uma tábua pendurada, com um leve balanço no final */
+@keyframes end-turn-drop{
+  0%   { transform: translateY(-160%) rotate(-3deg); opacity: 0; }
+  55%  { transform: translateY(6%) rotate(1.5deg); opacity: 1; }
+  75%  { transform: translateY(-3%) rotate(-1deg); }
+  100% { transform: translateY(0) rotate(0deg); opacity: 1; }
 }
-@media (prefers-reduced-motion: reduce){
-  .end-turn-btn__timer{ animation: none; opacity: .3; }
+.end-turn-btn--dropping{
+  animation: end-turn-drop .55s cubic-bezier(.34,1.56,.64,1) both;
 }
 
+/* sobe e some, ao clicar */
+@keyframes end-turn-rise{
+  0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(-160%) rotate(3deg); opacity: 0; }
+}
+.end-turn-btn--rising{
+  animation: end-turn-rise .4s ease-in both;
+}
+
+/* @media (prefers-reduced-motion: reduce){
+  .end-turn-btn--dropping,
+  .end-turn-btn--rising{ animation: none; }
+  .turn-clock__hint{ transition: none; }
+  .turn-clock__hand--minute{ transition: none !important; }
+} */
 /* ---------- banner de passagem de turno ---------- */
 #turn-banner-overlay{
   position: fixed;
