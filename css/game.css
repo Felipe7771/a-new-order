@@ -225,7 +225,8 @@
   margin-bottom: 10px;
 }
 
-.modal-visual img {
+.modal-visual img,
+.modal-visual .modal-media{
   width: 96px;
   height: 96px;
   object-fit: cover;

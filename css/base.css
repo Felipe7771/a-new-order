@@ -184,22 +184,39 @@ html, body {
   opacity: .28;
 }
 
-.card-visual {
+.card-visual{
   flex: 1;
   width: 100%;
   display: flex;
-  align-items: center;
+  align-items: flex-end;   /* ancora embaixo — igual "pisar" no slot */
   justify-content: center;
   font-size: clamp(20px, 3.2vw, 36px);
-  overflow: hidden;
+  overflow: visible;       /* deixa a mídia vazar da caixa */
+  position: relative;
+  z-index: 1;
+}
+.card-visual:hover{ z-index: 20; } /* traz o personagem sob o mouse pra frente da fileira */
+
+.card-media{
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: none;
+  object-fit: contain;     /* contain, não cover — cover cortaria o excesso que vaza */
+  pointer-events: none;
 }
 
-.card-visual img {
-  width: 82%;
-  height: 82%;
-  object-fit: cover;
-  border-radius: 2px;
-  pointer-events: none;
+/* ---------- reserva: vazamento discreto ---------- */
+.card-visual--reserve .card-media{
+  width: 122%;
+  height: 122%;
+}
+
+/* ---------- arena: espaço vital bem maior ---------- */
+.card-visual--board .card-media{
+  width: 150%;
+  height: 150%;
 }
 
 .card-stats {

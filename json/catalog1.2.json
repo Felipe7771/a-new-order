@@ -17,12 +17,6 @@
             "Família Cruz-Lenz",
             "C.A.S"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -44,12 +38,6 @@
             "Família Leef-Graves",
             "Londres"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": true,
             "description": "UMA VEZ EM CAMPO, o próximo ataque será (Dano em Área) "
@@ -68,12 +56,6 @@
         "affinities": [
             "Realeza"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -93,12 +75,6 @@
         "rageDamage": 10,
         "group": "Ashes of Winter",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -119,12 +95,6 @@
         "affinities": [
             "C.A.S"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": true,
             "description": "UMA VEZ em campo, Inimigo perde o próximo Turno Ofensivo"
@@ -143,12 +113,6 @@
         "rageDamage": 0,
         "group": "IRUMEO",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -167,12 +131,6 @@
         "rageDamage": 0,
         "group": "Vale do Leste",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -191,12 +149,6 @@
         "rageDamage": 0,
         "group": "IRUMEO",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -215,12 +167,6 @@
         "affinities": [
             "C.A.S"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": true,
             "description": "Reduza 3 de dano recebido pelo inimigo da Fileira"
@@ -239,12 +185,6 @@
         "rageDamage": 0,
         "group": "Parasitas",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -263,12 +203,6 @@
         "rageDamage": 0,
         "group": "Parasitas",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -287,12 +221,6 @@
         "rageDamage": 0,
         "group": "Parasitas",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -313,12 +241,6 @@
         "affinities": [
             "IRUMEO"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": true,
             "description": "UMA VEZ em campo, bonecos aliados [Mafia Pullduck] ATACAM instantâneamente"
@@ -335,12 +257,6 @@
         "rageDamage": 0,
         "group": "Mafia Pullduck",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": true,
             "description": "UMA VEZ em campo, realise um ataque instantâneamente"
@@ -357,12 +273,6 @@
         "rageDamage": 0,
         "group": "Mafia Pullduck",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -381,12 +291,6 @@
         "rageDamage": 0,
         "group": "Mafia Pullduck",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -405,12 +309,6 @@
         "rageDamage": 0,
         "group": "Mafia Pullduck",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -427,12 +325,6 @@
         "rageDamage": 0,
         "group": "Mafia Pullduck",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -451,12 +343,6 @@
         "rageDamage": 0,
         "group": "Mafia Pullduck",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -475,12 +361,6 @@
         "rageDamage": 0,
         "group": "Mafia Pullduck",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -499,12 +379,6 @@
         "rageDamage": 0,
         "group": "Mafia Pullduck",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -521,12 +395,6 @@
         "rageDamage": 0,
         "group": "Mafia Pullduck",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -547,12 +415,6 @@
         "affinities": [
             "Mafia Pullduck"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": true,
             "description": "Ao morrer, execute 3 de dano á TODOS da arena, até aliados"
@@ -573,12 +435,6 @@
         "rageDamage": 7,
         "group": "Mafia Pullduck",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -595,12 +451,6 @@
         "rageDamage": 0,
         "group": "Mafia Pullduck",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -617,12 +467,6 @@
         "rageDamage": 0,
         "group": "Vale do Leste",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -643,12 +487,6 @@
         "affinities": [
             "Família Leef-Graves"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -665,12 +503,6 @@
         "rageDamage": 0,
         "group": "Vale do Leste",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -689,12 +521,6 @@
         "rageDamage": 0,
         "group": "Vale do Leste",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": true,
             "description": "EM turnos ofensivos, REALISA ataques mesmo recuado no corredor"
@@ -711,12 +537,6 @@
         "rageDamage": 0,
         "group": "Vale do Leste",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -736,12 +556,6 @@
         "rageDamage": 0,
         "group": "Vale do Leste",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -758,12 +572,6 @@
         "rageDamage": 0,
         "group": "Quirkyville",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -782,12 +590,6 @@
         "affinities": [
             "Família Leef-Graves"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -804,12 +606,6 @@
         "rageDamage": 0,
         "group": "IRUMEO",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -828,12 +624,6 @@
         "rageDamage": 0,
         "group": "Quirkyville",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -856,12 +646,6 @@
         "affinities": [
             "Quirkyville"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -881,12 +665,6 @@
             "Família Cruz-Lenz",
             "Londres"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": true,
             "description": "Se eliminada, FINALIZE boneco que a derrotou"
@@ -905,12 +683,6 @@
         "affinities": [
             "Quirkyville"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -931,12 +703,6 @@
         "rageDamage": 0,
         "group": "Quirkyville",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -955,12 +721,6 @@
         "rageDamage": 0,
         "group": "Quirkyville",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -977,12 +737,6 @@
         "rageDamage": 0,
         "group": "Quirkyville",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -999,12 +753,6 @@
         "rageDamage": 0,
         "group": "Quirkyville",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -1024,12 +772,6 @@
         "rageDamage": 0,
         "group": "IRUMEO",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -1048,12 +790,6 @@
         "affinities": [
             "C.A.S"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -1073,12 +809,6 @@
             "Família Leef-Graves",
             "Londres"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": true,
             "description": "UMA VEZ em campo, bonecos aliados [Família Leef-Graves] ATACAM instantâneamente"
@@ -1097,12 +827,6 @@
         "affinities": [
             "C.A.S"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -1123,12 +847,6 @@
         "affinities": [
             "Família Leef-Graves"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": true,
             "description": "TODOS os Bonecos [Experimentos Graves] não causarão dano"
@@ -1145,12 +863,6 @@
         "rageDamage": 0,
         "group": "Ashes of Winter",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -1167,12 +879,6 @@
         "rageDamage": 0,
         "group": "IRUMEO",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -1189,12 +895,6 @@
         "rageDamage": 0,
         "group": "IRUMEO",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -1217,12 +917,6 @@
             "Família Cruz-Lenz",
             "Londres"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": true,
             "description": "UMA VEZ em campo, mova UM inimigo de lugar na Arena"
@@ -1239,12 +933,6 @@
         "rageDamage": 0,
         "group": "IRUMEO",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -1266,12 +954,6 @@
         "rageDamage": 6,
         "group": "IRUMEO",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -1292,12 +974,6 @@
         "affinities": [
             "Londres"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": true,
             "description": "UMA VEZ em campo, Atraia um inimigo para essa fileira"
@@ -1317,12 +993,6 @@
             "Ashes of Winter",
             " Londres"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -1341,12 +1011,6 @@
         "rageDamage": 0,
         "group": "IRUMEO",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -1365,12 +1029,6 @@
         "affinities": [
             "Londres"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -1389,12 +1047,6 @@
         "affinities": [
             "Família Leef-Graves"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -1411,12 +1063,6 @@
         "rageDamage": 0,
         "group": "Experimentos Graves",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -1438,12 +1084,6 @@
         "affinities": [
             "Londres"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": true,
             "description": "Rex não morre enquanto tiver aliados FORA do Corredor dele"
@@ -1460,12 +1100,6 @@
         "rageDamage": 0,
         "group": "Experimentos Graves",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": true,
             "description": "Impeça o oponente de mover os bonecos da Arena"
@@ -1485,12 +1119,6 @@
             "Família Leef-Graves",
             "Londres"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": true,
             "description": "UMA VEZ em campo, retorna um inimigo para a Reserva"
@@ -1507,12 +1135,6 @@
         "rageDamage": 0,
         "group": "IRUMEO",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -1529,12 +1151,6 @@
         "rageDamage": 0,
         "group": "Parasitas",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -1557,12 +1173,6 @@
             "Família Cruz-Lenz",
             "C.A.S"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": true,
             "description": "Seu ataque terá efeito (MORTAL) em bonecos tipo [IRUMEO]"
@@ -1583,12 +1193,6 @@
         "affinities": [
             "C.A.S"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -1607,12 +1211,6 @@
         "affinities": [
             "C.A.S"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": true,
             "description": "Aliados próximos tornam Pietro (IMPLACÁVEL)"
@@ -1633,12 +1231,6 @@
         "affinities": [
             "C.A.S"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -1660,12 +1252,6 @@
             "C.A.S",
             "Família Cruz-Lenz"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": true,
             "description": "UMA VEZ em campo, Aliados não recebem dano em 1 turno"
@@ -1684,12 +1270,6 @@
         "rageDamage": 9,
         "group": "Realeza",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -1708,12 +1288,6 @@
         "affinities": [
             "C.A.S"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -1735,12 +1309,6 @@
             "Família Cruz-Lenz",
             "Londres"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": true,
             "description": "Ganhe +1 de dano a cada boneco aliado [C.A.S] na Arena"
@@ -1759,12 +1327,6 @@
         "affinities": [
             "Realeza"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -1787,12 +1349,6 @@
             "IRUMEO",
             "Londres"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": true,
             "description": "UMA VEZ em campo, realize 5 de dano em um CORREDOR"
@@ -1813,12 +1369,6 @@
         "affinities": [
             "IRUMEO"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": true,
             "description": "UMA VEZ em campo, Não receba dano por 1 turno"
@@ -1835,12 +1385,6 @@
         "rageDamage": 0,
         "group": "Parasitas",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -1862,12 +1406,6 @@
             "Família Cruz-Lenz",
             "Londres"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -1884,12 +1422,6 @@
         "rageDamage": 0,
         "group": "IRUMEO",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -1906,12 +1438,6 @@
         "rageDamage": 0,
         "group": "Realeza",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -1930,12 +1456,6 @@
         "affinities": [
             "Londres"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -1954,12 +1474,6 @@
         "affinities": [
             "Londres"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -1976,12 +1490,6 @@
         "rageDamage": 0,
         "group": "IRUMEO",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -2000,12 +1508,6 @@
         "rageDamage": 0,
         "group": "Vale do Leste",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -2022,12 +1524,6 @@
         "rageDamage": 0,
         "group": "Vale do Leste",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -2046,12 +1542,6 @@
         "rageDamage": 0,
         "group": "Parasitas",
         "affinities": [],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -2070,12 +1560,6 @@
         "affinities": [
             "Londres"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": true,
             "description": "ENQUANTO VIVO, todos os Aliados ganham +1 de dano"
@@ -2097,12 +1581,6 @@
             "Família Leef-Graves",
             "Família Cruz-Lenz"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": true,
             "description": "Copie o MAIOR dano dos inimigos da Arena"
@@ -2126,12 +1604,6 @@
             "C.A.S",
             "Parasitas"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -2152,12 +1624,6 @@
         "affinities": [
             "C.A.S"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -2176,12 +1642,6 @@
         "affinities": [
             "Londres"
         ],
-        "animation": {
-            "reserve_default": "img/Amelie.png",
-            "arena_default": "img/amelieLopez.png",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": true,
             "description": "UMA VEZ em campo, inimigos da fileira não atacam por 1 turno"
@@ -2203,12 +1663,6 @@
             "Família Cruz-Lenz",
             "Realeza"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": true,
             "description": "Se AMELIE estiver em campo, GANHE 5 de dano"
@@ -2230,12 +1684,6 @@
             "Família Cruz-Lenz",
             "Realeza"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -2255,12 +1703,6 @@
             "Família Cruz-Lenz",
             "Londres"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -2281,12 +1723,6 @@
         "affinities": [
             "Londres"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -2311,12 +1747,6 @@
             "Família Cruz-Lenz",
             "Família Leef-Graves"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""
@@ -2337,12 +1767,6 @@
         "affinities": [
             "Londres"
         ],
-        "animation": {
-            "reserve_default": "",
-            "arena_default": "",
-            "arena_entrance": "",
-            "arena_exit": ""
-        },
         "power": {
             "has": false,
             "description": ""

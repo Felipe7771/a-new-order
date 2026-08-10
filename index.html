@@ -295,12 +295,48 @@ function getRandomDoll() {
 }
 
 /* ============================================================
+   Animation assets — resolve as mídias do catalog.animation
+   por personagem/contexto, com fallback em cascata até o emoji.
+============================================================ */
+function getAnimationAsset(characterId, key) {
+  const doll = catalog?.[characterId];
+  const src = doll?.animation?.[key];
+  return src && String(src).trim() ? src : null;
+}
+
+const VIDEO_EXT_RE = /\.(mp4|webm|mov|m4v)(\?.*)?$/i;
+function isVideoSrc(src) {
+  return VIDEO_EXT_RE.test(src);
+}
+
+// loop=true pra reserve_default/arena_default (idle);
+// loop=false + onEnded só é usado pra arena_entrance.
+function createMediaElement(src, character, { loop = true, onEnded = null } = {}) {
+  if (isVideoSrc(src)) {
+    const video = document.createElement('video');
+    video.src = src;
+    video.className = 'card-media';
+    video.autoplay = true;
+    video.muted = true;
+    video.playsInline = true;
+    video.loop = loop;
+    if (onEnded) video.addEventListener('ended', onEnded, { once: true });
+    video.play().catch(() => {});
+    return video;
+  }
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = character.name;
+  img.className = 'card-media';
+  return img;
+}
+/* ============================================================
    CardRenderer — desenha UM cartão dentro de um slot qualquer.
    Board e Reserve chamam essa mesma função; a única diferença
    entre os dois é a opção showStats/draggable.
 ============================================================ */
 const CardRenderer = {
-  render(el, character, { showStats = false, draggable = false } = {}) {
+  render(el, character, { showStats = false, draggable = false, variant = 'reserve' } = {}) {
     el.innerHTML = '';
     el.classList.toggle('slot--empty', !character);
     el.classList.toggle('slot--filled', !!character);
@@ -313,41 +349,61 @@ const CardRenderer = {
     }
 
     const visual = document.createElement('div');
-    visual.className = 'card-visual';
-    visual.appendChild(this.createImage(character));
+    visual.className = `card-visual card-visual--${variant === 'board' ? 'board' : 'reserve'}`;
+    visual.appendChild(this.createVisual(character, variant));
     el.appendChild(visual);
 
-    if (showStats) {
-      const stats = document.createElement('div');
-      stats.className = 'card-stats';
-      stats.innerHTML =
-        `<span class="stat ${definyStyle('life',character.id)}${character.life}</span>` +
-        `<span class="stat ${definyStyle('attack',character.id)}${character.attack}</span>` +
-        (character.rage > 0? `<span class="stat stat--rage">${simbol.rage}${character.rage}</span>`: '');
-
-      el.appendChild(stats);
-    }
-
+    if (showStats) el.appendChild(this.buildStats(character));
     if (draggable) el.draggable = true;
     el.setAttribute('aria-label', character.name);
   },
 
-  // character.image pode ser uma URL de gif (produção) ou um
-  // emoji/placeholder (o que a gente usa aqui pra não depender
-  // de assets externos). A detecção é só "parece uma URL?".
+  buildStats(character) {
+    const stats = document.createElement('div');
+    stats.className = 'card-stats';
+    stats.innerHTML =
+      `<span class="stat ${definyStyle('life',character.id)}${character.life}</span>` +
+      `<span class="stat ${definyStyle('attack',character.id)}${character.attack}</span>` +
+      (character.rage > 0 ? `<span class="stat stat--rage">${simbol.rage}${character.rage}</span>` : '');
+    return stats;
+  },
+
+  // variant: 'reserve' -> animation.reserve_default | 'board' -> animation.arena_default
+  createVisual(character, variant) {
+    const key = variant === 'board' ? 'arena_default' : 'reserve_default';
+    const src = getAnimationAsset(character.id, key);
+    if (src) return createMediaElement(src, character, { loop: true });
+    return this.createImage(character); // fallback: emoji padrão (comportamento atual)
+  },
+
+  // mantido como estava — usado pelo Modal e como fallback final
   createImage(character) {
     const looksLikeUrl = /^https?:\/\//.test(character.image) || character.image.includes('/');
     if (looksLikeUrl) {
       const img = document.createElement('img');
       img.src = character.image;
       img.alt = character.name;
-      img.className = 'card-img';
+      img.className = 'card-media'; // era 'card-img'
       return img;
     }
     const span = document.createElement('span');
     span.className = 'card-icon';
     span.textContent = character.image;
     return span;
+  },
+
+  // Usado só pelo Modal — sempre tenta animation.arena_default; se não
+  // existir, cai no fallback antigo (URL do character.image ou emoji).
+  // Sem o efeito de vazamento: aqui a imagem fica confinada na ficha.
+  createModalVisual(character) {
+    const src = getAnimationAsset(character.id, 'arena_default');
+    if (src) {
+      const media = createMediaElement(src, character, { loop: true });
+      media.classList.remove('card-media');
+      media.classList.add('modal-media');
+      return media;
+    }
+    return this.createImage(character);
   },
 };
 
@@ -360,6 +416,7 @@ const CardRenderer = {
 ============================================================ */
 const Board = {
   slotEls: [],
+  slotAnim: [], // [row][col] = 'entering' | 'settled' | undefined
 
   // Coluna LÓGICA (a mesma pra sempre, é o índice usado em
   // state.board / no documento do Firestore) -> coluna de EXIBIÇÃO
@@ -375,6 +432,9 @@ const Board = {
   build(container) {
     container.innerHTML = '';
     this.slotEls = [];
+    this.slotAnim = Array.from({ length: CONFIG.corridors }, () =>
+      Array(CONFIG.slotsPerSide * 2).fill(undefined)
+    );
 
     const totalCols = CONFIG.slotsPerSide * 2;
     // Ordem de construção dos slots: sempre em ordem crescente de
@@ -427,8 +487,58 @@ const Board = {
     state.board.forEach((row, r) => row.forEach((_, c) => this.renderSlot(r, c)));
   },
 
+  // Renderização "estável": nunca reinicia um vídeo de entrada em
+  // andamento. Se o slot ainda não tem estado registrado e já vem
+  // preenchido (ex: reconexão no meio da partida), assume 'settled'
+  // direto — não é uma entrada de verdade, então não tem replay.
   renderSlot(row, col) {
-    CardRenderer.render(this.slotEls[row][col], state.board[row][col], { showStats: true });
+    const character = state.board[row][col];
+
+    if (!character) {
+      this.slotAnim[row][col] = undefined;
+      CardRenderer.render(this.slotEls[row][col], null);
+      return;
+    }
+
+    if (this.slotAnim[row][col] === 'entering') return; // vídeo tocando, não mexe
+
+    this.slotAnim[row][col] = 'settled';
+    CardRenderer.render(this.slotEls[row][col], character, { showStats: true, variant: 'board' });
+  },
+
+    // Chamado pelo Game.syncRoom SÓ para os slots que acabaram de
+  // ficar ocupados nesse snapshot (mesmo diff que já dispara o
+  // EntranceFX). Toca arena_entrance; ao 'ended', troca pra
+  // arena_default via renderSlot normal.
+  playEntrance(row, col, character) {
+    const el = this.slotEls[row][col];
+    if (!el) return;
+
+    const entranceSrc = getAnimationAsset(character.id, 'arena_entrance');
+    if (!entranceSrc) {
+      // sem entrance: já cai direto no arena_default (ou emoji)
+      this.slotAnim[row][col] = 'settled';
+      this.renderSlot(row, col);
+      return;
+    }
+
+    this.slotAnim[row][col] = 'entering';
+    el.innerHTML = '';
+    el.classList.remove('slot--empty');
+    el.classList.add('slot--filled');
+    el.setAttribute('aria-label', character.name);
+
+    const visual = document.createElement('div');
+    visual.className = 'card-visual card-visual--board'; // era só 'card-visual
+    visual.appendChild(createMediaElement(entranceSrc, character, {
+      loop: false,
+      onEnded: () => {
+        this.slotAnim[row][col] = 'settled';
+        this.renderSlot(row, col);
+      },
+    }));
+    el.appendChild(visual);
+    el.appendChild(CardRenderer.buildStats(character));
   },
 
   handleSlotClick(row, col) {
@@ -438,6 +548,7 @@ const Board = {
 
   setSlot(row, col, character) {
     state.board[row][col] = character;
+    if (!character) this.slotAnim[row][col] = undefined;
     this.renderSlot(row, col);
   },
 
@@ -486,6 +597,7 @@ const Reserve = {
     CardRenderer.render(this.slotEls[i], character, {
       showStats: false,
       draggable: !!character,
+      variant: 'reserve',
     });
   },
 
@@ -712,7 +824,7 @@ const Modal = {
           <h2 class="modal-affinities">${doll.affinities.map(item => `&#9903;${item}   `).join('')}</h2>
       </div>
     `;
-    this.el.querySelector('.modal-visual').appendChild(CardRenderer.createImage(character));
+    this.el.querySelector('.modal-visual').appendChild(CardRenderer.createModalVisual(character));
     this.el.querySelector('.modal-close').addEventListener('click', () => this.close());
     this.el.classList.add('modal-overlay--visible');
 
@@ -1153,13 +1265,20 @@ handleRoomClosed() {
       newBoard[r][c] = characterFromRoomData(dollData, ownerRole);
     });
 
+    const enteredCells = [];
     for (let r = 0; r < CONFIG.corridors; r++) {
       for (let c = 0; c < CONFIG.slotsPerSide * 2; c++) {
         if (!state.board[r][c] && newBoard[r][c]) {
           EntranceFX.show(newBoard[r][c], r, c);
+          enteredCells.push([r, c, newBoard[r][c]]);
         }
       }
     }
+
+    // Marca 'entering' ANTES de trocar state.board/renderAll, senão o
+    // renderAll chegaria nesses slots primeiro e já mostraria o
+    // arena_default sem tocar o entrance.
+    enteredCells.forEach(([r, c, character]) => Board.playEntrance(r, c, character));
 
     state.board = newBoard;
     Board.renderAll();

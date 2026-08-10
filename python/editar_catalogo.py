@@ -46,7 +46,13 @@ for _, line in dtf.iterrows():
             'rageDamage': line['Fúria'] if isinstance(line['Fúria'],(int, float)) else 0,
             
             'group': line['Alianças'],
-            'affinities': line['Afinidades'].split(',') if line['Afinidades'] != 'Não informado' else []
+            'affinities': line['Afinidades'].split(',') if line['Afinidades'] != 'Não informado' else [],
+            'animation': {
+                "reserve_default": "",
+                "arena_default": "",
+                "arena_entrance": "",
+                "arena_exit": ""
+            }
         }
        
         
@@ -65,7 +71,7 @@ for _, line in dtf_pow.iterrows():
             'description': line.Poder if has_power else ''
         }
            
-with open("./json/catalog.json", "w", encoding="utf-8") as arquivo:
+with open("./json/catalog_test.json", "w", encoding="utf-8") as arquivo:
     # indent=4 é usado para deixar o JSON legível e formatado
     json.dump(database, arquivo, ensure_ascii=False, indent=4)
 
