@@ -105,7 +105,7 @@ const Board = {
     const el = this.slotEls[row][col];
     if (!el) return;
 
-    const entranceSrc = getAnimationAsset(character.id, 'arena_entrance');
+    const entranceSrc = getAnimationAsset(character.id, 'board', 'entrance');
     if (!entranceSrc) {
       // sem entrance: já cai direto no arena_default (ou emoji)
       this.slotAnim[row][col] = 'settled';

@@ -18,15 +18,10 @@
             "C.A.S"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/001/001_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/001/001_board_entrance.webm",
-                "default": "img/doll/001/001_board_default.webm",
-                "exit": "img/doll/001/001_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -50,15 +45,10 @@
             "Londres"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/002/002_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/002/002_board_entrance.webm",
-                "default": "img/doll/002/002_board_default.webm",
-                "exit": "img/doll/002/002_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": true,
@@ -79,15 +69,10 @@
             "Realeza"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/003/003_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/003/003_board_entrance.webm",
-                "default": "img/doll/003/003_board_default.webm",
-                "exit": "img/doll/003/003_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -109,15 +94,10 @@
         "group": "Ashes of Winter",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/004/004_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/004/004_board_entrance.webm",
-                "default": "img/doll/004/004_board_default.webm",
-                "exit": "img/doll/004/004_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -140,15 +120,10 @@
             "C.A.S"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/005/005_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/005/005_board_entrance.webm",
-                "default": "img/doll/005/005_board_default.webm",
-                "exit": "img/doll/005/005_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": true,
@@ -169,15 +144,10 @@
         "group": "IRUMEO",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/006/006_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/006/006_board_entrance.webm",
-                "default": "img/doll/006/006_board_default.webm",
-                "exit": "img/doll/006/006_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -198,15 +168,10 @@
         "group": "Vale do Leste",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/007/007_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/007/007_board_entrance.webm",
-                "default": "img/doll/007/007_board_default.webm",
-                "exit": "img/doll/007/007_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -227,15 +192,10 @@
         "group": "IRUMEO",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/008/008_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/008/008_board_entrance.webm",
-                "default": "img/doll/008/008_board_default.webm",
-                "exit": "img/doll/008/008_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -256,15 +216,10 @@
             "C.A.S"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/009/009_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/009/009_board_entrance.webm",
-                "default": "img/doll/009/009_board_default.webm",
-                "exit": "img/doll/009/009_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": true,
@@ -285,15 +240,10 @@
         "group": "Parasitas",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/010/010_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/010/010_board_entrance.webm",
-                "default": "img/doll/010/010_board_default.webm",
-                "exit": "img/doll/010/010_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -314,15 +264,10 @@
         "group": "Parasitas",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/011/011_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/011/011_board_entrance.webm",
-                "default": "img/doll/011/011_board_default.webm",
-                "exit": "img/doll/011/011_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -343,15 +288,10 @@
         "group": "Parasitas",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/012/012_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/012/012_board_entrance.webm",
-                "default": "img/doll/012/012_board_default.webm",
-                "exit": "img/doll/012/012_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -374,15 +314,10 @@
             "IRUMEO"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/013/013_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/013/013_board_entrance.webm",
-                "default": "img/doll/013/013_board_default.webm",
-                "exit": "img/doll/013/013_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": true,
@@ -401,15 +336,10 @@
         "group": "Mafia Pullduck",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/014/014_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/014/014_board_entrance.webm",
-                "default": "img/doll/014/014_board_default.webm",
-                "exit": "img/doll/014/014_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": true,
@@ -428,15 +358,10 @@
         "group": "Mafia Pullduck",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/015/015_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/015/015_board_entrance.webm",
-                "default": "img/doll/015/015_board_default.webm",
-                "exit": "img/doll/015/015_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -457,15 +382,10 @@
         "group": "Mafia Pullduck",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/016/016_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/016/016_board_entrance.webm",
-                "default": "img/doll/016/016_board_default.webm",
-                "exit": "img/doll/016/016_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -486,15 +406,10 @@
         "group": "Mafia Pullduck",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/017/017_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/017/017_board_entrance.webm",
-                "default": "img/doll/017/017_board_default.webm",
-                "exit": "img/doll/017/017_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -513,15 +428,10 @@
         "group": "Mafia Pullduck",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/018/018_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/018/018_board_entrance.webm",
-                "default": "img/doll/018/018_board_default.webm",
-                "exit": "img/doll/018/018_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -542,15 +452,10 @@
         "group": "Mafia Pullduck",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/019/019_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/019/019_board_entrance.webm",
-                "default": "img/doll/019/019_board_default.webm",
-                "exit": "img/doll/019/019_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -571,15 +476,10 @@
         "group": "Mafia Pullduck",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/020/020_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/020/020_board_entrance.webm",
-                "default": "img/doll/020/020_board_default.webm",
-                "exit": "img/doll/020/020_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -600,15 +500,10 @@
         "group": "Mafia Pullduck",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/021/021_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/021/021_board_entrance.webm",
-                "default": "img/doll/021/021_board_default.webm",
-                "exit": "img/doll/021/021_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -627,15 +522,10 @@
         "group": "Mafia Pullduck",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/022/022_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/022/022_board_entrance.webm",
-                "default": "img/doll/022/022_board_default.webm",
-                "exit": "img/doll/022/022_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -658,15 +548,10 @@
             "Mafia Pullduck"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/023/023_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/023/023_board_entrance.webm",
-                "default": "img/doll/023/023_board_default.webm",
-                "exit": "img/doll/023/023_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": true,
@@ -689,15 +574,10 @@
         "group": "Mafia Pullduck",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/024/024_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/024/024_board_entrance.webm",
-                "default": "img/doll/024/024_board_default.webm",
-                "exit": "img/doll/024/024_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -716,15 +596,10 @@
         "group": "Mafia Pullduck",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/025/025_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/025/025_board_entrance.webm",
-                "default": "img/doll/025/025_board_default.webm",
-                "exit": "img/doll/025/025_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -743,15 +618,10 @@
         "group": "Vale do Leste",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/026/026_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/026/026_board_entrance.webm",
-                "default": "img/doll/026/026_board_default.webm",
-                "exit": "img/doll/026/026_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -774,15 +644,10 @@
             "Família Leef-Graves"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/027/027_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/027/027_board_entrance.webm",
-                "default": "img/doll/027/027_board_default.webm",
-                "exit": "img/doll/027/027_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -801,15 +666,10 @@
         "group": "Vale do Leste",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/028/028_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/028/028_board_entrance.webm",
-                "default": "img/doll/028/028_board_default.webm",
-                "exit": "img/doll/028/028_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -830,15 +690,10 @@
         "group": "Vale do Leste",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/029/029_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/029/029_board_entrance.webm",
-                "default": "img/doll/029/029_board_default.webm",
-                "exit": "img/doll/029/029_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": true,
@@ -857,15 +712,10 @@
         "group": "Vale do Leste",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/030/030_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/030/030_board_entrance.webm",
-                "default": "img/doll/030/030_board_default.webm",
-                "exit": "img/doll/030/030_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -887,15 +737,10 @@
         "group": "Vale do Leste",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/031/031_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/031/031_board_entrance.webm",
-                "default": "img/doll/031/031_board_default.webm",
-                "exit": "img/doll/031/031_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -914,15 +759,10 @@
         "group": "Quirkyville",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/032/032_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/032/032_board_entrance.webm",
-                "default": "img/doll/032/032_board_default.webm",
-                "exit": "img/doll/032/032_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -943,15 +783,10 @@
             "Família Leef-Graves"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/033/033_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/033/033_board_entrance.webm",
-                "default": "img/doll/033/033_board_default.webm",
-                "exit": "img/doll/033/033_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -970,15 +805,10 @@
         "group": "IRUMEO",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/034/034_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/034/034_board_entrance.webm",
-                "default": "img/doll/034/034_board_default.webm",
-                "exit": "img/doll/034/034_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -999,15 +829,10 @@
         "group": "Quirkyville",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/035/035_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/035/035_board_entrance.webm",
-                "default": "img/doll/035/035_board_default.webm",
-                "exit": "img/doll/035/035_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -1032,15 +857,10 @@
             "Quirkyville"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/036/036_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/036/036_board_entrance.webm",
-                "default": "img/doll/036/036_board_default.webm",
-                "exit": "img/doll/036/036_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -1062,15 +882,10 @@
             "Londres"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/037/037_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/037/037_board_entrance.webm",
-                "default": "img/doll/037/037_board_default.webm",
-                "exit": "img/doll/037/037_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": true,
@@ -1091,15 +906,10 @@
             "Quirkyville"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/038/038_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/038/038_board_entrance.webm",
-                "default": "img/doll/038/038_board_default.webm",
-                "exit": "img/doll/038/038_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -1122,15 +932,10 @@
         "group": "Quirkyville",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/039/039_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/039/039_board_entrance.webm",
-                "default": "img/doll/039/039_board_default.webm",
-                "exit": "img/doll/039/039_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -1151,15 +956,10 @@
         "group": "Quirkyville",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/040/040_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/040/040_board_entrance.webm",
-                "default": "img/doll/040/040_board_default.webm",
-                "exit": "img/doll/040/040_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -1178,15 +978,10 @@
         "group": "Quirkyville",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/041/041_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/041/041_board_entrance.webm",
-                "default": "img/doll/041/041_board_default.webm",
-                "exit": "img/doll/041/041_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -1205,15 +1000,10 @@
         "group": "Quirkyville",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/042/042_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/042/042_board_entrance.webm",
-                "default": "img/doll/042/042_board_default.webm",
-                "exit": "img/doll/042/042_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -1235,15 +1025,10 @@
         "group": "IRUMEO",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/043/043_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/043/043_board_entrance.webm",
-                "default": "img/doll/043/043_board_default.webm",
-                "exit": "img/doll/043/043_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -1264,15 +1049,10 @@
             "C.A.S"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/044/044_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/044/044_board_entrance.webm",
-                "default": "img/doll/044/044_board_default.webm",
-                "exit": "img/doll/044/044_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -1294,15 +1074,10 @@
             "Londres"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/045/045_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/045/045_board_entrance.webm",
-                "default": "img/doll/045/045_board_default.webm",
-                "exit": "img/doll/045/045_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": true,
@@ -1323,15 +1098,10 @@
             "C.A.S"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/046/046_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/046/046_board_entrance.webm",
-                "default": "img/doll/046/046_board_default.webm",
-                "exit": "img/doll/046/046_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -1354,15 +1124,10 @@
             "Família Leef-Graves"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/047/047_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/047/047_board_entrance.webm",
-                "default": "img/doll/047/047_board_default.webm",
-                "exit": "img/doll/047/047_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": true,
@@ -1381,15 +1146,10 @@
         "group": "Ashes of Winter",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/048/048_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/048/048_board_entrance.webm",
-                "default": "img/doll/048/048_board_default.webm",
-                "exit": "img/doll/048/048_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -1408,15 +1168,10 @@
         "group": "IRUMEO",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/049/049_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/049/049_board_entrance.webm",
-                "default": "img/doll/049/049_board_default.webm",
-                "exit": "img/doll/049/049_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -1435,15 +1190,10 @@
         "group": "IRUMEO",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/050/050_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/050/050_board_entrance.webm",
-                "default": "img/doll/050/050_board_default.webm",
-                "exit": "img/doll/050/050_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -1468,15 +1218,10 @@
             "Londres"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/051/051_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/051/051_board_entrance.webm",
-                "default": "img/doll/051/051_board_default.webm",
-                "exit": "img/doll/051/051_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": true,
@@ -1495,15 +1240,10 @@
         "group": "IRUMEO",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/052/052_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/052/052_board_entrance.webm",
-                "default": "img/doll/052/052_board_default.webm",
-                "exit": "img/doll/052/052_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -1527,15 +1267,10 @@
         "group": "IRUMEO",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/053/053_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/053/053_board_entrance.webm",
-                "default": "img/doll/053/053_board_default.webm",
-                "exit": "img/doll/053/053_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -1558,15 +1293,10 @@
             "Londres"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/054/054_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/054/054_board_entrance.webm",
-                "default": "img/doll/054/054_board_default.webm",
-                "exit": "img/doll/054/054_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": true,
@@ -1585,18 +1315,13 @@
         "group": "Ashes of Winter",
         "affinities": [
             "Ashes of Winter",
-            "Londres"
+            " Londres"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/055/055_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/055/055_board_entrance.webm",
-                "default": "img/doll/055/055_board_default.webm",
-                "exit": "img/doll/055/055_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -1617,15 +1342,10 @@
         "group": "IRUMEO",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/056/056_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/056/056_board_entrance.webm",
-                "default": "img/doll/056/056_board_default.webm",
-                "exit": "img/doll/056/056_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -1646,15 +1366,10 @@
             "Londres"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/057/057_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/057/057_board_entrance.webm",
-                "default": "img/doll/057/057_board_default.webm",
-                "exit": "img/doll/057/057_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -1675,15 +1390,10 @@
             "Família Leef-Graves"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/058/058_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/058/058_board_entrance.webm",
-                "default": "img/doll/058/058_board_default.webm",
-                "exit": "img/doll/058/058_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -1702,15 +1412,10 @@
         "group": "Experimentos Graves",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/059/059_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/059/059_board_entrance.webm",
-                "default": "img/doll/059/059_board_default.webm",
-                "exit": "img/doll/059/059_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -1734,15 +1439,10 @@
             "Londres"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/060/060_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/060/060_board_entrance.webm",
-                "default": "img/doll/060/060_board_default.webm",
-                "exit": "img/doll/060/060_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": true,
@@ -1761,15 +1461,10 @@
         "group": "Experimentos Graves",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/061/061_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/061/061_board_entrance.webm",
-                "default": "img/doll/061/061_board_default.webm",
-                "exit": "img/doll/061/061_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": true,
@@ -1791,15 +1486,10 @@
             "Londres"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/062/062_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/062/062_board_entrance.webm",
-                "default": "img/doll/062/062_board_default.webm",
-                "exit": "img/doll/062/062_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": true,
@@ -1818,15 +1508,10 @@
         "group": "IRUMEO",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/063/063_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/063/063_board_entrance.webm",
-                "default": "img/doll/063/063_board_default.webm",
-                "exit": "img/doll/063/063_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -1845,15 +1530,10 @@
         "group": "Parasitas",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/064/064_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/064/064_board_entrance.webm",
-                "default": "img/doll/064/064_board_default.webm",
-                "exit": "img/doll/064/064_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -1878,15 +1558,10 @@
             "C.A.S"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/065/065_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/065/065_board_entrance.webm",
-                "default": "img/doll/065/065_board_default.webm",
-                "exit": "img/doll/065/065_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": true,
@@ -1909,15 +1584,10 @@
             "C.A.S"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/066/066_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/066/066_board_entrance.webm",
-                "default": "img/doll/066/066_board_default.webm",
-                "exit": "img/doll/066/066_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -1938,15 +1608,10 @@
             "C.A.S"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/067/067_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/067/067_board_entrance.webm",
-                "default": "img/doll/067/067_board_default.webm",
-                "exit": "img/doll/067/067_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": true,
@@ -1969,15 +1634,10 @@
             "C.A.S"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/068/068_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/068/068_board_entrance.webm",
-                "default": "img/doll/068/068_board_default.webm",
-                "exit": "img/doll/068/068_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -2001,15 +1661,10 @@
             "Família Cruz-Lenz"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/069/069_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/069/069_board_entrance.webm",
-                "default": "img/doll/069/069_board_default.webm",
-                "exit": "img/doll/069/069_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": true,
@@ -2030,15 +1685,10 @@
         "group": "Realeza",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/070/070_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/070/070_board_entrance.webm",
-                "default": "img/doll/070/070_board_default.webm",
-                "exit": "img/doll/070/070_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -2059,15 +1709,10 @@
             "C.A.S"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/071/071_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/071/071_board_entrance.webm",
-                "default": "img/doll/071/071_board_default.webm",
-                "exit": "img/doll/071/071_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -2091,15 +1736,10 @@
             "Londres"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/072/072_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/072/072_board_entrance.webm",
-                "default": "img/doll/072/072_board_default.webm",
-                "exit": "img/doll/072/072_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": true,
@@ -2120,15 +1760,10 @@
             "Realeza"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/073/073_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/073/073_board_entrance.webm",
-                "default": "img/doll/073/073_board_default.webm",
-                "exit": "img/doll/073/073_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -2153,15 +1788,10 @@
             "Londres"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/074/074_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/074/074_board_entrance.webm",
-                "default": "img/doll/074/074_board_default.webm",
-                "exit": "img/doll/074/074_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": true,
@@ -2184,15 +1814,10 @@
             "IRUMEO"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/075/075_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/075/075_board_entrance.webm",
-                "default": "img/doll/075/075_board_default.webm",
-                "exit": "img/doll/075/075_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": true,
@@ -2211,15 +1836,10 @@
         "group": "Parasitas",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/076/076_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/076/076_board_entrance.webm",
-                "default": "img/doll/076/076_board_default.webm",
-                "exit": "img/doll/076/076_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -2243,15 +1863,10 @@
             "Londres"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/077/077_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/077/077_board_entrance.webm",
-                "default": "img/doll/077/077_board_default.webm",
-                "exit": "img/doll/077/077_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -2270,15 +1885,10 @@
         "group": "IRUMEO",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/078/078_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/078/078_board_entrance.webm",
-                "default": "img/doll/078/078_board_default.webm",
-                "exit": "img/doll/078/078_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -2297,15 +1907,10 @@
         "group": "Realeza",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/079/079_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/079/079_board_entrance.webm",
-                "default": "img/doll/079/079_board_default.webm",
-                "exit": "img/doll/079/079_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -2326,15 +1931,10 @@
             "Londres"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/080/080_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/080/080_board_entrance.webm",
-                "default": "img/doll/080/080_board_default.webm",
-                "exit": "img/doll/080/080_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -2355,15 +1955,10 @@
             "Londres"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/081/081_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/081/081_board_entrance.webm",
-                "default": "img/doll/081/081_board_default.webm",
-                "exit": "img/doll/081/081_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -2382,15 +1977,10 @@
         "group": "IRUMEO",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/082/082_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/082/082_board_entrance.webm",
-                "default": "img/doll/082/082_board_default.webm",
-                "exit": "img/doll/082/082_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -2411,15 +2001,10 @@
         "group": "Vale do Leste",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/083/083_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/083/083_board_entrance.webm",
-                "default": "img/doll/083/083_board_default.webm",
-                "exit": "img/doll/083/083_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -2438,15 +2023,10 @@
         "group": "Vale do Leste",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/084/084_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/084/084_board_entrance.webm",
-                "default": "img/doll/084/084_board_default.webm",
-                "exit": "img/doll/084/084_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -2467,15 +2047,10 @@
         "group": "Parasitas",
         "affinities": [],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/085/085_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/085/085_board_entrance.webm",
-                "default": "img/doll/085/085_board_default.webm",
-                "exit": "img/doll/085/085_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -2496,15 +2071,10 @@
             "Londres"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/086/086_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/086/086_board_entrance.webm",
-                "default": "img/doll/086/086_board_default.webm",
-                "exit": "img/doll/086/086_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": true,
@@ -2528,15 +2098,10 @@
             "Família Cruz-Lenz"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/087/087_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/087/087_board_entrance.webm",
-                "default": "img/doll/087/087_board_default.webm",
-                "exit": "img/doll/087/087_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": true,
@@ -2562,15 +2127,10 @@
             "Parasitas"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/088/088_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/088/088_board_entrance.webm",
-                "default": "img/doll/088/088_board_default.webm",
-                "exit": "img/doll/088/088_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -2593,15 +2153,10 @@
             "C.A.S"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/089/089_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/089/089_board_entrance.webm",
-                "default": "img/doll/089/089_board_default.webm",
-                "exit": "img/doll/089/089_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -2622,15 +2177,10 @@
             "Londres"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/090/090_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/090/090_board_entrance.webm",
-                "default": "img/doll/090/090_board_default.webm",
-                "exit": "img/doll/090/090_board_exit.webm"
-            }
+            "reserve_default": "img/Amelie.png",
+            "arena_default": "img/amelieLopez.png",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": true,
@@ -2654,15 +2204,10 @@
             "Realeza"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/091/091_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/091/091_board_entrance.webm",
-                "default": "img/doll/091/091_board_default.webm",
-                "exit": "img/doll/091/091_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": true,
@@ -2686,15 +2231,10 @@
             "Realeza"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/092/092_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/092/092_board_entrance.webm",
-                "default": "img/doll/092/092_board_default.webm",
-                "exit": "img/doll/092/092_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -2716,15 +2256,10 @@
             "Londres"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/093/093_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/093/093_board_entrance.webm",
-                "default": "img/doll/093/093_board_default.webm",
-                "exit": "img/doll/093/093_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -2747,15 +2282,10 @@
             "Londres"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/094/094_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/094/094_board_entrance.webm",
-                "default": "img/doll/094/094_board_default.webm",
-                "exit": "img/doll/094/094_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -2782,15 +2312,10 @@
             "Família Leef-Graves"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/095/095_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/095/095_board_entrance.webm",
-                "default": "img/doll/095/095_board_default.webm",
-                "exit": "img/doll/095/095_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,
@@ -2813,15 +2338,10 @@
             "Londres"
         ],
         "animation": {
-            "reserve": {
-                "entrance": "",
-                "default": "img/doll/096/096_reserve_default.png"
-            },
-            "board": {
-                "entrance": "img/doll/096/096_board_entrance.webm",
-                "default": "img/doll/096/096_board_default.webm",
-                "exit": "img/doll/096/096_board_exit.webm"
-            }
+            "reserve_default": "",
+            "arena_default": "",
+            "arena_entrance": "",
+            "arena_exit": ""
         },
         "power": {
             "has": false,

@@ -95,15 +95,12 @@ window.Game = {
     CONFIG.enemyName = opponent.name;
     PlayerNames.setNames(me.name, opponent.name);
 
-    state.reserves.ally = myReserve.map((d) => characterFromRoomData(d, 'ally'));
+    // era: state.reserves.ally = myReserve.map((d) => characterFromRoomData(d, 'ally'));
+    Reserve.syncAlly(myReserve.map((d) => characterFromRoomData(d, 'ally')));
     state.reserves.enemy = opponentReserve.map((d) => characterFromRoomData(d, 'enemy'));
 
-    // Reconstrói o tabuleiro agora que já sabemos o papel do jogador
-    // local — o build feito no boot (DOMContentLoaded) usava o valor
-    // padrão 'owner' porque a sala ainda não tinha fechado.
     Board.build(document.getElementById('board'));
-
-    Reserve.renderAll();
+    // Reserve.renderAll(); <- remover essa linha, syncAlly já chama renderAll()
     Board.renderAll();
     PlayerStats.update();
 
@@ -221,10 +218,10 @@ handleRoomClosed() {
     const myReserveData = data.p?.[this.meId]?.reserve || [];
     const oppReserveData = data.p?.[this.opponentId]?.reserve || [];
 
-    state.reserves.ally = myReserveData.map((d) => characterFromRoomData(d, 'ally'));
+    Reserve.syncAlly(myReserveData.map((d) => characterFromRoomData(d, 'ally')));
     state.reserves.enemy = oppReserveData.map((d) => characterFromRoomData(d, 'enemy'));
 
-    Reserve.renderAll();
+    // Reserve.renderAll(); <- remover, já é feito dentro de syncAlly
     PlayerStats.update();
     this.handleTurnSync(data.turn, data);
   },

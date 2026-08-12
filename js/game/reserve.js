@@ -4,10 +4,12 @@
 ============================================================ */
 const Reserve = {
   slotEls: [],
+  slotAnim: [], // [i] = 'entering' | 'settled' | undefined
 
   build(container) {
     container.innerHTML = '';
     this.slotEls = [];
+    this.slotAnim = Array(CONFIG.reserveSize).fill(undefined);
 
     for (let i = 0; i < CONFIG.reserveSize; i++) {
       const slotEl = document.createElement('div');
@@ -35,11 +37,69 @@ const Reserve = {
 
   renderSlot(i) {
     const character = state.reserves.ally[i];
+
+    if (!character) {
+      this.slotAnim[i] = undefined;
+      CardRenderer.render(this.slotEls[i], null);
+      return;
+    }
+
+    if (this.slotAnim[i] === 'entering') return; // vídeo tocando, não mexe
+
+    this.slotAnim[i] = 'settled';
     CardRenderer.render(this.slotEls[i], character, {
       showStats: false,
-      draggable: !!character,
+      draggable: true,
       variant: 'reserve',
     });
+  },
+
+  // Toca reserve.entrance quando o slot passa de vazio pra ocupado
+  // (sorteio inicial, ou um boneco devolvido à reserva no futuro).
+  // Ao 'ended', troca pra reserve.default via renderSlot normal.
+  playEntrance(i, character) {
+    const el = this.slotEls[i];
+    if (!el) return;
+
+    const entranceSrc = getAnimationAsset(character.id, 'reserve', 'entrance');
+    if (!entranceSrc) {
+      this.slotAnim[i] = 'settled';
+      this.renderSlot(i);
+      return;
+    }
+
+    this.slotAnim[i] = 'entering';
+    el.innerHTML = '';
+    el.classList.remove('slot--empty');
+    el.classList.add('slot--filled');
+    el.draggable = true;
+    el.setAttribute('aria-label', character.name);
+
+    const visual = document.createElement('div');
+    visual.className = 'card-visual card-visual--reserve';
+    visual.appendChild(createMediaElement(entranceSrc, character, {
+      loop: false,
+      onEnded: () => {
+        this.slotAnim[i] = 'settled';
+        this.renderSlot(i);
+      },
+    }));
+    el.appendChild(visual);
+  },
+
+  // Diff-based sync (mesmo espírito do diff de Board em Game.syncRoom):
+  // compara o array antigo com o novo, dispara playEntrance() nos
+  // índices que passaram de vazio pra ocupado, e deixa renderAll()
+  // cuidar do resto (remoções não têm animação de saída aqui).
+  syncAlly(newReserve) {
+    const oldReserve = state.reserves.ally;
+    const enteredIdx = [];
+    for (let i = 0; i < CONFIG.reserveSize; i++) {
+      if (!oldReserve[i] && newReserve[i]) enteredIdx.push(i);
+    }
+    enteredIdx.forEach((i) => this.playEntrance(i, newReserve[i]));
+    state.reserves.ally = newReserve;
+    this.renderAll();
   },
 
   handleClick(i) {
@@ -49,6 +109,7 @@ const Reserve = {
 
   setSlot(i, character) {
     state.reserves.ally[i] = character;
+    if (!character) this.slotAnim[i] = undefined;
     this.renderSlot(i);
     PlayerStats.update();
   },

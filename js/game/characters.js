@@ -25,7 +25,11 @@ function getRandomKeyDoll() {
   return keys_doll[Math.floor(Math.random() * keys_doll.length)];
 }
 
-function getRandomDoll() {
-  const key_doll = getRandomKeyDoll();
+function getRandomDoll(usedDolls = new Set()) {
+  let key_doll;
+  do {
+    key_doll = getRandomKeyDoll();
+  } while (usedDolls.has(key_doll));
+
   return {id: key_doll, doll: catalog[key_doll]};
 }

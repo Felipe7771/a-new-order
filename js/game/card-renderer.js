@@ -38,12 +38,11 @@ const CardRenderer = {
 
   // variant: 'reserve' -> animation.reserve_default | 'board' -> animation.arena_default
   createVisual(character, variant) {
-    const key = variant === 'board' ? 'arena_default' : 'reserve_default';
-    const src = getAnimationAsset(character.id, key);
+    const context = variant === 'board' ? 'board' : 'reserve';
+    const src = getAnimationAsset(character.id, context, 'default');
     if (src) return createMediaElement(src, character, { loop: true });
-    return this.createImage(character); // fallback: emoji padrão (comportamento atual)
+    return this.createImage(character);
   },
-
   // mantido como estava — usado pelo Modal e como fallback final
   createImage(character) {
     const looksLikeUrl = /^https?:\/\//.test(character.image) || character.image.includes('/');
@@ -64,7 +63,7 @@ const CardRenderer = {
   // existir, cai no fallback antigo (URL do character.image ou emoji).
   // Sem o efeito de vazamento: aqui a imagem fica confinada na ficha.
   createModalVisual(character) {
-    const src = getAnimationAsset(character.id, 'arena_default');
+    const src = getAnimationAsset(character.id, 'board', 'default');
     if (src) {
       const media = createMediaElement(src, character, { loop: true });
       media.classList.remove('card-media');

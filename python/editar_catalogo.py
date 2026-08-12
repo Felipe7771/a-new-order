@@ -18,11 +18,13 @@ database = {}
 
 indx = 0
 for _, line in dtf.iterrows():
-    if line['Nome'] != 'Não informado' and line['Nome'] != '' and not line['Nome'].startswith('Capítulo '):
+    if line['Nome'] not in ('Não informado','') and not line['Nome'].startswith('Capítulo '):
         indx+=1
         
+        index = f'{indx:>03d}'
+        
         nome_sem_especiais = unidecode(line.Nome).replace(' ','').lower()
-        id = f'{indx:>03d}{nome_sem_especiais}'
+        id = f'{index}{nome_sem_especiais}'
         database[id] = {
             'name': line.Nome,
             'stats': {
@@ -46,32 +48,38 @@ for _, line in dtf.iterrows():
             'rageDamage': line['Fúria'] if isinstance(line['Fúria'],(int, float)) else 0,
             
             'group': line['Alianças'],
-            'affinities': line['Afinidades'].split(',') if line['Afinidades'] != 'Não informado' else [],
+            'affinities': [a.strip() for a in line['Afinidades'].split(',')] if line['Afinidades'] != 'Não informado' else [],
             'animation': {
-                "reserve_default": "",
-                "arena_default": "",
-                "arena_entrance": "",
-                "arena_exit": ""
+                'reserve': {
+                    'entrance': '',
+                    'default': f'img/doll/{index}/{index}_reserve_default.png',
+                },
+                
+                'board': {
+                    'entrance': f'img/doll/{index}/{index}_board_entrance.webm',
+                    'default': f'img/doll/{index}/{index}_board_default.webm',
+                    'exit': f'img/doll/{index}/{index}_board_exit.webm',
+                },
             }
         }
        
         
 indx = 0
 for _, line in dtf_pow.iterrows():
-    if line['Nome'] != 'Não informado' and line['Nome'] != '' and not line['Nome'].startswith('Capítulo '):
+    if line['Nome'] not in ('Não informado','') and not line['Nome'].startswith('Capítulo '):
         indx+=1
         
         nome_sem_especiais = unidecode(line.Nome).replace(' ','').lower()
         id = f'{indx:>03d}{nome_sem_especiais}'
         
-        has_power = line['Poder'] != 'Não informado' and line['Poder'] != ''
+        has_power = line['Poder'] not in ('Não informado','')
         
         database[id]['power'] = {
             'has': has_power,
             'description': line.Poder if has_power else ''
         }
            
-with open("./json/catalog_test.json", "w", encoding="utf-8") as arquivo:
+with open("./json/catalog.json", "w", encoding="utf-8") as arquivo:
     # indent=4 é usado para deixar o JSON legível e formatado
     json.dump(database, arquivo, ensure_ascii=False, indent=4)
 

@@ -40,7 +40,7 @@ import {
 import { firebaseConfig, isFirebaseConfigured } from "./firebase-config.js";
 
 const SALAS = "salas";
-const RESERVE_SIZE = 12;
+const RESERVE_SIZE = 11;
 const ROOM_TTL_MS = 24 * 60 * 60 * 1000; // 1 dia
 
 // Precisam bater com CONFIG.corridors/slotsPerSide em index.html —
@@ -81,8 +81,15 @@ function pickRandomDollId(catalog) {
 
 function buildDeck(catalog, ownerId) {
   const deck = [];
+  const usedDolls = new Set();
   for (let i = 0; i < RESERVE_SIZE; i++) {
-    const id = pickRandomDollId(catalog);
+    let id;
+    do {
+      id = pickRandomDollId(catalog);
+    } while (usedDolls.has(id));
+
+    usedDolls.add(id);
+
     const doll = catalog[id];
     deck.push({
       id,
@@ -94,6 +101,20 @@ function buildDeck(catalog, ownerId) {
       guard: new Set(doll.attbtLife).has("guardian"),
     });
   }
+
+  // adicionar para teste Londres (boneco 095 do catalog)
+  const londres = catalog['095londres'];
+  deck.push({
+    id: '095londres',
+    name: londres.name,
+    owner: ownerId,
+    life: londres.stats.baseLife,
+    damage: londres.stats.baseDamage,
+    rage: londres.rageDamage,
+    guard: new Set(londres.attbtLife).has("guardian"),
+  });
+
+
   return deck;
 }
 
