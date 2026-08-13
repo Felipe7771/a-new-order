@@ -226,12 +226,13 @@ html, body {
   font-family: var(--font-title);
   letter-spacing: .1em;
   font-weight: 500;
-  font-size: clamp(8px, .95vw, 11px);
+  font-size: clamp(8px, .95vw, 14px);
   z-index: 101;
+  text-shadow: 2px 2px 0px #000, 4px 4px 0px #000, 6px 6px 15px rgba(0, 0, 0, 0.9);
 }
 
-.stat--life { color: var(--life); }
-.stat--attack { color: var(--attack); }
+.stat--life { color: var(--life); font-weight: bold;}
+.stat--attack { color: var(--attack); font-weight: bold; }
 .stat--guardian { color: var(--guardian); font-weight: bold; }
 .stat--implacable { color: var(--implacable); font-weight: bold; }
 .stat--drill { color: var(--drill); font-weight: bold; }

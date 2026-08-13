@@ -40,7 +40,7 @@ import {
 import { firebaseConfig, isFirebaseConfigured } from "./firebase-config.js";
 
 const SALAS = "salas";
-const RESERVE_SIZE = 11;
+const RESERVE_SIZE = 10;
 const ROOM_TTL_MS = 24 * 60 * 60 * 1000; // 1 dia
 
 // Precisam bater com CONFIG.corridors/slotsPerSide em index.html —
@@ -79,6 +79,24 @@ function pickRandomDollId(catalog) {
   return keys[Math.floor(Math.random() * keys.length)];
 }
 
+// Retornar boneco específico do catálogo, com os campos que o front-end espera.
+// uso apenas para teste, pra não depender de sorte de sorteio aleatório.
+// pressupoe que o id_doll existe no catálogo, senão dá undefined.
+function pickSpecificDollId(catalog, id_doll) {
+  if (!catalog[id_doll]) return null;
+
+  const doll = catalog[id_doll];
+  return {
+    id: id_doll,
+    name: doll.name,
+    life: doll.stats.baseLife,
+    damage: doll.stats.baseDamage,
+    rage: doll.rageDamage,
+    guard: new Set(doll.attbtLife).has("guardian"),
+  }
+}
+
+
 function buildDeck(catalog, ownerId) {
   const deck = [];
   const usedDolls = new Set();
@@ -103,16 +121,9 @@ function buildDeck(catalog, ownerId) {
   }
 
   // adicionar para teste Londres (boneco 095 do catalog)
-  const londres = catalog['095londres'];
-  deck.push({
-    id: '095londres',
-    name: londres.name,
-    owner: ownerId,
-    life: londres.stats.baseLife,
-    damage: londres.stats.baseDamage,
-    rage: londres.rageDamage,
-    guard: new Set(londres.attbtLife).has("guardian"),
-  });
+  // adicionar para teste Charlotte (boneco 077 do catalog)
+  deck.push(pickSpecificDollId(catalog, "095londres"));
+  deck.push(pickSpecificDollId(catalog, "077charlottelenz"));
 
 
   return deck;
