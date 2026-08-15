@@ -57,7 +57,7 @@ const Reserve = {
   // Toca reserve.entrance quando o slot passa de vazio pra ocupado
   // (sorteio inicial, ou um boneco devolvido à reserva no futuro).
   // Ao 'ended', troca pra reserve.default via renderSlot normal.
-  playEntrance(i, character) {
+playEntrance(i, character) {
     const el = this.slotEls[i];
     if (!el) return;
 
@@ -72,18 +72,26 @@ const Reserve = {
     el.innerHTML = '';
     el.classList.remove('slot--empty');
     el.classList.add('slot--filled');
+    el.classList.remove('slot--media-loaded');
     el.draggable = true;
     el.setAttribute('aria-label', character.name);
 
     const visual = document.createElement('div');
     visual.className = 'card-visual card-visual--reserve';
-    visual.appendChild(createMediaElement(entranceSrc, character, {
+    const media = createMediaElement(entranceSrc, character, {
       loop: false,
       onEnded: () => {
         this.slotAnim[i] = 'settled';
         this.renderSlot(i);
       },
-    }));
+      onError: () => {
+        console.warn(`[Trincheira] vídeo de entrada (reserva) falhou (${entranceSrc}) — assentando slot direto.`);
+        this.slotAnim[i] = 'settled';
+        this.renderSlot(i);
+      },
+    });
+    watchSlotMediaLoad(media, el);
+    visual.appendChild(media);
     el.appendChild(visual);
   },
 

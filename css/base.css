@@ -161,6 +161,15 @@ html, body {
   cursor: pointer;
 }
 
+/* Mídia real carregada (vídeo pronto pra tocar sem travar, ou
+   imagem carregada) — some com a borda/fundo do slot, sobra só o
+   boneco vazando. Especificidade dupla pra sempre vencer
+   .slot--filled independente da ordem no arquivo. */
+.slot.slot--media-loaded{
+  border-color: transparent;
+  background: transparent;
+}
+
 .board-slot.slot--filled { cursor: pointer; }
 .reserve-slot.slot--filled { cursor: grab; }
 .reserve-slot.slot--filled:active { cursor: grabbing; }

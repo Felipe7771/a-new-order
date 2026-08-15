@@ -187,7 +187,7 @@
     "007misselisabeth": {
         "name": "Miss Elisabeth",
         "stats": {
-            "baseLife": 7.0,
+            "baseLife": 14.0,
             "baseDamage": 5.0
         },
         "attbtLife": [],
@@ -304,7 +304,7 @@
         "name": "Parasitas",
         "stats": {
             "baseLife": 12.0,
-            "baseDamage": 3.0
+            "baseDamage": 2.0
         },
         "attbtLife": [],
         "attbtDamage": [
@@ -333,7 +333,7 @@
         "name": "Novision",
         "stats": {
             "baseLife": 12.0,
-            "baseDamage": 5.0
+            "baseDamage": 6.0
         },
         "attbtLife": [
             "implacable"
@@ -362,13 +362,13 @@
         "name": "Coronel Mors Pulduck",
         "stats": {
             "baseLife": 18.0,
-            "baseDamage": 8.0
+            "baseDamage": 9.0
         },
         "attbtLife": [],
         "attbtDamage": [
             "rage"
         ],
-        "rageDamage": 9,
+        "rageDamage": 10,
         "group": "Mafia Pullduck",
         "affinities": [
             "IRUMEO"
@@ -676,7 +676,7 @@
     "024gigi": {
         "name": "Gigi",
         "stats": {
-            "baseLife": 10.0,
+            "baseLife": 12.0,
             "baseDamage": 5.0
         },
         "attbtLife": [
@@ -819,7 +819,7 @@
     "029mantonegro": {
         "name": "Manto Negro",
         "stats": {
-            "baseLife": 6.0,
+            "baseLife": 12.0,
             "baseDamage": 8.0
         },
         "attbtLife": [],
@@ -875,8 +875,8 @@
     "031cactoarmado": {
         "name": "Cactoarmado",
         "stats": {
-            "baseLife": 6.0,
-            "baseDamage": 4.0
+            "baseLife": 13.0,
+            "baseDamage": 6.0
         },
         "attbtLife": [],
         "attbtDamage": [
@@ -1050,7 +1050,7 @@
     "037queen": {
         "name": "Queen",
         "stats": {
-            "baseLife": 2.0,
+            "baseLife": 9.0,
             "baseDamage": 3.0
         },
         "attbtLife": [],
@@ -1223,7 +1223,7 @@
     "043velhoescudo": {
         "name": "Velho Escudo",
         "stats": {
-            "baseLife": 12.0,
+            "baseLife": 15.0,
             "baseDamage": 0.0
         },
         "attbtLife": [
@@ -1341,7 +1341,7 @@
     "047azraelgraves": {
         "name": "Azrael Graves",
         "stats": {
-            "baseLife": 11.0,
+            "baseLife": 15.0,
             "baseDamage": 7.0
         },
         "attbtLife": [],
@@ -1369,13 +1369,15 @@
             "description": "TODOS os Bonecos [Experimentos Graves] não causarão dano"
         }
     },
-    "048filiotielizabetta": {
-        "name": "Филиот и Элизабетта",
+    "048fillot&elisabetta": {
+        "name": "Fillot & Elisabetta",
         "stats": {
             "baseLife": 8.0,
-            "baseDamage": 8.0
+            "baseDamage": 10.0
         },
-        "attbtLife": [],
+        "attbtLife": [
+            "implacable"
+        ],
         "attbtDamage": [],
         "rageDamage": 0,
         "group": "Ashes of Winter",
@@ -1487,7 +1489,7 @@
         "name": "Caçador Vermelho",
         "stats": {
             "baseLife": 14.0,
-            "baseDamage": 5.0
+            "baseDamage": 8.0
         },
         "attbtLife": [],
         "attbtDamage": [],
@@ -1554,9 +1556,7 @@
         "attbtDamage": [],
         "rageDamage": 0,
         "group": "IRUMEO",
-        "affinities": [
-            "Londres"
-        ],
+        "affinities": [],
         "animation": {
             "reserve": {
                 "entrance": "",
@@ -1584,7 +1584,6 @@
         "rageDamage": 0,
         "group": "Ashes of Winter",
         "affinities": [
-            "Ashes of Winter",
             "Londres"
         ],
         "animation": {
@@ -1725,7 +1724,6 @@
         },
         "attbtLife": [],
         "attbtDamage": [
-            "drill",
             "rage"
         ],
         "rageDamage": 10,
@@ -1864,14 +1862,14 @@
         "name": "Kelvin Frost",
         "stats": {
             "baseLife": 15.0,
-            "baseDamage": 5.0
+            "baseDamage": 7.0
         },
         "attbtLife": [],
         "attbtDamage": [
             "drill",
             "rage"
         ],
-        "rageDamage": 6,
+        "rageDamage": 10,
         "group": "Família Cruz-Lenz",
         "affinities": [
             "Família Cruz-Lenz",
@@ -1988,7 +1986,7 @@
         "name": "Chanceller Brown",
         "stats": {
             "baseLife": 14.0,
-            "baseDamage": 3.0
+            "baseDamage": 6.0
         },
         "attbtLife": [],
         "attbtDamage": [
@@ -2087,8 +2085,7 @@
         "rageDamage": 0,
         "group": "C.A.S",
         "affinities": [
-            "Família Cruz-Lenz",
-            "Londres"
+            "Família Cruz-Lenz"
         ],
         "animation": {
             "reserve": {
@@ -2180,9 +2177,7 @@
         ],
         "rageDamage": 0,
         "group": "C.A.S",
-        "affinities": [
-            "IRUMEO"
-        ],
+        "affinities": [],
         "animation": {
             "reserve": {
                 "entrance": "",
@@ -2229,7 +2224,7 @@
     "077charlottelenz": {
         "name": "Charlotte Lenz",
         "stats": {
-            "baseLife": 17.0,
+            "baseLife": 20.0,
             "baseDamage": 3.0
         },
         "attbtLife": [
@@ -2316,10 +2311,14 @@
         "name": "Vazzimudu",
         "stats": {
             "baseLife": 16.0,
-            "baseDamage": 6.0
+            "baseDamage": 7.0
         },
-        "attbtLife": [],
-        "attbtDamage": [],
+        "attbtLife": [
+            "implacable"
+        ],
+        "attbtDamage": [
+            "drill"
+        ],
         "rageDamage": 0,
         "group": "Ashes of Winter",
         "affinities": [
@@ -2345,15 +2344,13 @@
         "name": "Grande Operador",
         "stats": {
             "baseLife": 16.0,
-            "baseDamage": 7.0
+            "baseDamage": 6.0
         },
         "attbtLife": [],
         "attbtDamage": [],
         "rageDamage": 0,
         "group": "IRUMEO",
-        "affinities": [
-            "Londres"
-        ],
+        "affinities": [],
         "animation": {
             "reserve": {
                 "entrance": "",
@@ -2514,7 +2511,7 @@
     "087matthiewcarter": {
         "name": "Matthiew Cárter",
         "stats": {
-            "baseLife": 18.0,
+            "baseLife": 19.0,
             "baseDamage": 1.0
         },
         "attbtLife": [],
@@ -2524,8 +2521,7 @@
         "rageDamage": 10,
         "group": "Família Leef-Graves",
         "affinities": [
-            "Família Leef-Graves",
-            "Família Cruz-Lenz"
+            "Família Leef-Graves"
         ],
         "animation": {
             "reserve": {
@@ -2672,7 +2668,7 @@
     "092liamlenz": {
         "name": "Liam Lenz",
         "stats": {
-            "baseLife": 6.0,
+            "baseLife": 8.0,
             "baseDamage": 3.0
         },
         "attbtLife": [
@@ -2705,7 +2701,7 @@
         "name": "King",
         "stats": {
             "baseLife": 5.0,
-            "baseDamage": 5.0
+            "baseDamage": 8.0
         },
         "attbtLife": [],
         "attbtDamage": [],
@@ -2801,9 +2797,11 @@
         "name": "Nogi Akiyama",
         "stats": {
             "baseLife": 14.0,
-            "baseDamage": 9.0
+            "baseDamage": 10.0
         },
-        "attbtLife": [],
+        "attbtLife": [
+            "implacable"
+        ],
         "attbtDamage": [
             "drill"
         ],

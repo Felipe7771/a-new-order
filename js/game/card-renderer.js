@@ -8,6 +8,7 @@ render(el, character, { showStats = false, draggable = false, variant = 'reserve
     el.innerHTML = '';
     el.classList.toggle('slot--empty', !character);
     el.classList.toggle('slot--filled', !!character);
+    el.classList.remove('slot--media-loaded'); // reseta a cada render
     el.draggable = false;
     el.removeAttribute('aria-label');
 
@@ -18,7 +19,9 @@ render(el, character, { showStats = false, draggable = false, variant = 'reserve
 
     const visual = document.createElement('div');
     visual.className = `card-visual card-visual--${variant === 'board' ? 'board' : 'reserve'}`;
-    visual.appendChild(this.createVisual(character, variant));
+    const media = this.createVisual(character, variant);
+    watchSlotMediaLoad(media, el);
+    visual.appendChild(media);
 
     if (variant === 'board') {
       const sideAttrs = this.buildSideAttributes(character);
@@ -30,7 +33,7 @@ render(el, character, { showStats = false, draggable = false, variant = 'reserve
     if (showStats) el.appendChild(this.buildStats(character));
     if (draggable) el.draggable = true;
     el.setAttribute('aria-label', character.name);
-  },
+},
 
   buildStats(character) {
     const stats = document.createElement('div');

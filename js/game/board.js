@@ -121,7 +121,7 @@ const Board = {
   // ficar ocupados nesse snapshot (mesmo diff que já dispara o
   // EntranceFX). Toca arena_entrance; ao 'ended', troca pra
   // arena_default via renderSlot normal.
-  playEntrance(row, col, character) {
+playEntrance(row, col, character) {
       const el = this.slotEls[row][col];
       if (!el) return;
 
@@ -136,34 +136,31 @@ const Board = {
       el.innerHTML = '';
       el.classList.remove('slot--empty');
       el.classList.add('slot--filled');
+      el.classList.remove('slot--media-loaded');
       el.setAttribute('aria-label', character.name);
 
       const visual = document.createElement('div');
       visual.className = 'card-visual card-visual--board';
-      visual.appendChild(createMediaElement(entranceSrc, character, {
+      const media = createMediaElement(entranceSrc, character, {
         loop: false,
         onEnded: () => {
           this.slotAnim[row][col] = 'settled';
           this.renderSlot(row, col);
         },
-        // Sem isso, um .webm que falha/404 nunca dispara 'ended' e o
-        // slot fica preso em 'entering' pra sempre — e enquanto isso,
-        // renderSlot() nem chega a marcar draggable=true (ver o guard
-        // logo no topo de renderSlot). É esse travamento que deixava
-        // os bonecos "intocáveis" mesmo com MOBS > 0.
         onError: () => {
           console.warn(`[Trincheira] vídeo de entrada falhou (${entranceSrc}) — assentando slot direto.`);
           this.slotAnim[row][col] = 'settled';
           this.renderSlot(row, col);
         },
-      }));
+      });
+      watchSlotMediaLoad(media, el);
+      visual.appendChild(media);
 
       const sideAttrs = CardRenderer.buildSideAttributes(character);
       if (sideAttrs) visual.appendChild(sideAttrs);
 
       el.appendChild(visual);
       el.appendChild(CardRenderer.buildStats(character));
-      this.updateDraggability(row, col); // <- adicionar esta linha
     },
 
   handleSlotClick(row, col) {
