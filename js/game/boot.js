@@ -80,27 +80,25 @@ window.Game = {
     // (dono + convidado presentes, 12 bonecos já sorteados pros
     // dois lados). Só desenha o que já veio pronto — nenhuma
     // lógica de turno/combate mexe aqui ainda.
-  startMatch({ roomId, me, opponent, myReserve, opponentReserve, role, turn }) {
+startMatch({ roomId, me, opponent, myReserve, opponentReserve, role, turn, myMobs, opponentMobs }) {
     this.roomId = roomId;
     this.meId = me.id;
     this.opponentId = opponent.id;
+    this._lastMoveSeq = null; // rastreia qual "moveSeq" já foi processado (evita tocar o som de novo)
 
-    // 'owner' | 'guest' — decide o espelhamento do tabuleiro e o
-    // bloqueio de colocar boneco no campo inimigo (ver CONFIG.myRole
-    // em isMyColumn/Board.displayColOf). Precisa ser setado ANTES de
-    // reconstruir o board, senão ele nasce com a orientação errada.
     CONFIG.myRole = role === 'guest' ? 'guest' : 'owner';
 
     CONFIG.playerName = me.name;
     CONFIG.enemyName = opponent.name;
     PlayerNames.setNames(me.name, opponent.name);
 
-    // era: state.reserves.ally = myReserve.map((d) => characterFromRoomData(d, 'ally'));
+    state.mobs.ally = typeof myMobs === 'number' ? myMobs : 3;
+    state.mobs.enemy = typeof opponentMobs === 'number' ? opponentMobs : 3;
+
     Reserve.syncAlly(myReserve.map((d) => characterFromRoomData(d, 'ally')));
     state.reserves.enemy = opponentReserve.map((d) => characterFromRoomData(d, 'enemy'));
 
     Board.build(document.getElementById('board'));
-    // Reserve.renderAll(); <- remover essa linha, syncAlly já chama renderAll()
     Board.renderAll();
     PlayerStats.update();
 
@@ -169,6 +167,7 @@ async endTurn() {
 handleRoomClosed() {
   clearTimeout(this._turnTimeout);
   this._lastTurnNumber = null;
+  this._lastMoveSeq = null;
   this.roomId = null;
   this.meId = null;
   this.opponentId = null;
@@ -181,8 +180,13 @@ handleRoomClosed() {
   // Reconstrói tabuleiro + reservas a partir do documento da sala
   // e dispara EntranceFX pra qualquer slot que passou de vazio pra
   // ocupado (seja boneco meu ou do oponente).
-  syncRoom(data) {
+syncRoom(data) {
     if (!this.meId) return;
+
+    // MOBS de cada lado vêm direto do documento — PlayerStats.update()
+    // no fim do método já redesenha os dois contadores.
+    state.mobs.ally = data.p?.[this.meId]?.mobs ?? state.mobs.ally;
+    state.mobs.enemy = data.p?.[this.opponentId]?.mobs ?? state.mobs.enemy;
 
     const newBoard = Array.from({ length: CONFIG.corridors }, () =>
       Array(CONFIG.slotsPerSide * 2).fill(null)
@@ -197,15 +201,30 @@ handleRoomClosed() {
       newBoard[r][c] = characterFromRoomData(dollData, ownerRole);
     });
 
+    // Se esse snapshot trouxe um moveSeq novo, a célula lastMove.to
+    // é reposicionamento via MOBS: não toca EntranceFX/vídeo de
+    // entrada, só o som da "mão" — e isso NÃO entra em enteredCells.
+    const isNewMove = !!data.lastMove && typeof data.moveSeq === 'number' && data.moveSeq !== this._lastMoveSeq;
+    const moveToKey = isNewMove ? data.lastMove.to : null;
+    let moveHappened = false;
+
     const enteredCells = [];
     for (let r = 0; r < CONFIG.corridors; r++) {
       for (let c = 0; c < CONFIG.slotsPerSide * 2; c++) {
         if (!state.board[r][c] && newBoard[r][c]) {
+          const key = `${r}-${c}`;
+          if (moveToKey && key === moveToKey) {
+            moveHappened = true;
+            continue; // reposicionado — sem telão, sem vídeo de entrada
+          }
           EntranceFX.show(newBoard[r][c], r, c);
           enteredCells.push([r, c, newBoard[r][c]]);
         }
       }
     }
+
+    if (isNewMove) this._lastMoveSeq = data.moveSeq;
+    if (moveHappened) AudioManager.Sfx.mobsMove();
 
     // Marca 'entering' ANTES de trocar state.board/renderAll, senão o
     // renderAll chegaria nesses slots primeiro e já mostraria o
@@ -221,12 +240,11 @@ handleRoomClosed() {
     Reserve.syncAlly(myReserveData.map((d) => characterFromRoomData(d, 'ally')));
     state.reserves.enemy = oppReserveData.map((d) => characterFromRoomData(d, 'enemy'));
 
-    // Reserve.renderAll(); <- remover, já é feito dentro de syncAlly
     PlayerStats.update();
     this.handleTurnSync(data.turn, data);
   },
 
-  async placeDoll(row, col, reserveIndex) {
+async placeDoll(row, col, reserveIndex) {
     if (!this.roomId || !this.meId) {
       console.warn('[Trincheira] placeDoll chamado sem partida ativa.');
       return;
@@ -235,6 +253,22 @@ handleRoomClosed() {
       await window.Matchmaking.placeDoll(this.roomId, this.meId, reserveIndex, row, col);
     } catch (err) {
       console.error('[Trincheira] não foi possível jogar o boneco:', err);
+    }
+  },
+
+  // Reposiciona um boneco já em campo pra outro slot vazio do mesmo
+  // lado (drag&drop arena -> arena). Gasta 1 MOBS no server; se a
+  // transação falhar (sem MOBS, fora do turno de defesa, etc.), o
+  // onSnapshot simplesmente nunca chega a mudar nada.
+  async moveDoll(fromRow, fromCol, toRow, toCol) {
+    if (!this.roomId || !this.meId) {
+      console.warn('[Trincheira] moveDoll chamado sem partida ativa.');
+      return;
+    }
+    try {
+      await window.Matchmaking.moveDoll(this.roomId, this.meId, fromRow, fromCol, toRow, toCol);
+    } catch (err) {
+      console.error('[Trincheira] não foi possível mover o boneco:', err);
     }
   },
 

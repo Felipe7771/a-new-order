@@ -31,6 +31,7 @@ import {
   getDoc,
   setDoc,
   deleteDoc,
+  deleteField,
   runTransaction,
   onSnapshot,
   serverTimestamp,
@@ -82,13 +83,14 @@ function pickRandomDollId(catalog) {
 // Retornar boneco específico do catálogo, com os campos que o front-end espera.
 // uso apenas para teste, pra não depender de sorte de sorteio aleatório.
 // pressupoe que o id_doll existe no catálogo, senão dá undefined.
-function pickSpecificDollId(catalog, id_doll) {
+function pickSpecificDollId(catalog, id_doll, ownerId) {
   if (!catalog[id_doll]) return null;
 
   const doll = catalog[id_doll];
   return {
     id: id_doll,
     name: doll.name,
+    owner: ownerId,
     life: doll.stats.baseLife,
     damage: doll.stats.baseDamage,
     rage: doll.rageDamage,
@@ -122,8 +124,8 @@ function buildDeck(catalog, ownerId) {
 
   // adicionar para teste Londres (boneco 095 do catalog)
   // adicionar para teste Charlotte (boneco 077 do catalog)
-  deck.push(pickSpecificDollId(catalog, "095londres"));
-  deck.push(pickSpecificDollId(catalog, "077charlottelenz"));
+  deck.push(pickSpecificDollId(catalog, "095londres", ownerId));
+  deck.push(pickSpecificDollId(catalog, "077charlottelenz", ownerId));
 
 
   return deck;
@@ -273,8 +275,8 @@ async function tryJoinRoom(roomId, player, catalog) {
         // O anfitrião sempre começa — turno 1, fase de defesa dele.
         turn: buildDefensePhase(ownerId, 1),
         p: {
-          [ownerId]: { mobs: [], reserve: ownerDeck, effects: [] },
-          [player.id]: { mobs: [], reserve: guestDeck, effects: [] },
+          [ownerId]: { mobs: 3, reserve: ownerDeck, effects: [] },
+          [player.id]: { mobs: 3, reserve: guestDeck, effects: [] },
         },
       });
     });
@@ -391,6 +393,75 @@ export async function placeDoll(roomId, playerId, reserveIndex, row, col) {
       [`board.${boardKey}`]: character,
       [`p.${playerId}.reserve`]: newReserve,
       "turn.hasActed": true,
+    });
+  });
+}
+
+/* ------------------------------------------------------------
+   Reposiciona um boneco JÁ EM CAMPO pra outro slot vazio do
+   MESMO lado (nunca de volta pra reserva). Gasta 1 MOBS do
+   jogador. Só funciona na fase de DEFESA e na vez de `playerId`
+   — mesma trava de turno usada em placeDoll. NÃO mexe em
+   turn.hasActed: mover não conta como "jogar um boneco" pra
+   liberar o botão de Encerrar Turno.
+
+   Grava lastMove/moveSeq só pra o(s) cliente(s) saberem, no
+   próximo snapshot, que aquela célula ficou ocupada por
+   REPOSICIONAMENTO (toca hand_mobs.mp3) e não por uma entrada
+   nova vinda da reserva (que tocaria o EntranceFX normal).
+------------------------------------------------------------ */
+export async function moveDoll(roomId, playerId, fromRow, fromCol, toRow, toCol) {
+  const roomRef = doc(getDb(), SALAS, roomId);
+  const fromKey = `${fromRow}-${fromCol}`;
+  const toKey = `${toRow}-${toCol}`;
+
+  const inBounds = (row, col) =>
+    Number.isInteger(row) && Number.isInteger(col) &&
+    row >= 0 && row < CORRIDORS && col >= 0 && col < TOTAL_COLS;
+
+  if (!inBounds(fromRow, fromCol) || !inBounds(toRow, toCol)) {
+    throw new Error("posicao-fora-do-tabuleiro");
+  }
+  if (fromKey === toKey) throw new Error("mesma-posicao");
+
+  await runTransaction(getDb(), async (tx) => {
+    const snap = await tx.get(roomRef);
+    if (!snap.exists()) throw new Error("sala-nao-existe");
+
+    const data = snap.data();
+
+    if (!data.turn || data.turn.phase !== "defense" || data.turn.current !== playerId) {
+      throw new Error("nao-e-seu-turno-de-defesa");
+    }
+
+    const isOwner = data.ower?.ID === playerId;
+    const isToOwnerColumn = toCol < SLOTS_PER_SIDE;
+    if (isOwner !== isToOwnerColumn) {
+      throw new Error("coluna-de-destino-nao-pertence-ao-jogador");
+    }
+
+    const character = data.board?.[fromKey];
+    if (!character || character.owner !== playerId) {
+      throw new Error("boneco-nao-encontrado-na-origem");
+    }
+
+    if (data.board?.[toKey]) {
+      throw new Error("slot-de-destino-ja-ocupado");
+    }
+
+    const mobsLeft = data.p?.[playerId]?.mobs ?? 0;
+    if (mobsLeft <= 0) {
+      throw new Error("sem-mobs-disponiveis");
+    }
+
+    const nextSeq = (data.moveSeq || 0) + 1;
+
+    tx.update(roomRef, {
+      [`board.${toKey}`]: character,
+      [`board.${fromKey}`]: deleteField(),
+      [`p.${playerId}.mobs`]: mobsLeft - 1,
+      moveSeq: nextSeq,
+      lastMove: { to: toKey, from: fromKey, by: playerId, seq: nextSeq },
     });
   });
 }

@@ -284,3 +284,6 @@
   font-family: var(--font-mono);
   margin-bottom: 20px;
 }
+
+.board-slot--movable{ cursor: grab; }
+.board-slot--movable:active{ cursor: grabbing; }

@@ -203,6 +203,18 @@ const Sfx = {
     });
   },
 
+  // audio/sound/effects/hand_mobs.mp3 — a "mão" reposicionando um
+  // boneco na arena via MOBS. Mesma categoria/volume de dollEffects.
+  mobsMove() {
+    if (!settings.dollEffects) return;
+    const base = getSfx('hand_mobs', PATHS.effects);
+    const instance = base.cloneNode();
+    instance.volume = settings.volumes.dollEffects;
+    instance.play().catch((err) => {
+      console.warn('[AudioManager] sem áudio de MOBS (audio/sound/effects/hand_mobs.mp3):', err.message);
+    });
+  },
+
   // audio/entrance/{grupo}.mp3 — um arquivo por facção/grupo do
   // catalog.json (ex: "IRUMEO.mp3", "C.A.S.mp3", "Família Cruz-Lenz.mp3").
   // Tocado pelo EntranceFX quando o boneco entra em campo.

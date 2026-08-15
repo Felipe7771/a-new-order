@@ -7,9 +7,9 @@
 ============================================================ */
 
 // 1) Import: adicione endTurn e autoAdvanceTurn
-import { findOrCreateRoom, listenRoom, cancelRoom, isFirebaseConfigured, placeDoll, endTurn, autoAdvanceTurn } from "./matchmaking.js";
+import { findOrCreateRoom, listenRoom, cancelRoom, isFirebaseConfigured, placeDoll, endTurn, autoAdvanceTurn, moveDoll } from "./matchmaking.js";
 
-window.Matchmaking = { placeDoll, endTurn, autoAdvanceTurn };
+window.Matchmaking = { placeDoll, endTurn, autoAdvanceTurn, moveDoll };
 // Testando com duas abas do MESMO navegador? localStorage é
 // compartilhado entre elas, então as duas puxariam o mesmo ID.
 // Abrindo a segunda aba como "?slot=2" (ou qualquer valor), essa
@@ -183,24 +183,27 @@ async handlePlay() {
   // index.html (globais: state, Board, Reserve, PlayerNames,
   // createCharacter — todos definidos no script principal).
   startMatch(roomData) {
-    const me = this.player.id;
-    const isOwner = roomData.ower.ID === me;
-    const opponent = isOwner ? roomData.guest : roomData.ower;
-    const opponentReserve = roomData.p?.[opponent.ID]?.reserve || [];
-    const myReserve = roomData.p?.[me]?.reserve || [];
+      const me = this.player.id;
+      const isOwner = roomData.ower.ID === me;
+      const opponent = isOwner ? roomData.guest : roomData.ower;
+      const opponentReserve = roomData.p?.[opponent.ID]?.reserve || [];
+      const myReserve = roomData.p?.[me]?.reserve || [];
+      const myMobs = roomData.p?.[me]?.mobs ?? 3;
+      const opponentMobs = roomData.p?.[opponent.ID]?.mobs ?? 3;
 
-  // 4) startMatch(roomData) precisa repassar o turno pro Game:
-  window.Game.startMatch({
-    roomId: this.roomId,
-    me: { id: me, name: this.player.name },
-    opponent: { id: opponent.ID, name: opponent.name },
-    myReserve,
-    opponentReserve,
-    role: isOwner ? 'owner' : 'guest',
-    turn: roomData.turn, // <-- novo
-  });
+    window.Game.startMatch({
+      roomId: this.roomId,
+      me: { id: me, name: this.player.name },
+      opponent: { id: opponent.ID, name: opponent.name },
+      myReserve,
+      opponentReserve,
+      role: isOwner ? 'owner' : 'guest',
+      turn: roomData.turn,
+      myMobs,
+      opponentMobs,
+    });
 
-    this.els.screen.classList.add("menu-screen--hidden");
+      this.els.screen.classList.add("menu-screen--hidden");
   },
 };
 

@@ -34,7 +34,7 @@ const TurnBanner = {
     this.el.classList.add(isAttack ? 'turn-banner--attack' : 'turn-banner--defense');
     this.el.classList.add(isAttack ? 'turn-banner--visible-attack' : 'turn-banner--visible-defense');
 
-    AudioManager.Sfx.entrance(isAttack ? 'turno_ofensivo' : 'turno_defensivo');
+    AudioManager.Sfx.entrance(isAttack ? 'turn_offense' : 'turn_defense');
 
     const duration = isAttack ? 3000 : 5500;
     this.hideTimeout = setTimeout(() => {

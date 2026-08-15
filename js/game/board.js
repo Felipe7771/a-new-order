@@ -58,6 +58,7 @@ const Board = {
         if (!isMyColumn(col)) slotEl.classList.add('board-slot--enemy');
 
         DragDrop.attachDropTarget(slotEl);
+        DragDrop.attachBoardDragSource(slotEl, row, col);
         slotEl.addEventListener('click', () => this.handleSlotClick(row, col));
         slotEl.addEventListener('keydown', (e) => {
           if (e.key === 'Enter' || e.key === ' ') this.handleSlotClick(row, col);
@@ -78,6 +79,21 @@ const Board = {
     state.board.forEach((row, r) => row.forEach((_, c) => this.renderSlot(r, c)));
   },
 
+    // Só liga/desliga draggable+classe, sem tocar no vídeo/imagem em
+  // andamento. Roda SEMPRE (inclusive com o slot em 'entering') —
+  // MOBS não deveria depender da animação de entrada ter terminado.
+  updateDraggability(row, col) {
+    const el = this.slotEls[row]?.[col];
+    const character = state.board[row][col];
+    if (!el || !character) return;
+    const movable = character.owner === 'ally' && state.mobs.ally > 0;
+    el.draggable = movable;
+    el.classList.toggle('board-slot--movable', movable);
+
+    console.log(`Condições: É aliado? ${character.owner === 'ally'}, MOBS > 0? ${state.mobs.ally > 0}`);
+    console.log(`[Trincheira] slot [${row},${col}] ${movable ? 'agora' : 'não mais'} arrastável (MOBS=${state.mobs.ally})`);
+  },
+
   // Renderização "estável": nunca reinicia um vídeo de entrada em
   // andamento. Se o slot ainda não tem estado registrado e já vem
   // preenchido (ex: reconexão no meio da partida), assume 'settled'
@@ -91,10 +107,14 @@ const Board = {
       return;
     }
 
-    if (this.slotAnim[row][col] === 'entering') return; // vídeo tocando, não mexe
+    if (this.slotAnim[row][col] === 'entering') {
+      this.updateDraggability(row, col); // atualiza mesmo com o vídeo ainda tocando
+      return;
+    }
 
     this.slotAnim[row][col] = 'settled';
     CardRenderer.render(this.slotEls[row][col], character, { showStats: true, variant: 'board' });
+    this.updateDraggability(row, col);
   },
 
     // Chamado pelo Game.syncRoom SÓ para os slots que acabaram de
@@ -126,6 +146,16 @@ const Board = {
           this.slotAnim[row][col] = 'settled';
           this.renderSlot(row, col);
         },
+        // Sem isso, um .webm que falha/404 nunca dispara 'ended' e o
+        // slot fica preso em 'entering' pra sempre — e enquanto isso,
+        // renderSlot() nem chega a marcar draggable=true (ver o guard
+        // logo no topo de renderSlot). É esse travamento que deixava
+        // os bonecos "intocáveis" mesmo com MOBS > 0.
+        onError: () => {
+          console.warn(`[Trincheira] vídeo de entrada falhou (${entranceSrc}) — assentando slot direto.`);
+          this.slotAnim[row][col] = 'settled';
+          this.renderSlot(row, col);
+        },
       }));
 
       const sideAttrs = CardRenderer.buildSideAttributes(character);
@@ -133,6 +163,7 @@ const Board = {
 
       el.appendChild(visual);
       el.appendChild(CardRenderer.buildStats(character));
+      this.updateDraggability(row, col); // <- adicionar esta linha
     },
 
   handleSlotClick(row, col) {
