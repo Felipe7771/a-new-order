@@ -4,7 +4,7 @@
    entre os dois é a opção showStats/draggable.
 ============================================================ */
 const CardRenderer = {
-  render(el, character, { showStats = false, draggable = false, variant = 'reserve' } = {}) {
+render(el, character, { showStats = false, draggable = false, variant = 'reserve' } = {}) {
     el.innerHTML = '';
     el.classList.toggle('slot--empty', !character);
     el.classList.toggle('slot--filled', !!character);
@@ -19,6 +19,12 @@ const CardRenderer = {
     const visual = document.createElement('div');
     visual.className = `card-visual card-visual--${variant === 'board' ? 'board' : 'reserve'}`;
     visual.appendChild(this.createVisual(character, variant));
+
+    if (variant === 'board') {
+      const sideAttrs = this.buildSideAttributes(character);
+      if (sideAttrs) visual.appendChild(sideAttrs);
+    }
+
     el.appendChild(visual);
 
     if (showStats) el.appendChild(this.buildStats(character));
@@ -34,6 +40,21 @@ const CardRenderer = {
       `<span class="stat ${definyStyle('attack',character.id)}${character.attack}</span>` +
       (character.rage > 0 ? `<span class="stat stat--rage">${simbol.rage}${character.rage}</span>` : '');
     return stats;
+  },
+
+  // Ícones dos atributos de vida/dano que NÃO aparecem no símbolo
+  // principal (ver getExtraLifeDamageAttributes em styles.js). Só usado
+  // na arena — reaproveita as classes .stat--X já coloridas, sem texto.
+  buildSideAttributes(character) {
+    const extra = getExtraLifeDamageAttributes(character.id);
+    if (!extra.length) return null;
+
+    const wrap = document.createElement('div');
+    wrap.className = 'card-side-attrs';
+    wrap.innerHTML = extra
+      .map((key) => `<i class="card-side-attr stat--${key}">${simbol[key]}</i>`)
+      .join('');
+    return wrap;
   },
 
   // variant: 'reserve' -> animation.reserve_default | 'board' -> animation.arena_default

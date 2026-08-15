@@ -38,6 +38,35 @@ function getHTMLattributes(attbt, damage) {
         .join(' ');
 }
 
+// Atributos de vida/dano que NÃO estão sendo exibidos pelo símbolo
+// principal (definyStyle escolhe só 1 por categoria: guardian>implacable
+// pra vida, drill>mortal pra dano). Tudo que sobrar disso — incluindo
+// area/entire_arena, que nunca viram símbolo principal — é retornado
+// aqui pra virar ícone na lateral do boneco na arena.
+function getExtraLifeDamageAttributes(id) {
+    const doll = catalog[id];
+    if (!doll) return [];
+
+    const lifeAttrs = new Set(doll.attbtLife || []);
+    const damageAttrs = new Set(doll.attbtDamage || []);
+
+    let primaryLife = null;
+    if (lifeAttrs.has('guardian')) primaryLife = 'guardian';
+    else if (lifeAttrs.has('implacable')) primaryLife = 'implacable';
+
+    let primaryDamage = null;
+    if (damageAttrs.has('drill')) primaryDamage = 'drill';
+    else if (damageAttrs.has('mortal')) primaryDamage = 'mortal';
+
+    const extra = [];
+    lifeAttrs.forEach((attr) => { if (attr !== primaryLife) extra.push(attr); });
+    damageAttrs.forEach((attr) => { if (attr !== primaryDamage) extra.push(attr); });
+
+    // rage tem seu próprio lugar no card-stats (via character.rage) —
+    // não duplica aqui. Só atributos com símbolo próprio em `simbol`.
+    return extra.filter((attr) => attr !== 'rage' && simbol[attr]);
+}
+
 function definyStyle(type, id) {
   if (type === 'life') {
     const list_attbt = new Set(catalog[id].attbtLife)

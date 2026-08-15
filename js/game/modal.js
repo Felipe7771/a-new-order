@@ -21,7 +21,7 @@ const Modal = {
         <button class="modal-close" data-sfx-click="click" aria-label="Fechar">&#10005;</button>
         <div class="modal-visual"></div>
         <h2 class="modal-name">${character.name}</h2>
-        <h2 class="modal-group"><i>${doll.group}<i></h2>
+        <h2 class="modal-group"><i>${doll.group}</i></h2>
           <div class="modal-stats">
             <span class="stat ${definyStyle('life',character.id)}Vida: ${character.life}</span>
               <span class="stat ${definyStyle('attack',character.id)}Ataque: ${character.attack}</span>
@@ -29,7 +29,7 @@ const Modal = {
           ${attbts.length || doll.power.description !== '' ? "<hr style='opacity: 0.3;'>": ''}
           <h2 class="modal-attributes">${getHTMLattributes(attbts,doll.rageDamage)}</h2>
           <br>
-          <h2 class="modal-power">${doll.power.description.replace('[','<i><strong><u>').replace(']','</i></strong></u>')}</h2>
+          <h2 class="modal-power">${doll.power.description.replace('[','<i><strong><u>').replace(']','</u></strong></i>')}</h2>
 
           ${doll.affinities.length ? "<br><hr style='opacity: 0.3;'>": ''}
 

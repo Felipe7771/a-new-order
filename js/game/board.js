@@ -102,35 +102,38 @@ const Board = {
   // EntranceFX). Toca arena_entrance; ao 'ended', troca pra
   // arena_default via renderSlot normal.
   playEntrance(row, col, character) {
-    const el = this.slotEls[row][col];
-    if (!el) return;
+      const el = this.slotEls[row][col];
+      if (!el) return;
 
-    const entranceSrc = getAnimationAsset(character.id, 'board', 'entrance');
-    if (!entranceSrc) {
-      // sem entrance: já cai direto no arena_default (ou emoji)
-      this.slotAnim[row][col] = 'settled';
-      this.renderSlot(row, col);
-      return;
-    }
-
-    this.slotAnim[row][col] = 'entering';
-    el.innerHTML = '';
-    el.classList.remove('slot--empty');
-    el.classList.add('slot--filled');
-    el.setAttribute('aria-label', character.name);
-
-    const visual = document.createElement('div');
-    visual.className = 'card-visual card-visual--board'; // era só 'card-visual
-    visual.appendChild(createMediaElement(entranceSrc, character, {
-      loop: false,
-      onEnded: () => {
+      const entranceSrc = getAnimationAsset(character.id, 'board', 'entrance');
+      if (!entranceSrc) {
         this.slotAnim[row][col] = 'settled';
         this.renderSlot(row, col);
-      },
-    }));
-    el.appendChild(visual);
-    el.appendChild(CardRenderer.buildStats(character));
-  },
+        return;
+      }
+
+      this.slotAnim[row][col] = 'entering';
+      el.innerHTML = '';
+      el.classList.remove('slot--empty');
+      el.classList.add('slot--filled');
+      el.setAttribute('aria-label', character.name);
+
+      const visual = document.createElement('div');
+      visual.className = 'card-visual card-visual--board';
+      visual.appendChild(createMediaElement(entranceSrc, character, {
+        loop: false,
+        onEnded: () => {
+          this.slotAnim[row][col] = 'settled';
+          this.renderSlot(row, col);
+        },
+      }));
+
+      const sideAttrs = CardRenderer.buildSideAttributes(character);
+      if (sideAttrs) visual.appendChild(sideAttrs);
+
+      el.appendChild(visual);
+      el.appendChild(CardRenderer.buildStats(character));
+    },
 
   handleSlotClick(row, col) {
     const character = state.board[row][col];
