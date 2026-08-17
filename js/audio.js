@@ -65,7 +65,7 @@ const settings = {
     click: 0.6,
     hover: 0.35,
     type: 0.3,
-    dollEffects: 0.7,
+    dollEffects: 0.2,
     entrance: 0.4,
     clockTick: 0.1,              // <-- novo
   },
@@ -212,6 +212,31 @@ const Sfx = {
     instance.volume = settings.volumes.dollEffects;
     instance.play().catch((err) => {
       console.warn('[AudioManager] sem áudio de MOBS (audio/sound/effects/hand_mobs.mp3):', err.message);
+    });
+  },
+
+  // audio/sound/effects/drag_doll.mp3 — toca no instante em que o
+  // jogador começa a arrastar um boneco (reserva ou arena).
+  dragDoll() {
+    if (!settings.dollEffects) return;
+    const base = getSfx('drag_doll', PATHS.effects);
+    const instance = base.cloneNode();
+    instance.volume = settings.volumes.dollEffects;
+    instance.play().catch((err) => {
+      console.warn('[AudioManager] sem áudio de arrasto (audio/sound/effects/drag_doll.mp3):', err.message);
+    });
+  },
+
+  // audio/sound/effects/return_doll.mp3 — toca quando um boneco
+  // arrastado volta pro slot de origem (drop inválido/cancelado,
+  // ou rollback por falha na escrita no Firestore).
+  returnDoll() {
+    if (!settings.dollEffects) return;
+    const base = getSfx('return_doll', PATHS.effects);
+    const instance = base.cloneNode();
+    instance.volume = settings.volumes.dollEffects;
+    instance.play().catch((err) => {
+      console.warn('[AudioManager] sem áudio de retorno (audio/sound/effects/return_doll.mp3):', err.message);
     });
   },
 

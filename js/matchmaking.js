@@ -41,7 +41,7 @@ import {
 import { firebaseConfig, isFirebaseConfigured } from "./firebase-config.js";
 
 const SALAS = "salas";
-const RESERVE_SIZE = 10;
+const RESERVE_SIZE = 8; // lembrar depois de reotornar para 12 após teste de Londres/Charlotte/Alice/Matthiew
 const ROOM_TTL_MS = 24 * 60 * 60 * 1000; // 1 dia
 
 // Precisam bater com CONFIG.corridors/slotsPerSide em index.html —
@@ -124,8 +124,12 @@ function buildDeck(catalog, ownerId) {
 
   // adicionar para teste Londres (boneco 095 do catalog)
   // adicionar para teste Charlotte (boneco 077 do catalog)
+  // adicionar para teste Alice (boneco 074 do catalog)
+  // adicionar para teste Matthiew (boneco 087 do catalog)
   deck.push(pickSpecificDollId(catalog, "095londres", ownerId));
   deck.push(pickSpecificDollId(catalog, "077charlottelenz", ownerId));
+  deck.push(pickSpecificDollId(catalog, "074alicedummer", ownerId));
+  deck.push(pickSpecificDollId(catalog, "087matthiewcarter", ownerId));
 
 
   return deck;

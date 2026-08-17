@@ -33,7 +33,14 @@
   --board-bg: #000;
 }
 
-* { box-sizing: border-box; }
+* { 
+  box-sizing: border-box;
+  /* impedir seleção de texto */
+  -webkit-user-select: none; /* Chrome, Safari e Opera */
+  -moz-user-select: none;    /* Firefox */
+  -ms-user-select: none;     /* Internet Explorer/Edge antigo */
+  user-select: none;         /* Padrão atual */
+ }
 
 html, body {
   height: 100%;
@@ -179,6 +186,23 @@ html, body {
   background: rgba(201,154,60,.15);
   transform: scale(1.04);
 }
+
+/* ---------- X vermelho no slot de origem durante um arrasto ---------- */
+.slot--drag-origin::before,
+.slot--drag-origin::after{
+  content: '';
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  top: 50%;
+  height: 2px;
+  background: var(--life);
+  box-shadow: 0 0 5px rgba(193,84,74,.75);
+  pointer-events: none;
+  z-index: 60;
+}
+.slot--drag-origin::before{ transform: rotate(45deg); }
+.slot--drag-origin::after{ transform: rotate(-45deg); }
 
 .slot:focus-visible {
   outline: 2px solid var(--attack);
