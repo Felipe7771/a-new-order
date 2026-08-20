@@ -35,6 +35,10 @@ const Reserve = {
     state.reserves.ally.forEach((_, i) => this.renderSlot(i));
   },
 
+  // draggable agora depende de canIActNow() — antes era sempre
+  // `true`, então dava pra começar a arrastar da reserva mesmo fora
+  // do próprio turno de defesa (o placeDoll no servidor rejeitava a
+  // transação, mas o client deixava o gesto acontecer visualmente).
   renderSlot(i) {
     const character = state.reserves.ally[i];
 
@@ -49,7 +53,7 @@ const Reserve = {
     this.slotAnim[i] = 'settled';
     CardRenderer.render(this.slotEls[i], character, {
       showStats: false,
-      draggable: true,
+      draggable: canIActNow(),
       variant: 'reserve',
     });
   },
@@ -73,7 +77,7 @@ playEntrance(i, character) {
     el.classList.remove('slot--empty');
     el.classList.add('slot--filled');
     el.classList.remove('slot--media-loaded');
-    el.draggable = true;
+    el.draggable = canIActNow();
     el.setAttribute('aria-label', character.name);
 
     const visual = document.createElement('div');

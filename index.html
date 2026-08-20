@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="css/menu.css">
 <link rel="stylesheet" href="css/entrance.css">
 <link rel="stylesheet" href="css/turn.css">
+<link rel="stylesheet" href="css/combat.css">
 <!-- adicionando icone de aba -->
 <link rel="icon" type="image/x-icon" href="img/ANEWORDER.png">
 </head>
@@ -72,7 +73,7 @@
     
     <div class="menu-card" id="login-card">
       <label class="menu-label" for="input-username">Como te chamam no palco?</label>
-      <input id="input-username" class="menu-input" type="text" maxlength="15" placeholder="Nome do marionetista" autocomplete="off">
+      <input id="input-username" class="menu-input" type="text" maxlength="15" placeholder="TEU NOME, AMIGO..." autocomplete="off">
       <div class="menu-id-tag" id="player-id-tag">Nº ————</div>
       <button id="btn-play" class="menu-play-btn" type="button" data-sfx-click="click" data-sfx-hover="hover">
         <i class="bi bi-suit-diamond-fill" aria-hidden="true"></i> Jogar
@@ -105,6 +106,8 @@
     </div>
 
 <div class="turn-action" id="turn-action">
+    <div class="turn-side-label turn-side-label--left turn-side-label--hidden" id="turn-side-label-left"></div>
+  <div class="turn-side-label turn-side-label--right turn-side-label--hidden" id="turn-side-label-right"></div>
 <div class="turn-clock" id="turn-clock">
   <div class="turn-clock__bezel"></div>
   <div class="turn-clock__dial" id="turn-clock-dial"></div>
@@ -176,6 +179,7 @@
 
 <div id="modal-overlay"></div>
 <div id="entrance-overlay"></div>
+<div id="combat-overlay"></div>
 <div id="turn-banner-overlay"></div>
 
 <script src="js/styles.js"></script>
@@ -191,8 +195,10 @@
 <script src="js/game/player-names.js"></script>
 <script src="js/game/player-stats.js"></script>
 <script src="js/game/entrance-fx.js"></script>
+<script src="js/game/combat-fx.js"></script>
 <script src="js/game/modal.js"></script>
 <script src="js/game/turn-banner.js"></script>
+<script src="js/game/turn-side-labels.js"></script>
 <script src="js/game/end-turn-button.js"></script>
 <script src="js/game/demo-data.js"></script>
 <script src="js/game/boot.js"></script>

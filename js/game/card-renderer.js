@@ -35,11 +35,18 @@ render(el, character, { showStats = false, draggable = false, variant = 'reserve
     el.setAttribute('aria-label', character.name);
 },
 
+  // A vida fica num <span class="card-stat__value"> à parte — é
+  // esse elemento que Board.playLifeHit() anima (pulo + flash
+  // vermelho) quando o dano chega, sem precisar re-renderizar o
+  // ícone (guardian/implacable/etc). Sempre clampada em 0 — "se
+  // vida <= 0, exibir 0" (o servidor já grava assim, isso aqui é
+  // só uma segunda trava, barata, contra qualquer estado velho).
   buildStats(character) {
     const stats = document.createElement('div');
     stats.className = 'card-stats';
+    const displayLife = Math.max(0, character.life);
     stats.innerHTML =
-      `<span class="stat ${definyStyle('life',character.id)}${character.life}</span>` +
+      `<span class="stat card-stat--life ${definyStyle('life',character.id)}<span class="card-stat__value">${displayLife}</span></span>` +
       `<span class="stat ${definyStyle('attack',character.id)}${character.attack}</span>` +
       (character.rage > 0 ? `<span class="stat stat--rage">${simbol.rage}${character.rage}</span>` : '');
     return stats;

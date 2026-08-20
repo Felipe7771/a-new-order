@@ -19,6 +19,7 @@
          rage.mp3
          area.mp3
          entire_arena.mp3
+         hit.mp3            -> dano aplicado num boneco (Board.playLifeHit)
          default.mp3       -> fallback pra atributo sem som próprio
 
    Como usar (liga/desliga fácil, por categoria):
@@ -200,6 +201,20 @@ const Sfx = {
     instance.volume = settings.volumes.dollEffects;
     instance.play().catch(() => {
       playOneShot('dollEffects', 'default', PATHS.effects);
+    });
+  },
+
+  // audio/sound/effects/hit.mp3 — dano de combate aplicado num
+  // boneco (o número de vida acabou de dar o "pulo" vermelho, ver
+  // Board.playLifeHit em board.js). Categoria dollEffects, mesmo
+  // volume dos outros efeitos por atributo.
+  hit() {
+    if (!settings.dollEffects) return;
+    const base = getSfx('hit', PATHS.effects);
+    const instance = base.cloneNode();
+    instance.volume = settings.volumes.dollEffects;
+    instance.play().catch((err) => {
+      console.warn('[AudioManager] sem áudio de hit (audio/sound/effects/hit.mp3):', err.message);
     });
   },
 

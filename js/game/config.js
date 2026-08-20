@@ -44,6 +44,19 @@ function isMyColumn(col) {
   return CONFIG.myRole === 'guest' ? !isOwnerColumn(col) : isOwnerColumn(col);
 }
 
+// O jogador LOCAL pode agir AGORA (é fase de DEFESA e é a vez dele)?
+// state.turn é mantido atualizado por Game.syncRoom/handleTurnSync
+// (ver boot.js) a cada snapshot da sala. Fora de uma partida real —
+// ex: Game.seedDemo(), sem sistema de turno ativo — state.turn fica
+// null e isso LIBERA a interação, pra não quebrar o atalho de teste.
+// Único ponto de verdade sobre "posso arrastar/soltar agora?" —
+// tanto drag-drop.js (início do arrasto) quanto board.js/reserve.js
+// (atributo draggable/cursor) consultam essa mesma função.
+function canIActNow() {
+  if (!state.turn) return true;
+  return state.turn.phase === 'defense' && state.turn.current === window.Game?.meId;
+}
+
 /* ============================================================
    ESTADO — a "fonte da verdade". Tudo que é desenhado na tela
    vem daqui. É nisso que o Firebase vai escrever/ler no futuro:
@@ -73,6 +86,9 @@ const state = {
     ally: 0,
     enemy: 0,
   },
+  // { phase: 'defense'|'attack', current: playerId } | null.
+  // null = sem sistema de turno ativo (fora de partida real).
+  turn: null,
   effects: {},
   winner: ''
 };

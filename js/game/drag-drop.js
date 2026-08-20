@@ -9,6 +9,12 @@
    automático + som de retorno). Se soltar no mesmo slot de
    origem ou em lugar inválido, o boneco só volta — sem NUNCA
    chamar o banco nesses casos.
+
+   canIActNow() (config.js) é checado logo no 'dragstart' (E de
+   novo no drop, defesa em profundidade) — sem isso, o client
+   deixava o jogador começar a arrastar bonecos fora do próprio
+   turno de defesa; o servidor rejeitava a transação, mas o gesto
+   já tinha acontecido na tela.
 ============================================================ */
 
 const DRAG_IMAGE_SCALE = 1.52; // mesma escala de .card-visual--reserve .card-media (152%)
@@ -156,6 +162,8 @@ buildDragImage(character, sourceEl) {
 
   attachDragSource(el, reserveIndex) {
     el.addEventListener('dragstart', (e) => {
+      if (!canIActNow()) { e.preventDefault(); return; }
+
       const character = state.reserves.ally[reserveIndex];
       if (!character) { e.preventDefault(); return; }
 
@@ -175,6 +183,8 @@ buildDragImage(character, sourceEl) {
   // Fonte de arrasto pra um slot do TABULEIRO (reposicionamento).
   attachBoardDragSource(el, row, col) {
     el.addEventListener('dragstart', (e) => {
+      if (!canIActNow()) { e.preventDefault(); return; }
+
       const character = state.board[row][col];
       const canMove = character && character.owner === 'ally' && state.mobs.ally > 0;
       if (!canMove) { e.preventDefault(); return; }
@@ -195,7 +205,8 @@ buildDragImage(character, sourceEl) {
   attachDropTarget(el) {
     const row = () => Number(el.dataset.row);
     const col = () => Number(el.dataset.col);
-    const canDropHere = () => state.board[row()][col()] === null && isMyColumn(col());
+    const canDropHere = () =>
+      canIActNow() && state.board[row()][col()] === null && isMyColumn(col());
 
     el.addEventListener('dragover', (e) => {
       if (canDropHere()) {

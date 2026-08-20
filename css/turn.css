@@ -12,9 +12,62 @@
   display: flex;
   pointer-events: auto;
 }
+
+/* ---------- rótulos laterais: quem joga AGORA + previsão do
+   PRÓXIMO turno (ver TurnSideLabels em turn-side-labels.js).
+   Posicionados fora do .turn-action (que tem position:relative),
+   grudados na esquerda/direita do relógio — o lado físico troca
+   dependendo de quem está jogando. ---------- */
+.turn-side-label{
+  position: absolute;
+  top: 40%;
+  transform: translateY(-50%);
+  padding: 12px 30px;
+  background: rgba(0,0,0,.9);
+  border-radius: 3px;
+  text-align: center;
+  /* white-space: nowrap; */
+  opacity: 1;
+  transition: opacity .22s ease;
+  pointer-events: none;
+  /* sombra por baixo, pra destacar a plaquinha do fundo do tabuleiro */
+  box-shadow: 0 10px 16px rgba(0,0,0,.55), 0 2px 5px rgba(0,0,0,.6);
+}
+.turn-side-label--hidden{ opacity: 0; }
+
+.turn-side-label--left{ right: 100%; margin-right: -30%; }
+.turn-side-label--right{ left: 100%; margin-left: -30%; }
+
+.turn-side-label__small{
+  margin: 0 0 2px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: #fff;
+  opacity: .75;
+}
+.turn-side-label__main{
+  margin: 0;
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: clamp(12px, 1.6vw, 16px);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.turn-side-label--blue .turn-side-label__main{
+  color: var(--implacable);
+  text-shadow: 0 0 10px rgba(74,171,193,.65), 0 2px 4px rgba(0,0,0,.9);
+}
+.turn-side-label--red .turn-side-label__main{
+  color: var(--life);
+  text-shadow: 0 0 10px rgba(193,84,74,.7), 0 2px 4px rgba(0,0,0,.9);
+}
+
 /* ---------- relógio eneágono (relógio de bolso antigo) ---------- */
 .turn-clock{
-  --clock-gray: #6c6656;
+  --clock-gray: #000000;
   --clock-elapsed: 0deg;
   --clock-fill: var(--clock-gray);
   position: relative;
@@ -306,4 +359,3 @@
   50%  { opacity: 1; transform: scale(1) translateX(0) rotate(0deg); }
   100% { opacity: 0; transform: scale(1) translateX(0) rotate(0deg); }
 }
-

@@ -1,0 +1,88 @@
+/* ============================================================
+   COMBAT — efeitos visuais do turno ofensivo (projéteis, flash
+   de acerto, fade-out de quem morreu). Tudo aqui é placeholder
+   até animation.board.combat existir de verdade no catalog —
+   trocar por vídeo é uma troca de CIMA pra baixo, sem mexer na
+   lógica em combat-fx.js/board.js.
+   ============================================================ */
+
+#combat-overlay{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 780; /* abaixo do entrance (800) e do turn-banner (850) */
+}
+
+/* ---------- projétil ---------- */
+.combat-bullet{
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px; /* centraliza no ponto left/top */
+  border-radius: 50%;
+  background: var(--attack);
+  box-shadow: 0 0 10px 3px rgba(201,154,60,.8);
+  animation: combat-bullet-fly var(--travel-ms) linear forwards;
+}
+
+@keyframes combat-bullet-fly{
+  from{ transform: translateX(0); opacity: 1; }
+  to  { transform: translateX(var(--travel-distance)); opacity: .85; }
+}
+
+.combat-bullet--drill{
+  width: 16px;
+  height: 6px;
+  margin: -3px 0 0 -8px;
+  border-radius: 3px;
+  background: var(--drill);
+  box-shadow: 0 0 12px 4px rgba(255,132,0,.75);
+}
+.combat-bullet--area{
+  background: var(--area);
+  box-shadow: 0 0 14px 5px rgba(185,64,58,.8);
+}
+.combat-bullet--entire_arena{
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  background: var(--entire_arena);
+  box-shadow: 0 0 18px 6px rgba(185,64,58,.9);
+}
+
+/* ---------- flash de acerto no(s) slot(s) atingido(s) ---------- */
+.board-slot--hit{
+  animation: board-slot-hit-flash .4s ease-out;
+}
+@keyframes board-slot-hit-flash{
+  0%   { box-shadow: 0 0 0 0 rgba(193,84,74,0); transform: scale(1); }
+  30%  { box-shadow: 0 0 18px 7px rgba(193,84,74,.85); transform: scale(1.06); }
+  100% { box-shadow: 0 0 0 0 rgba(193,84,74,0); transform: scale(1); }
+}
+
+/* ---------- fade-out de quem morreu (usado só quando o boneco
+   não tem animation.board.exit configurado — ver Board.playExit) ---------- */
+.board-slot--dying{
+  animation: board-slot-dying .45s ease-out forwards;
+}
+@keyframes board-slot-dying{
+  0%   { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(.85); }
+}
+
+/* ---------- pulo + flash vermelho no número de vida quando o
+   dano é aplicado (ver Board.playLifeHit em board.js). O valor já
+   sai clampado em 0 do próprio texto (CardRenderer/servidor) —
+   essa animação só reage visualmente, nunca decide o número. ---------- */
+.card-stat__value{
+  display: inline-block;
+}
+.card-stat__value--hit{
+  animation: life-hit-bounce .45s ease-out;
+}
+@keyframes life-hit-bounce{
+  0%   { transform: scale(1) translateY(0); color: inherit; }
+  22%  { transform: scale(1.55) translateY(-5px); color: var(--life); }
+  55%  { transform: scale(1.15) translateY(-1px); color: var(--life); }
+  100% { transform: scale(1) translateY(0); color: inherit; }
+}

@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   Reserve.build(document.getElementById('reserve-ally'));
   Modal.init(document.getElementById('modal-overlay'));
   EntranceFX.init(document.getElementById('entrance-overlay'));
+  CombatFX.init(document.getElementById('combat-overlay'));
   PlayerNames.init(
     document.getElementById('player-name-ally'),
     document.getElementById('player-name-enemy')
@@ -24,6 +25,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('player-mobs-enemy')
   );
   TurnBanner.init(document.getElementById('turn-banner-overlay'));
+  TurnSideLabels.init(
+    document.getElementById('turn-side-label-left'),
+    document.getElementById('turn-side-label-right')
+  );
   EndTurnButton.init(
     document.getElementById('btn-end-turn'),
     document.getElementById('turn-clock-dial'),
@@ -92,6 +97,12 @@ startMatch({ roomId, me, opponent, myReserve, opponentReserve, role, turn, myMob
     CONFIG.enemyName = opponent.name;
     PlayerNames.setNames(me.name, opponent.name);
 
+    // Precisa vir ANTES do Board/Reserve.renderAll() logo abaixo —
+    // updateDraggability()/Reserve.renderSlot() consultam canIActNow(),
+    // que lê state.turn. Se gravar depois, o primeiro render sairia
+    // com o draggable calculado a partir de um turno desatualizado.
+    state.turn = turn ? { phase: turn.phase, current: turn.current } : null;
+
     state.mobs.ally = typeof myMobs === 'number' ? myMobs : 3;
     state.mobs.enemy = typeof opponentMobs === 'number' ? opponentMobs : 3;
 
@@ -109,13 +120,18 @@ startMatch({ roomId, me, opponent, myReserve, opponentReserve, role, turn, myMob
 
   // Chamado depois de startMatch() e a cada syncRoom() com o novo
 // data.turn. Decide: mostra o banner (só quando o turno mudou de
-// verdade), mostra/esconde o botão de encerrar, e (re)agenda o
-// timer local que dispara o avanço automático quando o prazo acaba.
+// verdade), mostra/esconde o botão de encerrar, dispara a animação
+// de combate (CombatFX) quando um turno de ATAQUE novo começa, e
+// (re)agenda o timer local que dispara o avanço automático quando
+// o prazo acaba.
 handleTurnSync(turn, data) {
   clearTimeout(this._turnTimeout);
 
+  state.turn = turn ? { phase: turn.phase, current: turn.current } : null;
+
   if (!turn) {
     EndTurnButton.hide();
+    TurnSideLabels.hide();
     return;
   }
 
@@ -125,7 +141,27 @@ handleTurnSync(turn, data) {
   if (isNewTurn) {
     const activeName = turn.current === this.meId ? CONFIG.playerName : CONFIG.enemyName;
     TurnBanner.show(activeName, turn.phase);
+
+    // turn.combat só existe (e só é novo) na virada pra um turno de
+    // ATAQUE — computeCombatResolution já rodou no servidor com o
+    // snapshot de ANTES de qualquer dano. Aqui é só desenhar em cima.
+    if (turn.phase === 'attack' && turn.combat) {
+      CombatFX.playTurn(turn.combat);
+    }
   }
+
+  // Rótulos ao lado do relógio: de quem é o turno ATUAL, e a
+  // PREVISÃO de quem/qual fase vem a seguir. Só faz sentido mostrar
+  // essa previsão durante a DEFESA — durante o ataque o próximo já
+  // é sempre óbvio (o mesmo jogador cai na defesa dele em seguida),
+  // então mostrar a plaquinha ali só confundiria (parece que o
+  // próximo seria do oponente, o que nunca acontece nesse caso).
+  const currentIsMe = turn.current === this.meId;
+  const nextTurn = turn.phase === 'defense' ? this.predictNextTurn(turn) : null;
+  TurnSideLabels.update(
+    currentIsMe,
+    nextTurn ? { phase: nextTurn.phase, isMe: nextTurn.current === this.meId } : null
+  );
 
 const isMyDefenseTurn = turn.phase === 'defense' && turn.current === this.meId;
 
@@ -162,6 +198,30 @@ async endTurn() {
   }
 },
 
+// Espelha afterDefense/afterAttack de matchmaking.js, só que em
+// cima do estado LOCAL (state.board + meId/opponentId) — NUNCA
+// escreve nada no Firestore, é só um palpite pra UI (TurnSideLabels).
+// Se por alguma corrida rara divergir do que o servidor decidir de
+// verdade, o próximo snapshot real corrige sozinho, sem drama.
+predictNextTurn(turn) {
+  if (!turn || !this.meId || !this.opponentId) return null;
+
+  if (turn.phase === 'attack') {
+    // depois do ataque, quem defende em seguida é o MESMO jogador
+    return { phase: 'defense', current: turn.current };
+  }
+
+  // depois da defesa, quem age é sempre o ADVERSÁRIO — ataca se
+  // tiver bonecos em campo, senão pula direto pra defesa dele
+  const attackerId = turn.current === this.meId ? this.opponentId : this.meId;
+  const attackerRole = attackerId === this.meId ? 'ally' : 'enemy';
+  const attackerHasDolls = state.board.some((row) => row.some((c) => c && c.owner === attackerRole));
+
+  return attackerHasDolls
+    ? { phase: 'attack', current: attackerId }
+    : { phase: 'defense', current: attackerId };
+},
+
 // Chamado pelo menu.js quando a sala some NO MEIO da partida
 // (encerrada por inatividade). Reseta tudo e devolve pro pre-match.
 handleRoomClosed() {
@@ -172,16 +232,29 @@ handleRoomClosed() {
   this.meId = null;
   this.opponentId = null;
   EndTurnButton.hide();
+  TurnSideLabels.hide();
   document.getElementById('app').classList.add('pre-match');
   AudioManager.enterMenu();
 },
 
   // Chamado a cada onSnapshot depois que a partida começou.
-  // Reconstrói tabuleiro + reservas a partir do documento da sala
-  // e dispara EntranceFX pra qualquer slot que passou de vazio pra
-  // ocupado (seja boneco meu ou do oponente).
+  // Reconstrói tabuleiro + reservas a partir do documento da sala.
+  // Detecta, por DIFF direto contra o state.board anterior:
+  //   - quem entrou (vazio -> ocupado)          -> EntranceFX/vídeo
+  //   - quem sumiu de vez (ocupado -> vazio)     -> Board.playExit
+  //   - vida que diminuiu num boneco que CONTINUA -> Board.playLifeHit
+  // A morte de verdade (sumir do board) só acontece na ETAPA 2 do
+  // combate, 1s depois da vida cair na ETAPA 1 (ver DEATH_SWEEP_DELAY_MS
+  // em matchmaking.js) — então esses dois diffs naturalmente disparam
+  // em snapshots DIFERENTES, na ordem certa, sem precisar de nenhum
+  // "seq" pra coordenar isso.
 syncRoom(data) {
     if (!this.meId) return;
+
+    // Mesma razão do startMatch: precisa vir ANTES do Board.renderAll()
+    // mais abaixo, senão o draggable desse render sai calculado com o
+    // turno do snapshot ANTERIOR (canIActNow() ficaria um passo atrasado).
+    state.turn = data.turn ? { phase: data.turn.phase, current: data.turn.current } : null;
 
     // MOBS de cada lado vêm direto do documento — PlayerStats.update()
     // no fim do método já redesenha os dois contadores.
@@ -201,24 +274,43 @@ syncRoom(data) {
       newBoard[r][c] = characterFromRoomData(dollData, ownerRole);
     });
 
-    // Se esse snapshot trouxe um moveSeq novo, a célula lastMove.to
-    // é reposicionamento via MOBS: não toca EntranceFX/vídeo de
-    // entrada, só o som da "mão" — e isso NÃO entra em enteredCells.
+    // Se esse snapshot trouxe um moveSeq novo, as células lastMove.to
+    // (destino) e lastMove.from (origem) são reposicionamento via
+    // MOBS: não entram em enteredCells/exitCells (não é entrada nova
+    // nem morte) — só o som da "mão".
     const isNewMove = !!data.lastMove && typeof data.moveSeq === 'number' && data.moveSeq !== this._lastMoveSeq;
     const moveToKey = isNewMove ? data.lastMove.to : null;
+    const moveFromKey = isNewMove ? data.lastMove.from : null;
     let moveHappened = false;
 
     const enteredCells = [];
+    const exitCells = [];
+    const lifeHitCells = [];
+
     for (let r = 0; r < CONFIG.corridors; r++) {
       for (let c = 0; c < CONFIG.slotsPerSide * 2; c++) {
-        if (!state.board[r][c] && newBoard[r][c]) {
-          const key = `${r}-${c}`;
+        const before = state.board[r][c];
+        const after = newBoard[r][c];
+        const key = `${r}-${c}`;
+
+        if (!before && after) {
           if (moveToKey && key === moveToKey) {
             moveHappened = true;
             continue; // reposicionado — sem telão, sem vídeo de entrada
           }
-          EntranceFX.show(newBoard[r][c], r, c);
-          enteredCells.push([r, c, newBoard[r][c]]);
+          EntranceFX.show(after, r, c);
+          enteredCells.push([r, c, after]);
+          continue;
+        }
+
+        if (before && !after) {
+          if (moveFromKey && key === moveFromKey) continue; // reposicionado, não é morte
+          exitCells.push([r, c, before]); // sumiu de vez (ETAPA 2 do combate)
+          continue;
+        }
+
+        if (before && after && after.life < before.life) {
+          lifeHitCells.push([r, c]); // dano aplicado (ETAPA 1), boneco ainda no slot
         }
       }
     }
@@ -226,13 +318,19 @@ syncRoom(data) {
     if (isNewMove) this._lastMoveSeq = data.moveSeq;
     if (moveHappened) AudioManager.Sfx.mobsMove();
 
-    // Marca 'entering' ANTES de trocar state.board/renderAll, senão o
-    // renderAll chegaria nesses slots primeiro e já mostraria o
-    // arena_default sem tocar o entrance.
+    // Marca 'entering'/'exiting' ANTES de trocar state.board/renderAll,
+    // senão o renderAll chegaria nesses slots primeiro e já mostraria
+    // o resultado final (arena_default ou vazio) sem tocar a mídia.
     enteredCells.forEach(([r, c, character]) => Board.playEntrance(r, c, character));
+    exitCells.forEach(([r, c, character]) => Board.playExit(r, c, character));
 
     state.board = newBoard;
     Board.renderAll();
+
+    // Só DEPOIS do renderAll — precisa da DOM já com o número novo
+    // (renderizado por CardRenderer.buildStats) pra religar a
+    // animação em cima dela (ver Board.playLifeHit).
+    lifeHitCells.forEach(([r, c]) => Board.playLifeHit(r, c));
 
     const myReserveData = data.p?.[this.meId]?.reserve || [];
     const oppReserveData = data.p?.[this.opponentId]?.reserve || [];

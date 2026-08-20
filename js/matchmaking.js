@@ -6,7 +6,7 @@
      ower:   { ID, name }
      guest:  { ID, name } | null
      state:  'waiting' | 'playing' | 'ended'
-     turn:   { number, phase, current, deadline, hasActed } | null
+     turn:   { number, phase, current, deadline, hasActed, combat? } | null
      p:      { [ID]: { mobs, reserve, effects } } | null
      winner: ID | null
      board:  mapa esparso "linha-coluna" -> boneco | null
@@ -14,8 +14,8 @@
      expireAt:  Timestamp usado pela política de TTL do Firestore
 
    Este módulo cuida de MENU + LOGIN + MATCHMAKING + SISTEMA DE
-   TURNOS. A lógica de combate em si (o que acontece DENTRO do
-   turno ofensivo) ainda não existe.
+   TURNOS + RESOLUÇÃO DE COMBATE (o "o que acontece DENTRO do
+   turno ofensivo" já existe agora, via combat.js).
 ============================================================ */
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
@@ -39,6 +39,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
 import { firebaseConfig, isFirebaseConfigured } from "./firebase-config.js";
+import { computeCombatResolution, applyCombatDamage, sweepDeadDolls } from "./combat.js";
 
 const SALAS = "salas";
 const RESERVE_SIZE = 8; // lembrar depois de reotornar para 12 após teste de Londres/Charlotte/Alice/Matthiew
@@ -53,12 +54,19 @@ const SLOTS_PER_SIDE = 3;
 const TOTAL_COLS = SLOTS_PER_SIDE * 2;
 
 // ---- Sistema de turnos -----------------------------------------
-// Defesa: 60s pra jogar pelo menos 1 boneco. Ataque: por enquanto
-// não tem ação nenhuma implementada, então é só um mínimo de 5s
-// antes de devolver a vez (isso vai virar "tempo baseado na
-// animação/ação do boneco" quando o combate existir).
+// Defesa: 60s pra jogar pelo menos 1 boneco. Ataque: a duração NÃO
+// é mais fixa — vem de computeCombatResolution() (windup + maior
+// travelMs entre os projéteis que de fato têm alvo; 1.5s se ninguém
+// acerta ninguém). Ver buildAttackPhase().
+//
+// O turno de ataque agora tem DUAS etapas internas (ver
+// autoAdvanceTurn): 1) aplica o dano (turn.damageApplied vira true;
+// mortos ficam no board com life=0/dead=true, ainda NÃO removidos);
+// 2) DEATH_SWEEP_DELAY_MS depois, varre os mortos de vez e só então
+// vira a fase — esse intervalo dá tempo do jogador ver os números
+// de vida mudando antes do boneco sumir/o turno virar.
 const DEFENSE_TURN_MS = 60 * 1000;
-const ATTACK_TURN_MS = 5 * 1000;
+const DEATH_SWEEP_DELAY_MS = 1000;
 
 let db = null;
 function getDb() {
@@ -72,8 +80,16 @@ function getDb() {
 export { isFirebaseConfigured };
 
 /* ------------------------------------------------------------
-   Geração de baralho — 12 bonecos aleatórios do catálogo,
-   no mesmo formato que CardRenderer/createCharacter esperam.
+   Geração de baralho — 12 bonecos aleatórios do catálogo, no
+   mesmo formato que CardRenderer/createCharacter esperam.
+
+   attbtDamage e vel_att_attck são denormalizados aqui (copiados
+   do catalog pro doll salvo no board) de propósito: o motor de
+   combate roda dentro de transações do Firestore, então não pode
+   depender de um fetch externo ao catalog.json no meio do cálculo
+   — o board já carrega tudo que precisa pra resolver o combate
+   sozinho. vel_att_attck ainda não existe no catalog.json (schema
+   pendente na planilha) — por isso o fallback pra 'NORMAL'.
 ------------------------------------------------------------ */
 function pickRandomDollId(catalog) {
   const keys = Object.keys(catalog);
@@ -95,6 +111,8 @@ function pickSpecificDollId(catalog, id_doll, ownerId) {
     damage: doll.stats.baseDamage,
     rage: doll.rageDamage,
     guard: new Set(doll.attbtLife).has("guardian"),
+    attbtDamage: doll.attbtDamage || [],
+    vel_att_attck: doll.vel_att_attck || "NORMAL",
   }
 }
 
@@ -119,6 +137,8 @@ function buildDeck(catalog, ownerId) {
       damage: doll.stats.baseDamage,
       rage: doll.rageDamage,
       guard: new Set(doll.attbtLife).has("guardian"),
+      attbtDamage: doll.attbtDamage || [],
+      vel_att_attck: doll.vel_att_attck || "NORMAL",
     });
   }
 
@@ -163,16 +183,27 @@ function buildDefensePhase(playerId, turnNumber) {
     current: playerId,
     deadline: Timestamp.fromMillis(Date.now() + DEFENSE_TURN_MS),
     hasActed: false,
+    combat: null, // nenhuma resolução pendente durante a defesa
   };
 }
 
-function buildAttackPhase(playerId, turnNumber) {
+// Roda computeCombatResolution() sobre o board ATUAL (snapshot de
+// antes de qualquer dano) e usa o totalDurationMs devolvido como
+// prazo real do turno ofensivo — é aqui que "o turno dura até que
+// todos os projéteis calculados tenham sido realizados" vira, na
+// prática, um deadline concreto no Firestore.
+function buildAttackPhase(data, playerId, turnNumber) {
+  const attackerIsOwner = data.ower?.ID === playerId;
+  const resolution = computeCombatResolution(data.board || {}, playerId, attackerIsOwner);
+
   return {
     number: turnNumber,
     phase: "attack",
     current: playerId,
-    deadline: Timestamp.fromMillis(Date.now() + ATTACK_TURN_MS),
+    deadline: Timestamp.fromMillis(Date.now() + resolution.totalDurationMs),
     hasActed: false, // não usado em ataque, mantido só por consistência de shape
+    combat: resolution, // consumido pelo client (CombatFX) pra animar os projéteis
+    damageApplied: false, // vira true quando autoAdvanceTurn aplicar o dano (etapa 1)
   };
 }
 
@@ -183,13 +214,15 @@ function buildAttackPhase(playerId, turnNumber) {
 function afterDefense(data, playerId, turnNumber) {
   const attacker = opponentOf(data, playerId);
   if (hasDollsOnBoard(data.board, attacker)) {
-    return buildAttackPhase(attacker, turnNumber);
+    return buildAttackPhase(data, attacker, turnNumber);
   }
   return buildDefensePhase(attacker, turnNumber);
 }
 
-// Chamada quando o ATAQUE de `playerId` termina (timer mínimo
-// estourou). Quem defende em seguida é o MESMO jogador.
+// Chamada quando o ATAQUE de `playerId` termina (deadline calculado
+// por buildAttackPhase estourou). Quem defende em seguida é o MESMO
+// jogador. O dano em si já foi aplicado pelo caller (autoAdvanceTurn)
+// ANTES de chamar essa função — aqui é só a virada de fase.
 function afterAttack(playerId, turnNumber) {
   return buildDefensePhase(playerId, turnNumber);
 }
@@ -503,9 +536,18 @@ export async function endTurn(roomId, playerId) {
 
    Regras:
    - Defesa sem hasActed -> sala é apagada (inatividade).
-   - Defesa com hasActed  -> passa o turno normalmente.
-   - Ataque (sempre, já que ainda não existe ação de combate)
-     -> passa pra defesa do mesmo jogador.
+   - Defesa com hasActed  -> passa o turno normalmente (calcula
+     e embute a resolução de combate do próximo ataque, se houver).
+   - Ataque, ETAPA 1 (damageApplied ainda false) -> aplica o dano
+     de turn.combat sobre o board (mortos ficam marcados dead=true
+     com life travada em 0, NÃO removidos ainda), marca
+     damageApplied=true e estica o deadline por DEATH_SWEEP_DELAY_MS
+     — continua na mesma fase 'attack', só que agora esperando a
+     etapa 2.
+   - Ataque, ETAPA 2 (damageApplied já true) -> varre quem morreu
+     de vez (sweepDeadDolls) e só então passa pra defesa do mesmo
+     jogador. É o intervalo entre as duas etapas que dá tempo do
+     jogador ver os números de vida mudarem antes do boneco sumir.
 ------------------------------------------------------------ */
 export async function autoAdvanceTurn(roomId, expectedTurnNumber) {
   const roomRef = doc(getDb(), SALAS, roomId);
@@ -526,6 +568,27 @@ export async function autoAdvanceTurn(roomId, expectedTurnNumber) {
       return;
     }
 
-    tx.update(roomRef, { turn: afterAttack(turn.current, turn.number + 1) });
+    // fase 'attack'
+    if (!turn.damageApplied) {
+      // ETAPA 1: aplica o dano calculado no INÍCIO desse turno
+      // (turn.combat, snapshot de antes de qualquer morte). Mortos
+      // continuam no board por enquanto — só a etapa 2 remove.
+      const { board: nextBoard } = applyCombatDamage(data.board || {}, turn.combat);
+
+      tx.update(roomRef, {
+        board: nextBoard,
+        "turn.damageApplied": true,
+        "turn.deadline": Timestamp.fromMillis(Date.now() + DEATH_SWEEP_DELAY_MS),
+      });
+      return;
+    }
+
+    // ETAPA 2: o jogador já teve DEATH_SWEEP_DELAY_MS pra ver os
+    // números de vida mudarem — agora varre os mortos de vez e vira
+    // a fase.
+    tx.update(roomRef, {
+      board: sweepDeadDolls(data.board || {}),
+      turn: afterAttack(turn.current, turn.number + 1),
+    });
   });
 }
